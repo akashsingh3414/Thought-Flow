@@ -1,11 +1,14 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { AiOutlineSearch } from 'react-icons/ai'
 import { FaMoon } from 'react-icons/fa'
 import { GiHamburgerMenu } from 'react-icons/gi'
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const { pathname } = useLocation();
+
+  const isActive = (path) => pathname === path ? 'text-blue-500' : 'text-black';
 
   return (
     <div className='flex justify-between items-center p-4'>
@@ -29,6 +32,16 @@ function Header() {
           <FaMoon className='text-2xl' />
         </button>
 
+        <Link className={`hidden lg:block ${isActive('/home')}`} to='/home'>
+          <button>Home</button>
+        </Link>
+        <Link className={`hidden lg:block ${isActive('/about')}`} to='/about'>
+          <button>About</button>
+        </Link>
+        <Link className={`hidden lg:block ${isActive('/about')}`} to='/projects'>
+          <button>Projects</button>
+        </Link>
+
         <Link to='/signin'>
           <button className='text-black'>Sign In</button>
         </Link>
@@ -43,13 +56,13 @@ function Header() {
 
       {isMenuOpen && (
         <div className='lg:hidden absolute top-16 right-4 bg-white shadow-md rounded-lg p-4 flex flex-col items-start space-y-2'>
-          <Link to='/home' onClick={() => setIsMenuOpen(false)}>
+          <Link className={`${isActive('/home')}`} to='/home' onClick={() => setIsMenuOpen(false)}>
             <button>Home</button>
           </Link>
-          <Link to='/about' onClick={() => setIsMenuOpen(false)}>
+          <Link className={`${isActive('/about')}`} to='/about' onClick={() => setIsMenuOpen(false)}>
             <button>About</button>
           </Link>
-          <Link to='/projects' onClick={() => setIsMenuOpen(false)}>
+          <Link className={`${isActive('/projects')}`} to='/projects' onClick={() => setIsMenuOpen(false)}>
             <button>Projects</button>
           </Link>
         </div>
