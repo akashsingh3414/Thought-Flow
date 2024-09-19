@@ -1,15 +1,11 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import connectToMongoDB from './db/index.js';
+import userRouter from './routes/user.routes.js';
 
 dotenv.config();
 
-dotenv.config({
-    path: './env'
-})
-
 const app = express();
-
 
 connectToMongoDB().then(()=>{
     app.listen(process.env.PORT || 3000, () => {
@@ -18,6 +14,10 @@ connectToMongoDB().then(()=>{
 }).catch((error)=>{
     console.log("nMongoDB Connection Failed!", error)
 })
+
+app.use('/api',userRouter);
+
+export {app};
 
 
 
