@@ -1,5 +1,6 @@
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 const userSchema = mongoose.Schema({
     userName: {
@@ -24,24 +25,28 @@ const userSchema = mongoose.Schema({
     password: {
         type: String,
         required: true,
-    }, 
+    },
     profilePhoto: {
         type: String,
     },
     refreshToken: {
         type: String,
     }
-}, {timestamps: true})
+}, {timestamps: true});
 
-userSchema.pre('save', async function(next){
-    if(!this.isModified('password')) return next();
-    this.password = await bcrypt.hash(this.password, 8)
-    next()
-})
+userSchema.pre('save', async function(next) {
+    if (!this.isModified('password')) return next();
+    this.password = await bcrypt.hash(this.password, 8);
+    next();
+});
 
 userSchema.methods.isPasswordCorrect = async function(password) {
-    return await bcrypt.compare(password, this.password)
-}
+    if (!password || !this.password) {
+        throw new Error('Password or stored hash is missing');
+    }
+    return await bcrypt.compare(password, this.password);
+};
+
 
 userSchema.methods.generateAccessToken = function() {
     return jwt.sign(

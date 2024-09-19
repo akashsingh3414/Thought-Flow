@@ -17,6 +17,6 @@ connectToMongoDB().then(() => {
     console.log("MongoDB Connection Failed!", error);
 });
 
-app.use('/api', userRouter);
+app.use('/api/v1/user', userRouter);
 
 export { app };
