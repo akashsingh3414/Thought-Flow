@@ -1,6 +1,7 @@
 import express from 'express';
 import {User} from '../models/user.models.js'
 import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
 
 export const register = async (req, res) => {
     const { userName, fullName, emailID, password } = req.body;
@@ -21,7 +22,7 @@ export const register = async (req, res) => {
         userName: userName.toLowerCase(),
         emailID,
         fullName,
-        password,
+        password
     })
 
     const userCreated = await User.findById(user._id).select(

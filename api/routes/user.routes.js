@@ -14,6 +14,6 @@ router.route('/test').get((req, res) => {
 router.route('/register').post(register);
 router.route('/login').post(login);
 router.route('/logout').post(verifyjwt,logout);
-router.route('/getUser').get(verifyjwt,getUser);
+router.route('/getUser').get(verifyjwt,getUser); 
 
 export default router;

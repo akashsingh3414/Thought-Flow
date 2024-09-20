@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { AiOutlineSearch } from 'react-icons/ai'
-import { FaMoon } from 'react-icons/fa'
-import { GiHamburgerMenu } from 'react-icons/gi'
+import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { AiOutlineSearch } from 'react-icons/ai';
+import { FaMoon } from 'react-icons/fa';
+import { GiHamburgerMenu } from 'react-icons/gi';
 
 function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { pathname } = useLocation();
 
   const isActive = (path) => pathname === path ? 'text-blue-500' : 'text-black';
@@ -19,7 +19,7 @@ function Header() {
       </Link>
 
       <div className='flex items-center space-x-4'>
-        <form action="" className='relative'>
+        <form className='relative'>
           <input 
             type="text" 
             placeholder='Search...'
@@ -38,12 +38,14 @@ function Header() {
         <Link className={`hidden lg:block ${isActive('/about')}`} to='/about'>
           <button>About</button>
         </Link>
-        <Link className={`hidden lg:block ${isActive('/about')}`} to='/projects'>
+        <Link className={`hidden lg:block ${isActive('/projects')}`} to='/projects'>
           <button>Projects</button>
         </Link>
 
         <Link to='/signin'>
-          <button className='text-black'>Sign In</button>
+          <button className={`text-black ${pathname === '/signin' ? 'hidden' : 'block'}`}>
+            Sign In
+          </button>
         </Link>
 
         <button 
@@ -68,7 +70,7 @@ function Header() {
         </div>
       )}
     </div>
-  )
+  );
 }
 
-export default Header
+export default Header;
