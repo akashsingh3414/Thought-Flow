@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
@@ -25,11 +25,16 @@ function SignUp() {
       emailID: emailID.current.value,
       password: password.current.value,
     });
-    console.log(formData);
     setRegistered(true);
-    navigate('/');
   };
 
+  useEffect(() => {
+    if (registered) {
+      console.log(formData);
+      navigate('/');
+    }
+  }, [registered]);
+  
   return (
     !registered ? (
       <div className='mt-10 m-auto p-5 h-auto w-1/2 rounded-lg flex flex-col items-center justify-center bg-blue-100 shadow-lg'>
@@ -95,7 +100,7 @@ function SignUp() {
               />
             </div>
 
-            <button type='submit' className='p-3 bg-blue-600 hover:bg-blue-700 rounded text-white font-semibold transition-colors w-full'>
+            <button type='submit' className='p-3 bg-blue-600 hover:bg-blue-700 rounded text-white font-semibold transition-colors w-full' onClick={handleRegister}>
               Register Me
             </button>
           </form>

@@ -1,10 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 function SignIn() {
   const [loggedIn, setLogin] = useState(false);
-
   const [formData, setFormData] = useState({
     userID: '',
     fullName: '',
@@ -27,8 +26,14 @@ function SignIn() {
       password: password.current.value,
     });
     setLogin(true);
-    navigate('/');
   };
+
+  useEffect(()=>{
+    if(loggedIn) {
+      console.log(formData);
+      navigate('/')
+    }
+  }, [loggedIn])
 
   return (
     !loggedIn ? (
@@ -81,7 +86,7 @@ function SignIn() {
               />
             </div>
 
-            <button type='submit' className='p-3 bg-blue-600 hover:bg-blue-700 rounded text-white font-semibold transition-colors w-full'>
+            <button type='submit' className='p-3 bg-blue-600 hover:bg-blue-700 rounded text-white font-semibold transition-colors w-full' onClick={handleLogin}>
               Login
             </button>
           </form>
