@@ -6,7 +6,7 @@ export const login = async (req, res) => {
     const { userName, emailID, password } = req.body;
 
     if (!userName || !emailID || !password) {
-        return res.status(400).json({ message: "Username, Email, and Password are required" });
+        return res.status(400).json({ message: "All fields are required" });
     }
 
     const user = await User.findOne({
@@ -33,7 +33,7 @@ export const login = async (req, res) => {
 
     const options = {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        secure: true,
         maxAge: 24 * 60 * 60 * 1000
     };
 

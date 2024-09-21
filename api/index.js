@@ -3,10 +3,18 @@ import dotenv from 'dotenv';
 import connectToMongoDB from './db/index.js';
 import userRouter from './routes/user.routes.js';
 import cookieParser from 'cookie-parser'
+import cors from 'cors'
 
 dotenv.config();
 
 const app = express();
+
+app.use(cors())
+// app.options('*', cors());
+
+// app.use(cors({
+//     origin: 'http://localhost:5173',
+// }));
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true, limit: "16kb"}))
