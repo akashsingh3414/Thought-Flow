@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useRef, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom'; 
 import axios from 'axios';
 
 function SignUp() {
@@ -7,8 +7,13 @@ function SignUp() {
   const fullName = useRef(null);
   const emailID = useRef(null);
   const password = useRef(null);
+  const [errorMessage, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
     
     const formData = {
@@ -25,10 +30,10 @@ function SignUp() {
       if (res.status === 200) {
         navigate('/');
       } else {
-        console.error(res.data.message);
+        setError(res.data.message);
       }
     } catch (error) {
-      console.error('Axios error:', error);
+      setError(error.response?.data?.message || 'An error occurred');
     }
   };
 
@@ -49,7 +54,7 @@ function SignUp() {
               ref={userName}
               autoComplete='username'
               className='p-2 rounded border border-gray-300 text-black w-full focus:outline-none focus:ring-2 focus:ring-indigo-500'
-              required
+              // required
             />
           </div>
 
@@ -62,7 +67,7 @@ function SignUp() {
               ref={emailID}
               autoComplete='email'
               className='p-2 rounded border border-gray-300 text-black w-full focus:outline-none focus:ring-2 focus:ring-indigo-500'
-              required
+              // required
             />
           </div>
 
@@ -75,7 +80,7 @@ function SignUp() {
               ref={fullName}
               autoComplete='name'
               className='p-2 rounded border border-gray-300 text-black w-full focus:outline-none focus:ring-2 focus:ring-indigo-500'
-              required
+              // required
             />
           </div>
 
@@ -88,17 +93,23 @@ function SignUp() {
               ref={password}
               autoComplete='new-password'
               className='p-2 rounded border border-gray-300 text-black w-full focus:outline-none focus:ring-2 focus:ring-indigo-500'
-              required
+              // required
             />
           </div>
 
-          <button type='submit' className='p-3 bg-blue-600 hover:bg-blue-700 rounded text-white font-semibold transition-colors w-full'>
-            Register Me
+          <button type='submit' disabled={loading} className='p-3 bg-blue-600 hover:bg-blue-700 rounded text-white font-semibold transition-colors w-full'>
+            {loading ? <span>Loading</span> : <span>Register Me</span>}
           </button>
         </form>
       </div>
-
-      <div>
+      
+      {errorMessage && (
+        <div className='mt-4 p-3 bg-red-200 text-red-800 border border-red-400 rounded'>
+          {errorMessage}
+        </div>
+      )}
+      
+      <div className='mt-4'>
         <span>Have an account?</span>
         <Link to='/signin' className='ml-2 bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-blue-900'>
           Sign in

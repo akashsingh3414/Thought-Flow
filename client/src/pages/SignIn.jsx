@@ -12,6 +12,9 @@ function SignIn() {
   const userName = useRef(null);
   const emailID = useRef(null);
   const password = useRef(null);
+
+  const [errorMessage, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -25,21 +28,20 @@ function SignIn() {
   };
   
   const handleSubmit = (e) => {
+    setLoading(true)
     e.preventDefault();
-  
     axios.post('/api/v1/user/login', formData, {
       headers: { 'Content-Type': 'application/json' },
     })
     .then((res) => {
-      console.log(res.data);
       if (res.status === 200) {
         navigate('/');
       } else {
-        console.error(res.data.message);
+        setError(res.data.message);
       }
     })
     .catch((error) => {
-      console.error('Axios error:', error);
+      setError(error.response?.data?.message || 'An error occurred');
     });
   };
   
@@ -63,7 +65,7 @@ function SignIn() {
               autoComplete="username"
               onChange={handleChange}
               className='p-2 rounded border border-gray-300 text-black w-full focus:outline-none focus:ring-2 focus:ring-indigo-500'
-              required
+              // required
             />
           </div>
 
@@ -78,7 +80,7 @@ function SignIn() {
               autoComplete="email"
               onChange={handleChange}
               className='p-2 rounded border border-gray-300 text-black w-full focus:outline-none focus:ring-2 focus:ring-indigo-500'
-              required
+              // required
             />
           </div>
 
@@ -93,15 +95,20 @@ function SignIn() {
               autoComplete="current-password"
               onChange={handleChange}
               className='p-2 rounded border border-gray-300 text-black w-full focus:outline-none focus:ring-2 focus:ring-indigo-500'
-              required
+              // required
             />
           </div>
 
-          <button type='submit' className='p-3 bg-blue-600 hover:bg-blue-700 rounded text-white font-semibold transition-colors w-full'>
-            Login
+          <button type='submit' disabled={loading} className='p-3 bg-blue-600 hover:bg-blue-700 rounded text-white font-semibold transition-colors w-full'>
+            {loading ? <span>Loading</span> : <span>Login</span>}
           </button>
         </form>
       </div>
+      {errorMessage && (
+        <div className='mt-4 p-3 bg-red-200 text-red-800 border border-red-400 rounded'>
+          {errorMessage}
+        </div>
+      )}
 
       <div>
         <span>New to </span>
