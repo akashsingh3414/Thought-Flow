@@ -6,7 +6,7 @@ export const login = async (req, res) => {
     const { userName, emailID, password } = req.body;
 
     if (!userName || !emailID || !password) {
-        return res.status(400).json({ message: "All fields are required" });
+        return res.status(400).json({ message: "Please fill all fields" });
     }
 
     const user = await User.findOne({

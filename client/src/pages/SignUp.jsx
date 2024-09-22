@@ -28,8 +28,10 @@ function SignUp() {
         headers: { 'Content-Type': 'application/json' },
       });
       if (res.status === 200) {
+        setLoading(true);
         navigate('/');
       } else {
+        setLoading(false);
         setError(res.data.message);
       }
     } catch (error) {
@@ -98,7 +100,7 @@ function SignUp() {
           </div>
 
           <button type='submit' disabled={loading} className='p-3 bg-blue-600 hover:bg-blue-700 rounded text-white font-semibold transition-colors w-full'>
-            {loading ? <span>Loading</span> : <span>Register Me</span>}
+            {loading && !errorMessage ? 'Loading...' : 'Register Me'}
           </button>
         </form>
       </div>

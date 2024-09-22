@@ -7,7 +7,7 @@ export const register = async (req, res) => {
     const { userName, fullName, emailID, password } = req.body;
     
     if (!userName || !fullName || !emailID || !password || [userName, fullName, emailID, password].some((field) => String(field).trim() === "")) {
-        return res.status(400).json({ message: "All fields are important" });
+        return res.status(400).json({ message: "All fields are required" });
     }
 
     const existingUser = await User.findOne({

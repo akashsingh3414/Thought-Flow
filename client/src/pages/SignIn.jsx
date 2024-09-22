@@ -35,8 +35,10 @@ function SignIn() {
     })
     .then((res) => {
       if (res.status === 200) {
+        setLoading(true);
         navigate('/');
       } else {
+        setLoading(false);
         setError(res.data.message);
       }
     })
@@ -100,8 +102,9 @@ function SignIn() {
           </div>
 
           <button type='submit' disabled={loading} className='p-3 bg-blue-600 hover:bg-blue-700 rounded text-white font-semibold transition-colors w-full'>
-            {loading ? <span>Loading</span> : <span>Login</span>}
+            {loading && !errorMessage ? 'Loading...' : 'Login'}
           </button>
+
         </form>
       </div>
       {errorMessage && (
@@ -111,8 +114,8 @@ function SignIn() {
       )}
 
       <div>
-        <span>New to </span>
-        <Link to='/' className='ml-2 bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-blue-900'>
+        <span>New to</span>
+        <Link to='/about' className='ml-2 bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-blue-900'>
           Thought Flow
         </Link>
         <span>?</span>

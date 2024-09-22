@@ -32,18 +32,18 @@ function Header() {
           <FaMoon className='text-2xl' />
         </button>
 
-        <Link className={`hidden lg:block ${isActive('/home')}`} to='/home'>
+        <Link className={`hidden hover:bg-gray-200 hover:rounded px-1 lg:block ${isActive('/home')} ${isActive('/')}`} to='/home'>
           <button>Home</button>
         </Link>
-        <Link className={`hidden lg:block ${isActive('/about')}`} to='/about'>
+        <Link className={`hidden hover:bg-gray-200 hover:rounded px-1 lg:block ${isActive('/about')}`} to='/about'>
           <button>About</button>
         </Link>
-        <Link className={`hidden lg:block ${isActive('/projects')}`} to='/projects'>
+        <Link className={`hidden hover:bg-gray-200 hover:rounded px-1 lg:block ${isActive('/projects')}`} to='/projects'>
           <button>Projects</button>
         </Link>
 
         <Link to='/signin'>
-          <button className={`text-black ${pathname === '/signin' ? 'hidden' : 'block'}`}>
+          <button className={`text-black hover:bg-gray-200 hover:rounded px-1 active:text-blue-500 ${pathname === '/signin' ? 'hidden' : 'block'}`}>
             Sign In
           </button>
         </Link>
@@ -58,13 +58,13 @@ function Header() {
 
       {isMenuOpen && (
         <div className='lg:hidden absolute top-16 right-4 bg-white shadow-md rounded-lg p-4 flex flex-col items-start space-y-2'>
-          <Link className={`${isActive('/home')}`} to='/home' onClick={() => setIsMenuOpen(false)}>
+          <Link className={`hover:bg-gray-200 hover:rounded px-1 ${isActive('/home')} ${isActive('/') }`} to='/home' onClick={() => setIsMenuOpen(false)}>
             <button>Home</button>
           </Link>
-          <Link className={`${isActive('/about')}`} to='/about' onClick={() => setIsMenuOpen(false)}>
+          <Link className={`hover:bg-gray-200 hover:rounded px-1 ${isActive('/about')}`} to='/about' onClick={() => setIsMenuOpen(false)}>
             <button>About</button>
           </Link>
-          <Link className={`${isActive('/projects')}`} to='/projects' onClick={() => setIsMenuOpen(false)}>
+          <Link className={`hover:bg-gray-200 hover:rounded px-1 ${isActive('/projects')}`} to='/projects' onClick={() => setIsMenuOpen(false)}>
             <button>Projects</button>
           </Link>
         </div>
