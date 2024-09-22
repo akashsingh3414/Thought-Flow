@@ -1,52 +1,56 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginStart, loginSuccess, loginFailure } from '../redux/user/userSlice.js';
 
 function SignIn() {
-  const [formData, setFormData] = useState({
-    userName: '',
-    emailID: '',
-    password: '',
-  });
-
   const userName = useRef(null);
   const emailID = useRef(null);
   const password = useRef(null);
 
-  const [errorMessage, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state.user);
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
+  const [localErrorMessage, setLocalErrorMessage] = useState(null);
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setFormData({
-      ...formData,
+
+    const formData = {
       userName: userName.current.value,
       emailID: emailID.current.value,
       password: password.current.value,
-    });
-  };
-  
-  const handleSubmit = (e) => {
-    setLoading(true)
-    e.preventDefault();
+    };
+
+    setLocalErrorMessage(null);
+    dispatch(loginStart());
+
     axios.post('/api/v1/user/login', formData, {
       headers: { 'Content-Type': 'application/json' },
     })
     .then((res) => {
       if (res.status === 200) {
-        setLoading(true);
+        dispatch(loginSuccess(res.data));
         navigate('/');
       } else {
-        setLoading(false);
-        setError(res.data.message);
+        setLocalErrorMessage(res.data.message);
+        dispatch(loginFailure(res.data.message));
       }
     })
     .catch((error) => {
-      setError(error.response?.data?.message || 'An error occurred');
+      if (error.response) {
+        console.log("Error response:", error.response);
+        setLocalErrorMessage(error.response.data.message || "Something went wrong");
+        dispatch(loginFailure(error.response.data.message || "Something went wrong"));
+      } else {
+        console.log("Error:", error.message);
+        setLocalErrorMessage(error.message);
+        dispatch(loginFailure(error.message));
+      }
     });
   };
-  
 
   return (
     <div className='mt-10 m-auto p-5 h-auto w-1/2 rounded-lg flex flex-col items-center justify-center bg-blue-100 shadow-lg'>
@@ -63,11 +67,8 @@ function SignIn() {
               placeholder='johnsmith123' 
               id='userName'
               ref={userName}
-              value={formData.userName}
               autoComplete="username"
-              onChange={handleChange}
               className='p-2 rounded border border-gray-300 text-black w-full focus:outline-none focus:ring-2 focus:ring-indigo-500'
-              // required
             />
           </div>
 
@@ -78,11 +79,8 @@ function SignIn() {
               placeholder='johnsmith@xyz.com' 
               id='emailID'
               ref={emailID} 
-              value={formData.emailID}
               autoComplete="email"
-              onChange={handleChange}
               className='p-2 rounded border border-gray-300 text-black w-full focus:outline-none focus:ring-2 focus:ring-indigo-500'
-              // required
             />
           </div>
 
@@ -93,23 +91,20 @@ function SignIn() {
               placeholder='Enter your password' 
               id='password'
               ref={password} 
-              value={formData.password}
               autoComplete="current-password"
-              onChange={handleChange}
               className='p-2 rounded border border-gray-300 text-black w-full focus:outline-none focus:ring-2 focus:ring-indigo-500'
-              // required
             />
           </div>
 
           <button type='submit' disabled={loading} className='p-3 bg-blue-600 hover:bg-blue-700 rounded text-white font-semibold transition-colors w-full'>
-            {loading && !errorMessage ? 'Loading...' : 'Login'}
+            {loading && !localErrorMessage ? 'Loading...' : 'Login'}
           </button>
-
         </form>
       </div>
-      {errorMessage && (
+
+      {localErrorMessage && (
         <div className='mt-4 p-3 bg-red-200 text-red-800 border border-red-400 rounded'>
-          {errorMessage}
+          {localErrorMessage}
         </div>
       )}
 

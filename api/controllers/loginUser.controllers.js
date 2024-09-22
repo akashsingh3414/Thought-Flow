@@ -1,4 +1,3 @@
-import express from 'express';
 import { User } from '../models/user.models.js';
 import { generateAccessANDrefreshToken } from '../controllers/generate.controllers.js';
 
@@ -20,7 +19,7 @@ export const login = async (req, res) => {
     const isPasswordCorrect = await user.isPasswordCorrect(password);
 
     if (!isPasswordCorrect) {
-        return res.status(401).json({ message: "Invalid Credentials" });
+        return res.status(401).json({ message: "Invalid Password" });
     }
 
     const loggedInUser = await User.findById(user._id).select('-password -refreshToken');

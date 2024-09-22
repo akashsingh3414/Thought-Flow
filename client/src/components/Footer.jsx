@@ -37,7 +37,7 @@ function Footer() {
 
       <div className='flex items-center'>
         <Link to='/' className='text-white text-sm sm:text-xl font-bold'>
-          <span className='text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-blue-900'>
+          <span className='text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-blue-100'>
             Thought Flow
           </span>
         </Link>
