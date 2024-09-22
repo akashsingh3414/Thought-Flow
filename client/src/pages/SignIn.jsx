@@ -41,11 +41,9 @@ function SignIn() {
     })
     .catch((error) => {
       if (error.response) {
-        console.log("Error response:", error.response);
         setLocalErrorMessage(error.response.data.message || "Something went wrong");
         dispatch(loginFailure(error.response.data.message || "Something went wrong"));
       } else {
-        console.log("Error:", error.message);
         setLocalErrorMessage(error.message);
         dispatch(loginFailure(error.message));
       }
