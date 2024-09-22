@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginStart, loginSuccess, loginFailure } from '../redux/user/userSlice.js';
+import OAuth from '../components/OAuth.jsx'
 
 function SignIn() {
   const userName = useRef(null);
@@ -97,6 +98,7 @@ function SignIn() {
           <button type='submit' disabled={loading} className='p-3 bg-blue-600 hover:bg-blue-700 rounded text-white font-semibold transition-colors w-full'>
             {loading && !localErrorMessage ? 'Loading...' : 'Login'}
           </button>
+          <OAuth />
         </form>
       </div>
 

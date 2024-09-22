@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; 
 import axios from 'axios';
+import OAuth from '../components/OAuth.jsx'
 
 function SignUp() {
   const userName = useRef(null);
@@ -102,6 +103,7 @@ function SignUp() {
           <button type='submit' disabled={loading} className='p-3 bg-blue-600 hover:bg-blue-700 rounded text-white font-semibold transition-colors w-full'>
             {loading && !errorMessage ? 'Loading...' : 'Register Me'}
           </button>
+          <OAuth />
         </form>
       </div>
       
