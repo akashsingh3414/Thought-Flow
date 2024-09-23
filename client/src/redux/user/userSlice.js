@@ -8,8 +8,8 @@ export const userSlice = createSlice({
     loading: false,
   },
   reducers: {
-    loginStart: (state, action) => {
-      state.currentUser = action.payload;
+    loginStart: (state) => {
+      state.currentUser = null;
       state.loading = false;
     },
     loginSuccess: (state, action) => {
@@ -21,10 +21,14 @@ export const userSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    logoutStart: (state) => {
+      state.currentUser = null;
+      state.loading = false;
+    }
   },
 });
 
-export const { loginStart, loginSuccess, loginFailure} = userSlice.actions;
+export const { loginStart, loginSuccess, loginFailure, logoutStart } = userSlice.actions;
 
 export const selectUser = (state) => state.user;
 

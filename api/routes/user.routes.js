@@ -17,5 +17,4 @@ router.route('/logout').post(verifyjwt,logout);
 router.route('/getUser').get(verifyjwt,getUser); 
 router.route('/google').post(google);
 
-
 export default router;
