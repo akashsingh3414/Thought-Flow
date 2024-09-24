@@ -13,8 +13,8 @@ function Footer() {
 
   return (
     <footer
-      className={`flex flex-col md:flex-row justify-center items-center p-6 gap-8 w-full mt-5 ${
-        theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-gray-200 text-black'
+      className={`flex flex-col md:flex-row justify-between items-center p-2 gap-2 w-full mt-2 ${
+        theme === 'dark' ? 'bg-black text-white' : 'bg-gray-200 text-black'
       }`}
     >
       <div className="flex flex-col space-y-3 font-bold">

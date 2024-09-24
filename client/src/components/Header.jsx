@@ -158,13 +158,13 @@ function Header() {
           ref={menuRef}
           className={`lg:hidden absolute top-16 right-4 bg-white shadow-md rounded-lg p-4 flex flex-col items-start space-y-2 z-10 ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}
         >
-          <Link className={`hover:bg-gray-200 px-2 py-1 rounded ${isActive('/home')}`} to="/home" onClick={toggleMenuOptions}>
+          <Link className={`hover:bg-gray-200 px-2 py-1 rounded text-black ${isActive('/home')}`} to="/home" onClick={toggleMenuOptions}>
             Home
           </Link>
-          <Link className={`hover:bg-gray-200 px-2 py-1 rounded ${isActive('/about')}`} to="/about" onClick={toggleMenuOptions}>
+          <Link className={`hover:bg-gray-200 px-2 py-1 rounded text-black ${isActive('/about')}`} to="/about" onClick={toggleMenuOptions}>
             About
           </Link>
-          <Link className={`hover:bg-gray-200 px-2 py-1 rounded ${isActive('/projects')}`} to="/projects" onClick={toggleMenuOptions}>
+          <Link className={`hover:bg-gray-200 px-2 py-1 rounded text-black ${isActive('/projects')}`} to="/projects" onClick={toggleMenuOptions}>
             Projects
           </Link>
         </div>
