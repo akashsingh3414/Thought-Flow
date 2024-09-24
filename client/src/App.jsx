@@ -10,9 +10,12 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
+import { useSelector } from 'react-redux';
 
 function App() {
+  const theme = useSelector((state) => state.theme.theme);
   return (
+    <div className={theme === 'dark' ? 'dark bg-gray-900' : 'light bg-gray-100'}>
     <BrowserRouter>
       <Header />
       <Routes>
@@ -28,6 +31,7 @@ function App() {
       </Routes>
       <Footer />
     </BrowserRouter>
+    </div>
   );
 }
 

@@ -1,20 +1,25 @@
 import React, { useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; 
 import axios from 'axios';
-import OAuth from '../components/OAuth.jsx'
+import { useDispatch, useSelector } from 'react-redux';
+import { loginStart, loginSuccess, loginFailure } from '../redux/user/userSlice.js';
+import OAuth from '../components/OAuth.jsx';
 
 function SignUp() {
   const userName = useRef(null);
   const fullName = useRef(null);
   const emailID = useRef(null);
   const password = useRef(null);
-  const [errorMessage, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const { loading, error } = useSelector((state) => state.user);
+  const theme = useSelector((state) => state.theme.theme);
+  const [localErrorMessage, setLocalErrorMessage] = useState(null);
+
   const handleSubmit = async (e) => {
-    setLoading(true);
+    setLocalErrorMessage(null);
     e.preventDefault();
     
     const formData = {
@@ -24,98 +29,113 @@ function SignUp() {
       password: password.current.value,
     };
 
+    dispatch(loginStart());
+
     try {
       const res = await axios.post('/api/v1/user/register', formData, {
         headers: { 'Content-Type': 'application/json' },
       });
+
       if (res.status === 200) {
-        setLoading(true);
+        dispatch(loginSuccess(res.data));
         navigate('/');
       } else {
-        setLoading(false);
-        setError(res.data.message);
+        setLocalErrorMessage(res.data.message);
+        dispatch(loginFailure(res.data.message));
       }
     } catch (error) {
-      setError(error.response?.data?.message || 'An error occurred');
+      const errorMsg = error.response?.data?.message || 'An error occurred';
+      setLocalErrorMessage(errorMsg);
+      dispatch(loginFailure(errorMsg));
     }
   };
 
   return (
-    <div className='mt-10 m-auto p-5 h-auto w-1/2 rounded-lg flex flex-col items-center justify-center bg-blue-100 shadow-lg'>
-      <span className='bg-clip-text text-xl font-bold text-transparent bg-gradient-to-r from-indigo-500 to-blue-900'>
-        Register Here!
+    <div className={`mt-10 m-auto p-5 w-full max-w-lg rounded-lg flex flex-col items-center justify-center shadow-lg ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-blue-100 text-black'}`}>
+      <span className={`bg-clip-text text-2xl font-bold text-transparent bg-gradient-to-r from-indigo-500 to-blue-900 mb-4`}>
+        Create your account here!
       </span>
 
-      <div className='flex items-center mt-5 p-5 rounded w-full bg-white shadow-md'>
-        <form onSubmit={handleSubmit} className='flex flex-col space-y-4 w-full'>
-          <div className='flex items-center gap-5 w-full'>
-            <label htmlFor='userName' className='w-1/3 font-medium text-gray-700'>User ID</label>
+      <div className={`flex items-center p-5 rounded-lg w-full ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'} shadow-md`}>
+        <form onSubmit={handleSubmit} className="flex flex-col space-y-4 w-full">
+          <div className="flex flex-col gap-2">
+            <label htmlFor="userName" className={`font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
+              User ID
+            </label>
             <input
-              type='text'
-              placeholder='johnsmith123'
-              id='userName'
+              type="text"
+              placeholder="johnsmith123"
+              id="userName"
               ref={userName}
-              autoComplete='username'
-              className='p-2 rounded border border-gray-300 text-black w-full focus:outline-none focus:ring-2 focus:ring-indigo-500'
-              // required
+              autoComplete="username"
+              className={`p-3 rounded-lg border ${theme === 'dark' ? 'border-gray-600 text-gray-900 bg-gray-300' : 'border-gray-300 text-black'} w-full focus:outline-none focus:ring-2 focus:ring-indigo-500`}
             />
           </div>
 
-          <div className='flex items-center gap-5 w-full'>
-            <label htmlFor='emailID' className='w-1/3 font-medium text-gray-700'>Email ID</label>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="fullName" className={`font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
+              Full Name
+            </label>
             <input
-              type='email'
-              placeholder='johnsmith@xyz.com'
-              id='emailID'
-              ref={emailID}
-              autoComplete='email'
-              className='p-2 rounded border border-gray-300 text-black w-full focus:outline-none focus:ring-2 focus:ring-indigo-500'
-              // required
-            />
-          </div>
-
-          <div className='flex items-center gap-5 w-full'>
-            <label htmlFor='fullName' className='w-1/3 font-medium text-gray-700'>Full Name</label>
-            <input
-              type='text'
-              placeholder='John Smith'
-              id='fullName'
+              type="text"
+              placeholder="John Smith"
+              id="fullName"
               ref={fullName}
-              autoComplete='name'
-              className='p-2 rounded border border-gray-300 text-black w-full focus:outline-none focus:ring-2 focus:ring-indigo-500'
-              // required
+              autoComplete="name"
+              className={`p-3 rounded-lg border ${theme === 'dark' ? 'border-gray-600 text-gray-900 bg-gray-300' : 'border-gray-300 text-black'} w-full focus:outline-none focus:ring-2 focus:ring-indigo-500`}
             />
           </div>
 
-          <div className='flex items-center gap-5 w-full'>
-            <label htmlFor='password' className='w-1/3 font-medium text-gray-700'>Password</label>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="emailID" className={`font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
+              Email ID
+            </label>
             <input
-              type='password'
-              placeholder='Enter your password'
-              id='password'
-              ref={password}
-              autoComplete='new-password'
-              className='p-2 rounded border border-gray-300 text-black w-full focus:outline-none focus:ring-2 focus:ring-indigo-500'
-              // required
+              type="email"
+              placeholder="johnsmith@xyz.com"
+              id="emailID"
+              ref={emailID}
+              autoComplete="email"
+              className={`p-3 rounded-lg border ${theme === 'dark' ? 'border-gray-600 text-gray-900 bg-gray-300' : 'border-gray-300 text-black'} w-full focus:outline-none focus:ring-2 focus:ring-indigo-500`}
             />
           </div>
 
-          <button type='submit' disabled={loading} className='p-3 bg-blue-600 hover:bg-blue-700 rounded text-white font-semibold transition-colors w-full'>
-            {loading && !errorMessage ? 'Loading...' : 'Register Me'}
+          <div className="flex flex-col gap-2">
+            <label htmlFor="password" className={`font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
+              Password
+            </label>
+            <input
+              type="password"
+              placeholder="Enter your password"
+              id="password"
+              ref={password}
+              autoComplete="new-password"
+              className={`p-3 rounded-lg border ${theme === 'dark' ? 'border-gray-600 text-gray-900 bg-gray-300' : 'border-gray-300 text-black'} w-full focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className={`p-3 rounded-lg text-white font-semibold transition w-full ${loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700'}`}
+          >
+            {loading ? 'Loading...' : 'Sign up'}
           </button>
           <OAuth />
         </form>
       </div>
-      
-      {errorMessage && (
-        <div className='mt-4 p-3 bg-red-200 text-red-800 border border-red-400 rounded'>
-          {errorMessage}
+
+
+      {(localErrorMessage || error) && (
+        <div className="mt-4 p-3 bg-red-200 text-red-800 border border-red-400 rounded-lg">
+          {localErrorMessage || error}
         </div>
       )}
-      
-      <div className='mt-4'>
-        <span>Have an account?</span>
-        <Link to='/signin' className='ml-2 bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-blue-900'>
+
+
+      <div className={`mt-6 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+        <span>Already have an account?</span>
+        <Link to="/signin" className="ml-2 text-indigo-600 font-semibold hover:underline">
           Sign in
         </Link>
       </div>
