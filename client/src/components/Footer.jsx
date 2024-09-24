@@ -16,7 +16,7 @@ function Footer() {
           <button
             className={`hover:${
               theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-            } `}
+            } hover:bg-white hover:text-black hover:rounded-lg p-2`}
           >
             Home
           </button>
@@ -25,7 +25,7 @@ function Footer() {
           <button
             className={`hover:${
               theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-            } `}
+            } hover:bg-white hover:text-black hover:rounded-lg p-2`}
           >
             About
           </button>
@@ -34,7 +34,7 @@ function Footer() {
           <button
             className={`hover:${
               theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-            } `}
+            } hover:bg-white hover:text-black hover:rounded-lg p-2`}
           >
             Projects
           </button>
@@ -50,7 +50,7 @@ function Footer() {
               key={platform}
               className={`hover:${
                 theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-              } `}
+              } hover:bg-white hover:text-black hover:rounded-lg p-2`}
             >
               {platform}
             </a>
@@ -66,7 +66,7 @@ function Footer() {
             key={policy}
             className={`text-sm font-semibold hover:${
               theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-            } `}
+            } hover:bg-white hover:text-black hover:rounded-lg p-2`}
           >
             {policy}
           </a>
@@ -78,7 +78,7 @@ function Footer() {
           <span
             className={`text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-blue-300 ${
               theme === 'dark' ? '' : ''
-            }`}
+            } `}
           >
             Thought Flow
           </span>
