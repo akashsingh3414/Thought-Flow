@@ -8,18 +8,26 @@ import axios from 'axios';
 import { logoutStart } from '../redux/user/userSlice.js';
 
 function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { pathname } = useLocation();
-  const { currentUser } = useSelector((state) => state.user);
-  const [profileOptions, setProfileOptions] = useState(false);
-  const profileRef = useRef(null);
-
-  const isActive = (path) => (pathname === path ? 'text-blue-500' : 'text-black');
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const { currentUser } = useSelector((state) => state.user);
+
+  const [profileOptions, setProfileOptions] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const profileRef = useRef(null);
+  const menuRef = useRef(null);
+
+  const isActive = (path) => (pathname === path ? 'text-blue-500' : 'text-black');
+
   const toggleProfileOptions = () => {
     setProfileOptions((prev) => !prev);
+  };
+
+  const toggleMenuOptions = () => {
+    setIsMenuOpen((prev) => !prev);
   };
 
   const handleLogout = () => {
@@ -32,19 +40,6 @@ function Header() {
         console.log(error.message);
       });
   };
-
-  const handleClickOutside = (event) => {
-    if (profileRef.current && !profileRef.current.contains(event.target)) {
-      setProfileOptions(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
 
   return (
     <div className='flex justify-between items-center p-4'>
@@ -79,34 +74,47 @@ function Header() {
         </Link>
 
         <div className="relative" ref={profileRef}>
-          {currentUser && <button 
-            className='px-2 py-1 rounded hover:bg-gray-200' 
-            onClick={toggleProfileOptions}
-          >
-            {currentUser.user.userName}
-          </button>}
+          {currentUser && (
+            <button
+              className="px-2 py-1 rounded-full hover:bg-gray-200 flex items-center justify-center h-10 w-10"
+              onClick={toggleProfileOptions}
+            >
+              <img
+                className="rounded-full h-full w-full object-cover"
+                src={currentUser.user.profilePhoto || 'https://th.bing.com/th/id/OIP.xo-BCC1ZKFpLL65D93eHcgHaGe?rs=1&pid=ImgDetMain'}
+                alt="Profile"
+              />
+            </button>
+          )}
+
           {currentUser && profileOptions && (
-            <div className='absolute right-0 mt-2 w-50 bg-white border border-gray-200 shadow-lg'>
-              <ul>
-                <li>
-                  <div className='h-20 w-20 flex items-center justify-center m-auto'>
-                    <img 
-                      src={currentUser.user.profilePhoto || 'https://th.bing.com/th/id/OIP.xo-BCC1ZKFpLL65D93eHcgHaGe?rs=1&pid=ImgDetMain'} 
-                      alt="Profile" 
+            <div className="absolute -ml-44 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+              <ul className="text-center">
+                <li className="px-4 py-3">
+                  <div className="h-16 w-16 mx-auto mb-2">
+                    <img
+                      className="rounded-full h-full w-full object-cover"
+                      src={currentUser.user.profilePhoto || 'https://th.bing.com/th/id/OIP.xo-BCC1ZKFpLL65D93eHcgHaGe?rs=1&pid=ImgDetMain'}
+                      alt="Profile"
                     />
                   </div>
+                  <span className="block font-semibold text-gray-800">{currentUser.user.userName}</span>
+                  <span className="block text-sm text-gray-500">{currentUser.user.emailID}</span>
                 </li>
-                <li className='px-1.5 py-2 flex justify-center'>
-                  <span>{currentUser.user.userName}</span>
+                <li className={`hover:bg-gray-100 px-4 py-2 ${isActive('/profile')}`}>
+                  <Link to="/profile">
+                    <button className="w-full text-left">Profile Page</button>
+                  </Link>
                 </li>
-                <li className='px-1.5 py-2'>
-                  <span>{currentUser.user.emailID}</span>
+                <li className={`hover:bg-gray-100 px-4 py-2 ${isActive('/settings')}`}>
+                  <Link to="/settings">
+                    <button className="w-full text-left">Settings</button>
+                  </Link>
                 </li>
-                <li className={`hover:bg-gray-100 px-1.5 py-2 ${isActive('/settings')}`}>
-                  <Link to='/settings'><button>Settings</button></Link>
-                </li>
-                <li className='hover:bg-gray-100 px-1.5 py-2'>
-                  <button onClick={handleLogout}>Logout</button>
+                <li className="hover:bg-gray-100 px-4 py-2">
+                  <button className="w-full text-left" onClick={handleLogout}>
+                    Logout
+                  </button>
                 </li>
               </ul>
             </div>
@@ -123,14 +131,14 @@ function Header() {
 
         <button 
           className='lg:hidden h-10 w-10 flex justify-center items-center' 
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          onClick={toggleMenuOptions}
         >
           <GiHamburgerMenu className='text-2xl' />
         </button>
       </div>
 
       {isMenuOpen && (
-        <div className='lg:hidden absolute top-16 right-4 bg-white shadow-md rounded-lg p-4 flex flex-col items-start space-y-2'>
+        <div ref={menuRef} className='lg:hidden absolute top-16 right-4 bg-white shadow-md rounded-lg p-4 flex flex-col items-start space-y-2'>
           <Link className={`hover:bg-gray-200 hover:rounded px-1 ${isActive('/home')} ${isActive('/')}`} to='/home' onClick={() => setIsMenuOpen(false)}>
             <button>Home</button>
           </Link>

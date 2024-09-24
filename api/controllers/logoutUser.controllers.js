@@ -3,7 +3,7 @@ import { User } from "../models/user.models.js";
 export const logout = async (req, res) => {
     const user = await User.findByIdAndUpdate(
         req.body._id,
-        { $set: { refreshToken: undefined } },
+        { $set: { refreshToken: null } },
         { new: true }
     );
 
