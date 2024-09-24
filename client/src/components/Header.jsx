@@ -23,7 +23,7 @@ function Header() {
   const menuRef = useRef(null);
 
   const isActive = useCallback(
-    (path) => (pathname === path ? 'text-blue-500' : 'text-black'),
+    (path) => (pathname === path ? 'text-blue-500' : ''),
     [pathname]
   );
 
@@ -61,26 +61,26 @@ function Header() {
           <input
             type="text"
             placeholder="Search..."
-            className={`pl-10 pr-4 py-2 rounded-full border text-black ${theme === 'dark' ? 'border-gray-700 bg-gray-600' : 'border-gray-300 bg-gray-100'} rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+            className={`pl-10 pr-4 py-2 rounded-full border text-black ${theme === 'dark' ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-gray-100'} rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500`}
           />
           <AiOutlineSearch className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-500" />
         </form>
 
         <nav className="hidden lg:flex space-x-4">
           <Link
-            className={`hover:bg-gray-200 px-2 py-1 rounded ${isActive('/home')} ${theme === 'dark' ? 'text-white hover:text-black': 'text-black'}`}
+            className={`hover:bg-white px-2 py-1 rounded ${isActive('/home')} ${theme === 'dark' ? 'hover:text-black' : 'text-black'}`}
             to="/home"
           >
             Home
           </Link>
           <Link
-            className={`hover:bg-gray-200 px-2 py-1 rounded ${isActive('/about')} ${theme === 'dark' ? 'text-white hover:text-black' : 'text-black'}`}
+            className={`hover:bg-white px-2 py-1 rounded ${isActive('/about')} ${theme === 'dark' ? 'hover:text-black' : 'text-black'}`}
             to="/about"
           >
             About
           </Link>
           <Link
-            className={`hover:bg-gray-200 px-2 py-1 rounded ${isActive('/projects')} ${theme === 'dark' ? 'text-white hover:text-black' : 'text-black'}`}
+            className={`hover:bg-white px-2 py-1 rounded ${isActive('/projects')} ${theme === 'dark' ? 'hover:text-black' : 'text-black'}`}
             to="/projects"
           >
             Projects
