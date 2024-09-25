@@ -34,10 +34,8 @@ export default function OAuth() {
     } catch (error) {
       if (error.response) {
         dispatch(loginFailure(error.response.data.message))
-        console.error('Error during sign-in:', error.response.data.message);
       } else {
         dispatch(loginFailure(error.response))
-        console.error('Error during sign-in:', error.message);
       }
     }
   };

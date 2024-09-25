@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; 
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,7 +14,7 @@ function SignUp() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { loading, error } = useSelector((state) => state.user);
+  const { loading} = useSelector((state) => state.user.loading);
   const theme = useSelector((state) => state.theme.theme);
   const [localErrorMessage, setLocalErrorMessage] = useState(null);
 
@@ -28,9 +28,7 @@ function SignUp() {
       emailID: emailID.current.value,
       password: password.current.value,
     };
-
     dispatch(loginStart());
-
     try {
       const res = await axios.post('/api/v1/user/register', formData, {
         headers: { 'Content-Type': 'application/json' },
@@ -44,7 +42,7 @@ function SignUp() {
         dispatch(loginFailure(res.data.message));
       }
     } catch (error) {
-      const errorMsg = error.response?.data?.message || 'An error occurred';
+      const errorMsg = error.response.data.message || error.response.statusText;
       setLocalErrorMessage(errorMsg);
       dispatch(loginFailure(errorMsg));
     }
@@ -125,13 +123,11 @@ function SignUp() {
         </form>
       </div>
 
-
-      {(localErrorMessage || error) && (
+      {(localErrorMessage) && (
         <div className="mt-4 p-3 bg-red-200 text-red-800 border border-red-400 rounded-lg">
-          {localErrorMessage || error}
+          {localErrorMessage}
         </div>
       )}
-
 
       <div className={`mt-6 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
         <span>Already have an account?</span>

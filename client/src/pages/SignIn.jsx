@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,7 +11,7 @@ function SignIn() {
   const password = useRef(null);
 
   const dispatch = useDispatch();
-  const { loading, error } = useSelector((state) => state.user);
+  const { loading } = useSelector((state) => state.user.loading);
   const theme = useSelector((state) => state.theme.theme);
   const navigate = useNavigate();
 
@@ -28,11 +28,12 @@ function SignIn() {
 
     setLocalErrorMessage(null);
     dispatch(loginStart());
-
+  
     axios.post('/api/v1/user/login', formData, {
       headers: { 'Content-Type': 'application/json' },
     })
       .then((res) => {
+        console.log("Server Response:", res);
         if (res.status === 200) {
           dispatch(loginSuccess(res.data));
           navigate('/');
@@ -43,14 +44,15 @@ function SignIn() {
       })
       .catch((error) => {
         if (error.response) {
-          setLocalErrorMessage(error.response.data.message || 'Something went wrong');
-          dispatch(loginFailure(error.response.data.message || 'Something went wrong'));
+          const serverErrorMessage = error.response.data.message || error.response.statusText;
+          setLocalErrorMessage(serverErrorMessage);
+          dispatch(loginFailure(serverErrorMessage));
         } else {
           setLocalErrorMessage(error.message);
           dispatch(loginFailure(error.message));
         }
       });
-  };
+    }    
 
   return (
     <div className={`mt-10 m-auto p-5 w-full max-w-lg rounded-lg flex flex-col items-center justify-center shadow-lg ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-blue-100 text-black'}`}>
@@ -114,9 +116,9 @@ function SignIn() {
         </form>
       </div>
 
-      {(localErrorMessage || error) && (
+      {(localErrorMessage) && (
         <div className="mt-4 p-3 bg-red-200 text-red-800 border border-red-400 rounded-lg">
-          {localErrorMessage || error}
+          {localErrorMessage}
         </div>
       )}
 

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { GiHamburgerMenu } from 'react-icons/gi';
@@ -45,6 +45,12 @@ function Header() {
     }
   };
 
+  useEffect(()=>{
+    if(currentUser){
+      setProfileOptions(false);
+    }
+  }, [currentUser])
+
   return (
     <header
       className={`flex justify-between items-center p-4 bg-blue-100 ${theme === 'dark' ? 'bg-gray-900 text-white' : 'text-black'}`}
@@ -61,7 +67,7 @@ function Header() {
           <input
             type="text"
             placeholder="Search..."
-            className={`pl-10 pr-4 py-2 rounded-full border text-black ${theme === 'dark' ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-gray-100'} rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+            className={`pl-10 pr-4 py-2 border text-black ${theme === 'dark' ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-gray-100'} rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500`}
           />
           <AiOutlineSearch className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-500" />
         </form>
@@ -102,11 +108,15 @@ function Header() {
               onClick={toggleProfileOptions}
               aria-label="Profile Options"
             >
-              <img
-                className="object-cover h-full w-full"
-                src={currentUser.user.profilePhoto || 'https://via.placeholder.com/150'}
-                alt="Profile"
-              />
+            <img
+              src={currentUser.user.profilePhoto || 'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?size=626&ext=jpg'}
+              alt="Profile"
+              className="h-full w-full rounded-full object-contain"
+              onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = 'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?size=626&ext=jpg';
+              }}
+            />
             </button>
           ) : (
             <Link to="/signin" className={pathname === '/signin' ? 'hidden' : 'block'}>
@@ -116,32 +126,47 @@ function Header() {
             </Link>
           )}
 
-          {currentUser && profileOptions && (
-            <div className={`absolute right-0 mt-2 w-56 bg-white border ${theme === 'dark' ? 'border-gray-700 bg-gray-900 text-white hover:text-black' : 'border-gray-200 bg-white text-black'} rounded-lg shadow-lg z-10`}>
-              <ul className="text-center">
-                <li className="px-4 py-3">
-                  <img
-                    className="rounded-full h-16 w-16 mx-auto mb-2 object-cover"
-                    src={currentUser.user.profilePhoto || 'https://via.placeholder.com/150'}
-                    alt="Profile"
-                  />
-                  <span className="block font-semibold">{currentUser.user.userName}</span>
-                  <span className="block text-sm">{currentUser.user.emailID}</span>
-                </li>
-                <li className={`hover:bg-gray-100 px-4 py-2 ${isActive('/profile')}`}>
-                  <Link to="/profile">Profile Page</Link>
-                </li>
-                <li className={`hover:bg-gray-100 px-4 py-2 ${isActive('/settings')}`}>
-                  <Link to="/settings">Settings</Link>
-                </li>
-                <li className="hover:bg-gray-100 px-4 py-2">
-                  <button onClick={handleLogout} className="w-full text-left text-red-500">
-                    Logout
-                  </button>
-                </li>
-              </ul>
+        {currentUser && profileOptions && (
+          <div
+            className={`absolute right-0 mt-2 w-56 border ${
+              theme === 'dark' ? 'border-gray-700 bg-gray-900 text-white' : 'border-gray-200 bg-white text-black'
+            } rounded-lg shadow-lg z-10`}
+          >
+            <div className="text-center">
+              <div className="px-4 py-3">
+              <img
+                src={currentUser.user.profilePhoto || 'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?size=626&ext=jpg'}
+                alt="Profile"
+                className="h-1/3 w-1/3 rounded-full object-contain m-auto"
+                onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = 'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?size=626&ext=jpg';
+                }}
+              />
+                <span className="block font-semibold">{currentUser.user.userName}</span>
+                <span className="block text-sm">{currentUser.user.emailID}</span>
+              </div>
+
+              <Link
+                to="/dashboard"
+                className={`block px-4 py-2 rounded cursor-pointer ${isActive('/profile')} ${
+                  theme === 'dark' ? 'border-gray-600 hover:bg-gray-600 hover:text-white' : 'border-gray-200 hover:bg-gray-300 text-black'
+                }`}
+                onClick={toggleProfileOptions}
+              >
+                Dashboard
+              </Link>
+
+              <div
+                className={`block px-4 py-2 rounded cursor-pointer text-white bg-red-500 hover:bg-red-700`}
+              >
+                <button onClick={handleLogout} className="w-full flex justify-center">
+                  Logout
+                </button>
+              </div>
             </div>
-          )}
+          </div>
+        )}
         </div>
 
         <button
