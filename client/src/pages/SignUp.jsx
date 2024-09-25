@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; 
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginStart, loginSuccess, loginFailure } from '../redux/user/userSlice.js';
+import { loginStart, loginSuccess, loginFailure, logoutStart } from '../redux/user/userSlice.js';
 import OAuth from '../components/OAuth.jsx';
 
 function SignUp() {
@@ -18,7 +18,7 @@ function SignUp() {
   const theme = useSelector((state) => state.theme.theme);
   const [localErrorMessage, setLocalErrorMessage] = useState(null);
 
-  const handleSubmit = async (e) => {
+  const handleRegister = async (e) => {
     setLocalErrorMessage(null);
     e.preventDefault();
     
@@ -34,13 +34,13 @@ function SignUp() {
         headers: { 'Content-Type': 'application/json' },
       });
 
-      if (res.status === 200) {
+      if (res.status === 200 && res.data) {
         dispatch(loginSuccess(res.data));
         navigate('/');
       } else {
         setLocalErrorMessage(res.data.message);
-        dispatch(loginFailure(res.data.message));
-      }
+        dispatch(logoutStart());
+      }      
     } catch (error) {
       const errorMsg = error.response.data.message || error.response.statusText;
       setLocalErrorMessage(errorMsg);
@@ -55,7 +55,7 @@ function SignUp() {
       </span>
 
       <div className={`flex items-center p-5 rounded-lg w-full ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'} shadow-md`}>
-        <form onSubmit={handleSubmit} className="flex flex-col space-y-4 w-full">
+        <form className="flex flex-col space-y-4 w-full">
           <div className="flex flex-col gap-2">
             <label htmlFor="userName" className={`font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
               User ID
@@ -116,6 +116,7 @@ function SignUp() {
             type="submit"
             disabled={loading}
             className={`p-3 rounded-lg text-white font-semibold transition w-full ${loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700'}`}
+            onClick={handleRegister}
           >
             {loading ? 'Loading...' : 'Sign up'}
           </button>

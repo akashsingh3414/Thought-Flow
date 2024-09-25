@@ -5,6 +5,7 @@ import { verifyjwt } from '../middlewares/auth.middlewares.js';
 import { logout } from '../controllers/logoutUser.controllers.js';
 import { getUser } from '../controllers/getUserDetails.controllers.js';
 import { update } from '../controllers/updateUser.controllers.js';
+import { deleteUser } from '../controllers/deleteUser.controllers.js';
 
 const router = Router();
 
@@ -18,5 +19,6 @@ router.route('/logout').post(verifyjwt,logout);
 router.route('/getUser').get(verifyjwt,getUser); 
 router.route('/google').post(google);
 router.route('/update').patch(verifyjwt, update);
+router.route('/delete').delete(verifyjwt, deleteUser);
 
 export default router;

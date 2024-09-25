@@ -8,15 +8,21 @@ export const update = async (req, res) => {
         const user = await User.findById(req.user._id)
         console.log(req)
         if (!user) {
+            console.log('user does not exist')
             return res.status(404).json({ message: 'User not found' })
         }
 
         const password = req.body.oldPassword
 
+        if(!password) {
+            return res.status(400).json({message:"Password is required"});
+        }
+
         const passwordMatch = await bcrypt.compare(password, user.password)
         if (!passwordMatch) {
-            throw new ApiError(400, 'Unauthorized Access', )
+            throw new ApiError(400, 'Invalid Old Password', )
         }
+
         const newPassword = req.body.newPassword
         let newHashedPassword;
         if(newPassword) {

@@ -102,7 +102,7 @@ function Header() {
         </button>
 
         <div className="relative" ref={profileRef}>
-          {currentUser ? (
+          {currentUser && currentUser.user ? (
             <button
               className="w-10 h-10 rounded-full overflow-hidden hover:bg-gray-200"
               onClick={toggleProfileOptions}
@@ -126,7 +126,7 @@ function Header() {
             </Link>
           )}
 
-        {currentUser && profileOptions && (
+        {currentUser && currentUser.user && profileOptions && (
           <div
             className={`absolute right-0 mt-2 w-56 border ${
               theme === 'dark' ? 'border-gray-700 bg-gray-900 text-white' : 'border-gray-200 bg-white text-black'
