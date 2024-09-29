@@ -17,6 +17,7 @@ function Dashboard() {
   const [oldPassword, setOldPassword] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [profilePhoto, setProfilePhoto] = useState(null);
 
   const { theme } = useSelector((state) => state.theme.theme);
   const { currentUser } = useSelector((state) => state.user);
@@ -40,6 +41,25 @@ function Dashboard() {
       navigate('/home');
     } catch (error) {
       console.error(error.message);
+    }
+  };
+
+  const handleProfilePhotoUpload = async () => {
+    if (!profilePhoto) {
+      alert('Please choose a profile photo first')
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', profilePhoto);
+
+    try {
+      const res = await axios.patch('/api/v1/user/updateProfilePhoto', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      dispatch(loginSuccess(res.data));
+    } catch (error) {
+      console.error(error.response.data.message);
     }
   };
 
@@ -94,6 +114,13 @@ function Dashboard() {
                 }}
               />
             </div>
+            <div className="mb-4">
+              <label className="block mb-1">Upload Profile Photo</label>
+              <input type="file" onChange={(e) => setProfilePhoto(e.target.files[0])} className={`w-full p-2 rounded ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'}`}/>
+              <button onClick={handleProfilePhotoUpload} className={`mt-2 w-full py-2 rounded ${theme === 'dark' ? 'bg-blue-500 text-white hover:bg-blue-700' : 'bg-blue-400 text-white hover:bg-blue-600 active:bg-blue-500'}`}>
+                Upload Photo
+              </button>
+            </div>
 
             <div className="mb-4">
               <label className="block mb-1">Username</label>
@@ -107,6 +134,7 @@ function Dashboard() {
               <label className="block mb-1">Email</label>
               <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className={`w-full p-2 rounded ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'}`} disabled={!isEditing} />
             </div>
+
             {isEditing && (
               <>
                 <div className="mb-4">
@@ -119,6 +147,7 @@ function Dashboard() {
                 </div>
               </>
             )}
+
             <div className="flex justify-between mt-4">
               {isEditing ? (
                 <button onClick={handleSave} className="bg-green-500 w-full text-white py-2 px-4 rounded hover:bg-green-700">Save</button>
@@ -144,11 +173,11 @@ function Dashboard() {
               <p className="mb-4">Are you sure you want to delete your account? This action cannot be undone.</p>
               <div className="mb-4">
                 <label className="block mb-1">Enter Password to Confirm</label>
-                <input type="password" value={oldPassword} placeholder='Enter your password' onChange={(e) => setOldPassword(e.target.value)} className={`w-full p-2 rounded ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'}`} />
+                <input type="password" value={oldPassword} onChange={(e) => setOldPassword(e.target.value)} className={`w-full p-2 rounded ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'}`} />
               </div>
-              <div className="flex justify-between">
-                <button className="bg-red-500 text-white py-2 px-4 rounded" onClick={handleDelete}>Delete Account</button>
-                <button className="bg-gray-500 text-white py-2 px-4 rounded" onClick={() => setConfirmDelete(false)}>Cancel</button>
+              <div className="flex justify-between mt-4">
+                <button className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-700" onClick={handleDelete}>Confirm</button>
+                <button className="bg-gray-300 text-black py-2 px-4 rounded hover:bg-gray-400" onClick={() => setConfirmDelete(false)}>Cancel</button>
               </div>
             </div>
           </div>

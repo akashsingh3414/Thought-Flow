@@ -1,7 +1,4 @@
-import express from 'express';
 import {User} from '../models/user.models.js'
-import mongoose from 'mongoose';
-import bcrypt from 'bcrypt';
 
 export const register = async (req, res) => {
     const { userName, fullName, emailID, password } = req.body;
@@ -12,10 +9,10 @@ export const register = async (req, res) => {
 
     const existingUser = await User.findOne({
         $or: [{ userName }, { emailID }]
-    })
+    }).select('-password -refreshToken')
 
     if(existingUser) {
-        return res.status(400).json({message: "User Already exists"});
+        return res.status(400).json({message: "User Already exists", user: existingUser});
     }
 
     const user = await User.create({
@@ -33,5 +30,5 @@ export const register = async (req, res) => {
         return res.status(500).json({message: "server side error while creating user"});
     }
 
-    return res.status(200).json({ message: "User Registered Successfully" });
+    return res.status(200).json({ message: "User Registered Successfully", user: userCreated});
 };

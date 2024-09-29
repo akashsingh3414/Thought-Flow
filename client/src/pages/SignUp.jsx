@@ -1,5 +1,5 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; 
+import React, { useRef, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginStart, loginSuccess, loginFailure, logoutStart } from '../redux/user/userSlice.js';
@@ -14,48 +14,58 @@ function SignUp() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { loading} = useSelector((state) => state.user.loading);
+  const loading = useSelector((state) => state.user.loading);
   const theme = useSelector((state) => state.theme.theme);
   const [localErrorMessage, setLocalErrorMessage] = useState(null);
 
   const handleRegister = async (e) => {
-    setLocalErrorMessage(null);
     e.preventDefault();
-    
+    setLocalErrorMessage(null);
+
     const formData = {
       userName: userName.current.value,
       fullName: fullName.current.value,
       emailID: emailID.current.value,
       password: password.current.value,
     };
+
     dispatch(loginStart());
+
     try {
       const res = await axios.post('/api/v1/user/register', formData, {
         headers: { 'Content-Type': 'application/json' },
       });
 
       if (res.status === 200 && res.data) {
-        dispatch(loginSuccess(res.data));
+        dispatch(loginSuccess(res.data.user));
         navigate('/');
       } else {
-        setLocalErrorMessage(res.data.message);
+        setLocalErrorMessage(res.data.message || 'Registration failed');
         dispatch(logoutStart());
-      }      
+      }
     } catch (error) {
-      const errorMsg = error.response.data.message || error.response.statusText;
+      const errorMsg = error.response?.data?.message || error.message || 'An unexpected error occurred';
       setLocalErrorMessage(errorMsg);
       dispatch(loginFailure(errorMsg));
     }
   };
 
   return (
-    <div className={`mt-10 m-auto p-5 w-full max-w-lg rounded-lg flex flex-col items-center justify-center shadow-lg ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-blue-100 text-black'}`}>
-      <span className={`bg-clip-text text-2xl font-bold text-transparent bg-gradient-to-r from-indigo-500 to-blue-900 mb-4`}>
+    <div
+      className={`mt-10 m-auto p-5 w-full max-w-lg rounded-lg flex flex-col items-center justify-center shadow-lg ${
+        theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-blue-100 text-black'
+      }`}
+    >
+      <span className="bg-clip-text text-2xl font-bold text-transparent bg-gradient-to-r from-indigo-500 to-blue-900 mb-4">
         Create your account here!
       </span>
 
-      <div className={`flex items-center p-5 rounded-lg w-full ${theme === 'dark' ? 'bg-gray-700' : 'bg-white'} shadow-md`}>
-        <form className="flex flex-col space-y-4 w-full">
+      <div
+        className={`flex items-center p-5 rounded-lg w-full ${
+          theme === 'dark' ? 'bg-gray-700' : 'bg-white'
+        } shadow-md`}
+      >
+        <form className="flex flex-col space-y-4 w-full" onSubmit={handleRegister}>
           <div className="flex flex-col gap-2">
             <label htmlFor="userName" className={`font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
               User ID
@@ -66,7 +76,9 @@ function SignUp() {
               id="userName"
               ref={userName}
               autoComplete="username"
-              className={`p-3 rounded-lg border ${theme === 'dark' ? 'border-gray-600 text-gray-900 bg-gray-300' : 'border-gray-300 text-black'} w-full focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+              className={`p-3 rounded-lg border ${
+                theme === 'dark' ? 'border-gray-600 text-gray-900 bg-gray-300' : 'border-gray-300 text-black'
+              } w-full focus:outline-none focus:ring-2 focus:ring-indigo-500`}
             />
           </div>
 
@@ -80,7 +92,9 @@ function SignUp() {
               id="fullName"
               ref={fullName}
               autoComplete="name"
-              className={`p-3 rounded-lg border ${theme === 'dark' ? 'border-gray-600 text-gray-900 bg-gray-300' : 'border-gray-300 text-black'} w-full focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+              className={`p-3 rounded-lg border ${
+                theme === 'dark' ? 'border-gray-600 text-gray-900 bg-gray-300' : 'border-gray-300 text-black'
+              } w-full focus:outline-none focus:ring-2 focus:ring-indigo-500`}
             />
           </div>
 
@@ -94,7 +108,9 @@ function SignUp() {
               id="emailID"
               ref={emailID}
               autoComplete="email"
-              className={`p-3 rounded-lg border ${theme === 'dark' ? 'border-gray-600 text-gray-900 bg-gray-300' : 'border-gray-300 text-black'} w-full focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+              className={`p-3 rounded-lg border ${
+                theme === 'dark' ? 'border-gray-600 text-gray-900 bg-gray-300' : 'border-gray-300 text-black'
+              } w-full focus:outline-none focus:ring-2 focus:ring-indigo-500`}
             />
           </div>
 
@@ -108,15 +124,18 @@ function SignUp() {
               id="password"
               ref={password}
               autoComplete="new-password"
-              className={`p-3 rounded-lg border ${theme === 'dark' ? 'border-gray-600 text-gray-900 bg-gray-300' : 'border-gray-300 text-black'} w-full focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+              className={`p-3 rounded-lg border ${
+                theme === 'dark' ? 'border-gray-600 text-gray-900 bg-gray-300' : 'border-gray-300 text-black'
+              } w-full focus:outline-none focus:ring-2 focus:ring-indigo-500`}
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className={`p-3 rounded-lg text-white font-semibold transition w-full ${loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700'}`}
-            onClick={handleRegister}
+            className={`p-3 rounded-lg text-white font-semibold transition w-full ${
+              loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700'
+            }`}
           >
             {loading ? 'Loading...' : 'Sign up'}
           </button>
@@ -124,7 +143,7 @@ function SignUp() {
         </form>
       </div>
 
-      {(localErrorMessage) && (
+      {localErrorMessage && (
         <div className="mt-4 p-3 bg-red-200 text-red-800 border border-red-400 rounded-lg">
           {localErrorMessage}
         </div>

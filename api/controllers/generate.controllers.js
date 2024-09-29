@@ -1,14 +1,13 @@
 import jwt from 'jsonwebtoken';
 import { User } from "../models/user.models.js";
-import { ApiError } from "../utils/ApiError.js";
-import { ApiResponse } from "../utils/ApiResponse.js";
 
 export const generateAccessANDrefreshToken = async (userId) => {
     try {
         const user = await User.findById(userId);
         if (!user) {
-            throw new ApiError(404, "User not found");
+            return { status: 404, message: "User not found" };
         }
+
         const accessToken = user.generateAccessToken();
         const refreshToken = user.generateRefreshToken();
 
@@ -17,7 +16,7 @@ export const generateAccessANDrefreshToken = async (userId) => {
 
         return { accessToken, refreshToken };
     } catch (error) {
-        throw new ApiError(500, "Something went wrong while generating refresh and access token");
+        return { status: 500, message: 'Error generating tokens' };
     }
 };
 
@@ -26,18 +25,18 @@ export const refreshAccessToken = async (req, res) => {
         const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken;
 
         if (!incomingRefreshToken) {
-            throw new ApiError(401, "Unauthorized request");
+            return res.status(401).json({ message: "Unauthorized request" });
         }
 
         const decodedToken = jwt.verify(incomingRefreshToken, process.env.REFRESH_TOKEN_SECRET);
         const user = await User.findById(decodedToken?._id);
 
         if (!user) {
-            throw new ApiError(401, "Invalid refresh token");
+            return res.status(401).json({ message: "Invalid refresh token" });
         }
 
         if (incomingRefreshToken !== user.refreshToken) {
-            throw new ApiError(401, "Refresh token is expired or used");
+            return res.status(401).json({ message: "Refresh token is expired or invalid" });
         }
 
         const options = {
@@ -47,18 +46,16 @@ export const refreshAccessToken = async (req, res) => {
 
         const { accessToken, refreshToken: newRefreshToken } = await generateAccessANDrefreshToken(user._id);
 
+        if (!accessToken || !newRefreshToken) {
+            return res.status(500).json({ message: "Error generating tokens" });
+        }
+
         return res
             .status(200)
-            .cookie("accessToken", accessToken, { ...options, maxAge: 3600000 }) // Set max age for access token
-            .cookie("refreshToken", newRefreshToken, { ...options, maxAge: 604800000 }) // Set max age for refresh token (7 days)
-            .json(
-                new ApiResponse(
-                    200, 
-                    { accessToken, refreshToken: newRefreshToken },
-                    "Access token refreshed"
-                )
-            );
+            .cookie("accessToken", accessToken, { ...options, maxAge: 3600000 }) // Access token valid for 1 hour
+            .cookie("refreshToken", newRefreshToken, { ...options, maxAge: 604800000 }) // Refresh token valid for 7 days
+            .json({ message: "Access token refreshed", accessToken, refreshToken: newRefreshToken });
     } catch (error) {
-        res.status(error.statusCode || 500).json({ message: error.message || "Internal server error" });
+        return res.status(500).json({ message: error.message || "Internal server error" });
     }
 };

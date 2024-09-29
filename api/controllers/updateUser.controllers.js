@@ -6,7 +6,6 @@ import { generateAccessANDrefreshToken } from "./generate.controllers.js"
 export const update = async (req, res) => {
     try {
         const user = await User.findById(req.user._id)
-        console.log(req)
         if (!user) {
             console.log('user does not exist')
             return res.status(404).json({ message: 'User not found' })
