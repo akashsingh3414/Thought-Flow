@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import DashboardSidebar from '../components/DashboardSidebar';
 import DashboardProfile from '../components/DashboardProfile';
-import { useSelector } from 'react-redux';
+import DashboardPosts from '../components/DashboardPosts';
 
 export default function Dashboard() {
   const location = useLocation();
@@ -16,8 +16,6 @@ export default function Dashboard() {
     }
   }, [location.search]);
 
-  const theme = useSelector((state) => state.theme.theme);
-
   return (
     <div className='min-h-screen flex flex-col md:flex-row transition-colors duration-300'>
       <aside className="md:w-64 w-full md:min-h-screen">
@@ -27,6 +25,9 @@ export default function Dashboard() {
       <div className="container mx-auto">
           {tab === 'profile' && (
             <DashboardProfile />
+          )}
+          {tab === 'posts' && (
+            <DashboardPosts />
           )}
       </div>
     </div>

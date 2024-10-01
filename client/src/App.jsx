@@ -11,6 +11,7 @@ import Settings from './pages/Settings';
 import Dashboard from './pages/Dashboard';
 import { useSelector } from 'react-redux';
 import PrivateRoute from './components/PrivateRoute';
+import CreatePosts from './pages/CreatePosts'
 
 function App() {
   const theme = useSelector((state) => state.theme.theme);
@@ -26,6 +27,9 @@ function App() {
         <Route path='/signup' element={<SignUp />} />
         <Route element={<PrivateRoute/>}>
           <Route path='/dashboard' element={<Dashboard />} />
+        </Route>
+        <Route element={<PrivateRoute/>}>
+          <Route path='/createPosts' element={<CreatePosts />} />
         </Route>
         <Route path='/projects' element={<Projects />} />
         <Route path='/settings' element={<Settings />} />

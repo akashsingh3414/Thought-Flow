@@ -127,7 +127,7 @@ function DashboardProfile() {
           <div className="mb-4">
             <label className="block mb-1">Upload Profile Photo</label>
             <input type="file" onChange={(e) => setProfilePhoto(e.target.files[0])} className={`w-full p-1 rounded ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'}`} />
-            <button onClick={handleProfilePhotoUpload} className={`mt-2 w-full py-2 rounded ${theme === 'dark' ? 'bg-blue-500 text-white hover:bg-blue-700' : 'bg-blue-400 text-white hover:bg-blue-600 active:bg-blue-500'}`}>
+            <button onClick={handleProfilePhotoUpload} className={`mt-2 w-full py-2 rounded ${theme === 'dark' ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-blue-500 text-white hover:bg-blue-600 active:bg-blue-500'}`}>
               Upload Photo
             </button>
           </div>
@@ -172,15 +172,6 @@ function DashboardProfile() {
               <button onClick={() => setIsEditing(true)} className="bg-gray-500 w-full text-white py-2 px-4 rounded hover:bg-gray-600">Update Account Details</button>
             )}
           </div>
-
-          {/* Admin Post Button */}
-          {currentUser?.user?.isAdmin && (
-            <Link to={'/createPost'}>
-              <button type="submit" className="w-full mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
-                Post Your Thoughts
-              </button>
-            </Link>
-          )}
 
           {/* Delete Account and Logout Buttons */}
           <div className="flex justify-between mt-4 gap-2">
