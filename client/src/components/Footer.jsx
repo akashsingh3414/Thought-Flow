@@ -13,7 +13,7 @@ function Footer() {
 
   return (
     <footer
-      className={`flex flex-col md:flex-row justify-between items-center p-2 gap-2 w-full mt-2 ${
+      className={`flex flex-col md:flex-row justify-between items-center p-2 gap-2 w-full ${
         theme === 'dark' ? 'bg-black text-white' : 'bg-gray-200 text-black'
       }`}
     >

@@ -7,7 +7,6 @@ import SignUp from './pages/SignUp';
 import Projects from './pages/Projects';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import Dashboard from './pages/Dashboard';
 import { useSelector } from 'react-redux';
