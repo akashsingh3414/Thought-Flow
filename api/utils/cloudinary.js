@@ -1,5 +1,4 @@
 import { v2 as cloudinary } from 'cloudinary';
-import { ApiError } from './ApiError.js';
 import fs from 'fs';
 import dotenv from 'dotenv';
 
@@ -14,12 +13,13 @@ cloudinary.config({
 const uploadOnCloudinary = async (localFilePath) => {
     try {
         if (!localFilePath || typeof localFilePath !== 'string') {
-            throw new ApiError(400, 'Invalid file path provided');
+            return res.status(400)
+            .json({message: 'Invalid File Path Provided'})
         }
 
         if (!fs.existsSync(localFilePath)) {
-            throw new ApiError(400, 'File does not exist at the specified path');
-        }
+            return res.status(400)
+            .json({message: 'File Does not exist'})        }
 
         const response = await cloudinary.uploader.upload(localFilePath, {
             resource_type: "auto"
@@ -28,8 +28,8 @@ const uploadOnCloudinary = async (localFilePath) => {
         return { url: response.secure_url };
 
     } catch (error) {
-
-        throw new ApiError(500, 'Something went wrong while uploading to Cloudinary: ' + error.message);
+        return res.status(400)
+            .json({message: 'Something went wrong while uploading on Cloudinary' + error.message})
     } finally {
         if (localFilePath && fs.existsSync(localFilePath)) {
             fs.unlinkSync(localFilePath);

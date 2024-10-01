@@ -28,7 +28,11 @@ const userSchema = mongoose.Schema({
     },
     profilePhoto: {
         type: String,
-        default: ""
+        default: 'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?size=626&ext=jpg'
+    },
+    isAdmin : {
+        type: Boolean,
+        default: false,
     },
     refreshToken: {
         type: String,
@@ -56,6 +60,7 @@ userSchema.methods.generateAccessToken = function() {
             emailID: this.emailID,
             userName: this.userName,
             fullName: this.fullName,
+            isAdmin: this.isAdmin,
         },
         process.env.ACCESS_TOKEN_SECRET,
         {
@@ -68,6 +73,7 @@ userSchema.methods.generateRefreshToken = function() {
     return jwt.sign(
         {
             _id: this._id,
+            isAdmin: this.isAdmin,
         },
         process.env.REFRESH_TOKEN_SECRET,
         {

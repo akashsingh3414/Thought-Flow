@@ -1,6 +1,5 @@
 import { User } from "../models/user.models.js"
 import bcrypt from 'bcrypt'
-import { ApiError } from "../utils/ApiError.js"
 import { generateAccessANDrefreshToken } from "./generate.controllers.js"
 
 export const update = async (req, res) => {
@@ -19,7 +18,7 @@ export const update = async (req, res) => {
 
         const passwordMatch = await bcrypt.compare(password, user.password)
         if (!passwordMatch) {
-            throw new ApiError(400, 'Invalid Old Password', )
+            return res.status(400).json({message:"Old Password is incorrect"});
         }
 
         const newPassword = req.body.newPassword

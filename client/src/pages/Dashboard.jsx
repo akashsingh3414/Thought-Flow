@@ -18,6 +18,8 @@ function Dashboard() {
   const [isEditing, setIsEditing] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState(null);
+  const [localErrorMessage, setLocalErrorMessage] = useState(null);
+  const [localSuccessMessage, setSuccessMessage] = useState(null);
 
   const { theme } = useSelector((state) => state.theme.theme);
   const { currentUser } = useSelector((state) => state.user);
@@ -37,10 +39,11 @@ function Dashboard() {
   const handleLogout = async () => {
     try {
       await axios.post('/api/v1/user/logout');
+      setLocalErrorMessage(null);
       dispatch(logoutStart());
       navigate('/home');
     } catch (error) {
-      console.error(error.message);
+      setLocalErrorMessage(error.message);
     }
   };
 
@@ -58,7 +61,9 @@ function Dashboard() {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       dispatch(loginSuccess(res.data));
+      setSuccessMessage(res.data.message);
     } catch (error) {
+      setLocalErrorMessage(error.response.data.message);
       console.error(error.response.data.message);
     }
   };
@@ -79,10 +84,12 @@ function Dashboard() {
       setUsername(res.data.user.userName);
       setFullName(res.data.user.fullName);
       setEmail(res.data.user.emailID);
+      setSuccessMessage(res.data.message)
       dispatch(loginSuccess(res.data));
       setIsEditing(false);
     } catch (error) {
       console.error(error.response.data.message);
+      setLocalErrorMessage(error.response.data.message);
     }
   };
 
@@ -92,8 +99,10 @@ function Dashboard() {
         data: { password: oldPassword },
       });
       dispatch(logoutStart());
+      setSuccessMessage(res.data.message)
       navigate('/home');
     } catch (error) {
+      setLocalErrorMessage(error.response.data.message);
       console.log(error.response.data.message);
     }
   };
@@ -105,7 +114,7 @@ function Dashboard() {
           <div className="w-full max-w-md p-3 rounded-md">
             <div className="flex items-center mb-4">
               <img
-                src={currentUser?.user?.profilePhoto || 'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?size=626&ext=jpg'}
+                src={currentUser?.user?.profilePhoto}
                 alt="Profile"
                 className="h-1/4 w-1/4 border-8 border-[lightblue] rounded-full object-cover m-auto"
                 onError={(e) => {
@@ -163,6 +172,16 @@ function Dashboard() {
                 Logout
               </button>
             </div>
+            {localErrorMessage && (
+              <div className="mt-4 p-3 bg-red-200 text-red-800 border border-red-400 rounded-lg">
+                {localErrorMessage}
+              </div>
+            )}
+            {localSuccessMessage && (
+              <div className="mt-4 p-3 bg-green-200 text-green-800 border border-green-400 rounded-lg">
+                {localSuccessMessage}
+              </div>
+            )}
           </div>
         )}
 

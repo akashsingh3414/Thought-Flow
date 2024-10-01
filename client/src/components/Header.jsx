@@ -109,7 +109,7 @@ function Header() {
               aria-label="Profile Options"
             >
             <img
-              src={currentUser.user.profilePhoto || 'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?size=626&ext=jpg'}
+              src={currentUser.user.profilePhoto}
               alt="Profile"
               className="h-full w-full rounded-full object-contain"
               onError={(e) => {
@@ -135,7 +135,7 @@ function Header() {
             <div className="text-center">
               <div className="px-4 py-3">
               <img
-                src={currentUser.user.profilePhoto || 'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?size=626&ext=jpg'}
+                src={currentUser.user.profilePhoto}
                 alt="Profile"
                 className="h-1/3 w-1/3 rounded-full object-contain m-auto"
                 onError={(e) => {
@@ -150,7 +150,7 @@ function Header() {
               <Link
                 to="/dashboard"
                 className={`block px-4 py-2 rounded cursor-pointer ${isActive('/profile')} ${
-                  theme === 'dark' ? 'border-gray-600 hover:bg-gray-600 hover:text-white' : 'border-gray-200 hover:bg-gray-300 text-black'
+                  theme === 'dark' ? 'hover:bg-gray-500 hover:text-white' : 'border-gray-200 hover:bg-gray-300 text-black'
                 }`}
                 onClick={toggleProfileOptions}
               >
@@ -158,7 +158,7 @@ function Header() {
               </Link>
 
               <div
-                className={`block px-4 py-2 rounded cursor-pointer text-white bg-red-500 hover:bg-red-700`}
+                className={` flex flex-grow block px-4 py-2 rounded cursor-pointer text-red-500 hover:bg-red-500 hover:text-white`}
               >
                 <button onClick={handleLogout} className="w-full flex justify-center">
                   Logout
