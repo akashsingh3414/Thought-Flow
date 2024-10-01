@@ -12,7 +12,6 @@ function SignIn() {
 
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.user.loading);
-  const theme = useSelector((state) => state.theme.theme);
   const navigate = useNavigate();
 
   const [localErrorMessage, setLocalErrorMessage] = useState(null);
@@ -45,23 +44,15 @@ function SignIn() {
   };
 
   return (
-    <div
-      className={`mt-10 m-auto p-5 w-full max-w-lg rounded-lg flex flex-col items-center justify-center shadow-lg ${
-        theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-blue-100 text-black'
-      }`}
-    >
-      <span className={`bg-clip-text text-2xl font-bold text-transparent bg-gradient-to-r from-indigo-500 to-blue-900 mb-4`}>
+    <div className='mt-10 m-auto p-5 w-full max-w-lg rounded-lg flex flex-col items-center justify-center shadow-lg text-black'>
+      <span className='bg-clip-text text-2xl font-bold text-transparent bg-gradient-to-r from-indigo-500 to-blue-900 mb-4'>
         Welcome back, Login
       </span>
 
-      <div
-        className={`flex items-center p-5 rounded-lg w-full ${
-          theme === 'dark' ? 'bg-gray-700' : 'bg-white'
-        } shadow-md`}
-      >
+      <div className='flex items-center p-5 rounded-lg w-full shadow-md' style={{ backgroundColor: '#F5F7F8' }}>
         <form onSubmit={handleSubmit} className="flex flex-col space-y-4 w-full">
           <div className="flex flex-col gap-2">
-            <label htmlFor="userName" className={`font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
+            <label htmlFor="userName" className='font-medium text-gray-700'>
               User ID
             </label>
             <input
@@ -70,14 +61,12 @@ function SignIn() {
               id="userName"
               ref={userName}
               autoComplete="username"
-              className={`p-3 rounded-lg border ${
-                theme === 'dark' ? 'border-gray-600 bg-gray-300 text-gray-900' : 'border-gray-300 text-black'
-              } w-full focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+              className='p-3 rounded-lg border border-gray-300 text-black w-full focus:outline-none focus:ring-2 focus:ring-indigo-500'
             />
           </div>
 
           <div className="flex flex-col gap-2">
-            <label htmlFor="emailID" className={`font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
+            <label htmlFor="emailID" className='font-medium text-gray-700'>
               Email ID
             </label>
             <input
@@ -86,14 +75,12 @@ function SignIn() {
               id="emailID"
               ref={emailID}
               autoComplete="email"
-              className={`p-3 rounded-lg border ${
-                theme === 'dark' ? 'border-gray-600 text-gray-900 bg-gray-300' : 'border-gray-300 text-black'
-              } w-full focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+              className='p-3 rounded-lg border border-gray-300 text-black w-full focus:outline-none focus:ring-2 focus:ring-indigo-500'
             />
           </div>
 
           <div className="flex flex-col gap-2">
-            <label htmlFor="password" className={`font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
+            <label htmlFor="password" className='font-medium text-gray-700'>
               Password
             </label>
             <input
@@ -102,9 +89,7 @@ function SignIn() {
               id="password"
               ref={password}
               autoComplete="current-password"
-              className={`p-3 rounded-lg border ${
-                theme === 'dark' ? 'border-gray-600 text-gray-900 bg-gray-300' : 'border-gray-300 text-black'
-              } w-full focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+              className='p-3 rounded-lg border border-gray-300 text-black w-full focus:outline-none focus:ring-2 focus:ring-indigo-500'
             />
           </div>
 
@@ -128,7 +113,7 @@ function SignIn() {
         </div>
       )}
 
-      <div className={`mt-6 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+      <div className='mt-6 text-gray-700'>
         <span>New to</span>
         <Link to="/about" className="ml-2 text-indigo-600 font-semibold hover:underline">
           Thought Flow

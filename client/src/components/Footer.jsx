@@ -1,9 +1,7 @@
 import React, { useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
 function Footer() {
-  const theme = useSelector((state) => state.theme.theme);
   const { pathname } = useLocation();
 
   const isActive = useCallback(
@@ -12,84 +10,49 @@ function Footer() {
   );
 
   return (
-    <footer
-      className={`flex flex-col md:flex-row justify-between items-center p-2 gap-2 w-full ${
-        theme === 'dark' ? 'bg-black text-white' : 'bg-gray-200 text-black'
-      }`}
-    >
-      <div className="flex flex-col space-y-3 font-bold">
-        <Link to="/home">
-          <button
-            className={`${isActive('/home')} hover:${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-            } hover:bg-white hover:text-black hover:rounded-lg p-2`}
-          >
-            Home
-          </button>
+    <footer className="flex flex-col md:flex-row items-center justify-between p-4 bg-gray-100 text-gray-800 rounded-lg gap-4">
+      {/* Navigation Links */}
+      <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4 font-semibold">
+        <Link to="/home" className={`hover:text-blue-500 ${isActive('/home')}`}>
+          Home
         </Link>
-        <Link to="/about">
-          <button
-            className={`${isActive('/about')} hover:${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-            } hover:bg-white hover:text-black hover:rounded-lg p-2`}
-          >
-            About
-          </button>
+        <Link to="/about" className={`hover:text-blue-500 ${isActive('/about')}`}>
+          About
         </Link>
-        <Link to="/projects">
-          <button
-            className={`${isActive('/projects')} hover:${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-            } hover:bg-white hover:text-black hover:rounded-lg p-2`}
-          >
-            Projects
-          </button>
+        <Link to="/projects" className={`hover:text-blue-500 ${isActive('/projects')}`}>
+          Projects
         </Link>
       </div>
 
-      <div className="flex flex-col items-center font-bold">
-        <div className="mb-3">Follow Us</div>
-        <div className="grid grid-cols-2 gap-x-5 gap-y-2 text-sm font-semibold">
-          {['Facebook', 'Discord', 'Instagram', 'Github', 'LinkedIn', 'X (Twitter)'].map((platform) => (
-            <a
-              href="#"
-              key={platform}
-              className={`hover:${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-              } hover:bg-white hover:text-black hover:rounded-lg p-2`}
-            >
-              {platform}
-            </a>
-          ))}
-        </div>
-      </div>
-
-      <div className="flex flex-col items-center font-bold">
-        <div className="mb-3">Policies</div>
-        {['Privacy Policy', 'Terms and Conditions', 'Legal'].map((policy) => (
+      {/* Social Links */}
+      <div className="flex space-x-4">
+        {['Facebook', 'Instagram', 'Github', 'LinkedIn'].map((platform) => (
           <a
             href="#"
-            key={policy}
-            className={`text-sm font-semibold hover:${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-            } hover:bg-white hover:text-black hover:rounded-lg p-2`}
+            key={platform}
+            className="text-sm font-semibold hover:text-blue-500"
           >
-            {policy}
+            {platform}
           </a>
         ))}
       </div>
 
-      <div className="flex items-center">
-        <Link to="/" className="text-sm sm:text-xl font-bold">
-          <span
-            className={`text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-blue-300 ${
-              theme === 'dark' ? '' : ''
-            } `}
-          >
-            Thought Flow
-          </span>
+      {/* Policies */}
+      <div className="flex space-x-4">
+        <Link to="/privacy-policy" className="text-sm font-semibold hover:text-blue-500">
+          Privacy Policy
         </Link>
-        <span
-          className={`ml-3 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-          }`}
-        >
-          © {new Date().getFullYear()}
-        </span>
+        <Link to="/terms-conditions" className="text-sm font-semibold hover:text-blue-500">
+          Terms & Conditions
+        </Link>
+      </div>
+
+      {/* Branding and Copyright */}
+      <div className="flex items-center">
+        <Link to="/" className="text-xl font-bold text-indigo-600">
+          Thought Flow
+        </Link>
+        <span className="ml-2 text-sm text-gray-600">© {new Date().getFullYear()}</span>
       </div>
     </footer>
   );

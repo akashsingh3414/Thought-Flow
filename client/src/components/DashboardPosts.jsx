@@ -11,12 +11,12 @@ function DashboardPosts() {
     };
 
     return (
-        <div className='p-4 bg-blue-50 flex-1 flex-col items-center w-full rounded-lg shadow-md m-0'>
-            <h2 className='text-lg text-center font-semibold mb-3 text-gray-800'>
+        <div className='p-4 flex-1 flex-col items-center w-full rounded-lg shadow-md' style={{ backgroundColor: '#F5F7F8' }}>
+            <h2 className='text-lg text-center font-semibold mb-3 text-blue-700'>
                 {currentUser.user.isAdmin ? "Welcome, Admin!" : "Welcome!"}
             </h2>
             {currentUser.user.isAdmin && (
-                <div className='flex flex-col items-center rounded-lg'>
+                <div className='flex flex-col items-center'>
                     <p className='mb-2 text-gray-600'>
                         As an admin, you can create new posts to share your thoughts.
                     </p>

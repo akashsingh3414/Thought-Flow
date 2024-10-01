@@ -6,7 +6,7 @@ const DashboardSidebar = () => {
   const currentTab = new URLSearchParams(location.search).get('tab') || 'profile';
 
   return (
-    <div className="h-full p-2 md:sticky top-0 dark:bg-gray-900 bg-blue-100">
+    <div className="h-full p-2 md:sticky top-0 rounded-lg" style={{ backgroundColor: '#F5F7F8' }}>
       <h2 className="text-xl font-bold mb-4 text-left text-blue-800 px-4">Dashboard</h2>
       <ul className="flex flex-col gap-2">
         <li>
@@ -21,7 +21,6 @@ const DashboardSidebar = () => {
             Profile
           </Link>
         </li>
-
         <li>
           <Link
             to="/dashboard?tab=posts"
@@ -34,7 +33,6 @@ const DashboardSidebar = () => {
             Posts
           </Link>
         </li>
-
         <li>
           <Link
             to="/dashboard?tab=users"
@@ -47,7 +45,6 @@ const DashboardSidebar = () => {
             Users
           </Link>
         </li>
-
         <li>
           <Link
             to="/dashboard?tab=comments"

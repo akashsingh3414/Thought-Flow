@@ -2,11 +2,56 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { GiHamburgerMenu } from 'react-icons/gi';
-import { FaMoon, FaSun } from 'react-icons/fa';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { logoutStart } from '../redux/user/userSlice.js';
-import { toggleTheme } from '../redux/theme/themeSlice.js';
+
+const ProfileOptions = ({ user, toggleOptions, onLogout }) => (
+  <div className="absolute right-0 mt-2 w-48 border border-gray-200 bg-white text-black rounded-lg shadow-lg z-10">
+    <div className="text-center">
+      <div className="px-4 py-3">
+        <img
+          src={user.profilePhoto}
+          alt="Profile"
+          className="h-12 w-12 rounded-full object-cover m-auto"
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = 'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?size=626&ext=jpg';
+          }}
+        />
+        <span className="block font-semibold mt-2">{user.userName}</span>
+        <span className="block text-sm text-gray-600">{user.emailID}</span>
+      </div>
+
+      <Link
+        to="/dashboard"
+        className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
+        onClick={toggleOptions}
+      >
+        Dashboard
+      </Link>
+
+      <button
+        onClick={onLogout}
+        className="w-full px-4 py-2 text-sm text-red-600 hover:bg-red-500 hover:text-white"
+      >
+        Logout
+      </button>
+    </div>
+  </div>
+);
+
+const SearchInput = () => (
+  <form className="relative flex-1 max-w-72">
+    <input
+      type="text"
+      placeholder="Search..."
+      className="pl-10 pr-4 py-2 w-full border border-gray-300 bg-gray-100 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 backdrop-blur-lg bg-opacity-60"
+      style={{ backdropFilter: 'blur(10px)' }}
+    />
+    <AiOutlineSearch className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-500" />
+  </form>
+);
 
 function Header() {
   const { pathname } = useLocation();
@@ -14,18 +59,10 @@ function Header() {
   const dispatch = useDispatch();
 
   const { currentUser } = useSelector((state) => state.user);
-  const theme = useSelector((state) => state.theme.theme);
-
   const [profileOptions, setProfileOptions] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const profileRef = useRef(null);
-  const menuRef = useRef(null);
-
-  const isActive = useCallback(
-    (path) => (pathname === path ? 'text-blue-500' : ''),
-    [pathname]
-  );
+  const isActive = useCallback((path) => (pathname === path ? 'text-indigo-500 font-semibold' : ''), [pathname]);
 
   const toggleProfileOptions = useCallback(() => {
     setProfileOptions((prev) => !prev);
@@ -45,151 +82,81 @@ function Header() {
     }
   };
 
-  useEffect(()=>{
-    if(currentUser){
+  useEffect(() => {
+    if (currentUser) {
       setProfileOptions(false);
     }
-  }, [currentUser])
+  }, [currentUser]);
 
   return (
-    <header
-      className={`flex justify-between items-center p-4 bg-blue-100 ${theme === 'dark' ? 'bg-gray-900 text-white' : 'text-black'}`}
-    >
-      <Link to="/" className="text-xl font-bold">
-      <span className={`bg-clip-text text-xl font-bold text-transparent bg-gradient-to-r from-indigo-500 to-blue-900`}>
-          Thought Flow
-        </span>
+    <header className="flex justify-between items-center p-4 bg-white shadow-md rounded-lg">
+      {/* Logo Section */}
+      <Link to="/" className="flex items-center space-x-2 text-xl font-bold text-indigo-700">
+        <span>Thought Flow</span>
       </Link>
 
+      {/* Search and Navigation */}
+      <div className="flex items-center space-x-4 flex-grow justify-end">
+        <SearchInput />
 
-      <div className="flex items-center space-x-4">
-        <form className="relative">
-          <input
-            type="text"
-            placeholder="Search..."
-            className={`pl-10 pr-4 py-2 border text-black ${theme === 'dark' ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-gray-100'} rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500`}
-          />
-          <AiOutlineSearch className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-500" />
-        </form>
-
-        <nav className="hidden lg:flex space-x-4">
-          <Link
-            className={`hover:bg-white px-2 py-1 rounded ${isActive('/home')} ${theme === 'dark' ? 'hover:text-black' : 'text-black'}`}
-            to="/home"
-          >
+        <nav className="hidden lg:flex space-x-6">
+          <Link className={`hover:bg-gray-100 px-4 py-2 rounded-md ${isActive('/home')} text-gray-800`} to="/home">
             Home
           </Link>
-          <Link
-            className={`hover:bg-white px-2 py-1 rounded ${isActive('/about')} ${theme === 'dark' ? 'hover:text-black' : 'text-black'}`}
-            to="/about"
-          >
+          <Link className={`hover:bg-gray-100 px-4 py-2 rounded-md ${isActive('/about')} text-gray-800`} to="/about">
             About
           </Link>
-          <Link
-            className={`hover:bg-white px-2 py-1 rounded ${isActive('/projects')} ${theme === 'dark' ? 'hover:text-black' : 'text-black'}`}
-            to="/projects"
-          >
+          <Link className={`hover:bg-gray-100 px-4 py-2 rounded-md ${isActive('/projects')} text-gray-800`} to="/projects">
             Projects
           </Link>
         </nav>
 
-        <button
-          className="hidden sm:inline-block"
-          aria-label="Toggle Theme"
-          onClick={() => dispatch(toggleTheme())}
-        >
-          {theme === 'light' ? <FaSun /> : <FaMoon />}
-        </button>
-
-        <div className="relative" ref={profileRef}>
+        <div className="relative">
           {currentUser && currentUser.user ? (
-            <button
-              className="w-10 h-10 rounded-full overflow-hidden hover:bg-gray-200"
-              onClick={toggleProfileOptions}
-              aria-label="Profile Options"
-            >
-            <img
-              src={currentUser.user.profilePhoto}
-              alt="Profile"
-              className="h-full w-full rounded-full object-contain"
-              onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = 'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?size=626&ext=jpg';
-              }}
-            />
-            </button>
-          ) : (
-            <Link to="/signin" className={pathname === '/signin' ? 'hidden' : 'block'}>
-              <button className={`px-2 py-1 rounded ${theme === 'dark' ? 'text-white hover:text-black hover:bg-gray-200' : 'hover:bg-gray-100'}`}>
-                Sign In
-              </button>
-            </Link>
-          )}
-
-        {currentUser && currentUser.user && profileOptions && (
-          <div
-            className={`absolute right-0 mt-2 w-56 border ${
-              theme === 'dark' ? 'border-gray-700 bg-gray-900 text-white' : 'border-gray-200 bg-white text-black'
-            } rounded-lg shadow-lg z-10`}
-          >
-            <div className="text-center">
-              <div className="px-4 py-3">
-              <img
-                src={currentUser.user.profilePhoto}
-                alt="Profile"
-                className="h-1/3 w-1/3 rounded-full object-contain m-auto"
-                onError={(e) => {
+            <>
+              <button
+                className="w-10 h-10 rounded-full overflow-hidden hover:bg-gray-200"
+                onClick={toggleProfileOptions}
+                aria-label="Profile Options"
+              >
+                <img
+                  src={currentUser.user.profilePhoto}
+                  alt="Profile"
+                  className="h-full w-full object-cover"
+                  onError={(e) => {
                     e.target.onerror = null;
                     e.target.src = 'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?size=626&ext=jpg';
-                }}
-              />
-                <span className="block font-semibold">{currentUser.user.userName}</span>
-                <span className="block text-sm">{currentUser.user.emailID}</span>
-              </div>
+                  }}
+                />
+              </button>
 
-              <Link
-                to="/dashboard"
-                className={`block px-4 py-2 rounded cursor-pointer ${isActive('/profile')} ${
-                  theme === 'dark' ? 'hover:bg-gray-500 hover:text-white' : 'border-gray-200 hover:bg-gray-300 text-black'
-                }`}
-                onClick={toggleProfileOptions}
-              >
-                Dashboard
-              </Link>
-
-              <div
-                className={` flex flex-grow block px-4 py-2 rounded cursor-pointer text-red-500 hover:bg-red-500 hover:text-white`}
-              >
-                <button onClick={handleLogout} className="w-full flex justify-center">
-                  Logout
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+              {profileOptions && (
+                <ProfileOptions user={currentUser.user} toggleOptions={toggleProfileOptions} onLogout={handleLogout} />
+              )}
+            </>
+          ) : (
+            <Link to="/signin">
+              <button className="px-4 py-2 text-gray-800 hover:bg-gray-100 rounded-md">Sign In</button>
+            </Link>
+          )}
         </div>
 
-        <button
-          className="lg:hidden h-10 w-10 flex justify-center items-center"
-          aria-label="Toggle Menu"
-          onClick={toggleMenuOptions}
-        >
-          <GiHamburgerMenu className="text-2xl" />
+        {/* Hamburger Menu for Small Screens */}
+        <button className="lg:hidden h-10 w-10 flex items-center justify-center" onClick={toggleMenuOptions}>
+          <GiHamburgerMenu className="text-2xl text-gray-800" />
         </button>
       </div>
 
+      {/* Mobile Menu */}
       {isMenuOpen && (
-        <div
-          ref={menuRef}
-          className={`lg:hidden absolute top-16 right-4 bg-white shadow-md rounded-lg p-4 flex flex-col items-start space-y-2 z-10 ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}
-        >
-          <Link className={`hover:bg-gray-200 px-2 py-1 rounded text-black ${isActive('/home')}`} to="/home" onClick={toggleMenuOptions}>
+        <div className="absolute right-4 top-16 bg-white shadow-md rounded-lg py-3 px-2 flex flex-col space-y-2 lg:hidden">
+          <Link className={`hover:bg-gray-100 px-4 py-2 rounded-md ${isActive('/home')} text-gray-800`} to="/home" onClick={toggleMenuOptions}>
             Home
           </Link>
-          <Link className={`hover:bg-gray-200 px-2 py-1 rounded text-black ${isActive('/about')}`} to="/about" onClick={toggleMenuOptions}>
+          <Link className={`hover:bg-gray-100 px-4 py-2 rounded-md ${isActive('/about')} text-gray-800`} to="/about" onClick={toggleMenuOptions}>
             About
           </Link>
-          <Link className={`hover:bg-gray-200 px-2 py-1 rounded text-black ${isActive('/projects')}`} to="/projects" onClick={toggleMenuOptions}>
+          <Link className={`hover:bg-gray-100 px-4 py-2 rounded-md ${isActive('/projects')} text-gray-800`} to="/projects" onClick={toggleMenuOptions}>
             Projects
           </Link>
         </div>

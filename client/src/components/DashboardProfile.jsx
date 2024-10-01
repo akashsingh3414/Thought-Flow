@@ -21,7 +21,6 @@ function DashboardProfile() {
   const [localErrorMessage, setLocalErrorMessage] = useState(null);
   const [localSuccessMessage, setSuccessMessage] = useState(null);
 
-  const { theme } = useSelector((state) => state.theme.theme);
   const { currentUser } = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -108,100 +107,98 @@ function DashboardProfile() {
   };
 
   return (
-    <div className={`flex flex-col flex-grow items-center justify-center w-full p-4`}>
-      {activeTab === 'profile' && (
-        <div className="w-full max-w-md rounded-md bg-white shadow-lg dark:bg-gray-800 dark:text-white dark:shadow-gray-700 p-6">
-          <div className="flex items-center justify-center mb-4">
-            <img
-              src={currentUser?.user?.profilePhoto}
-              alt="Profile"
-              className="h-28 w-28 border-4 border-[lightblue] rounded-full object-cover m-auto"
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = 'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?size=626&ext=jpg';
-              }}
-            />
-          </div>
+    <div className="flex-1 flex-col flex-grow items-center justify-center w-full h-full p-2 rounded-lg" style={{ backgroundColor: '#F5F7F8' }}>
+      <div className="w-full max-w-md rounded-md shadow-lg text-black p-6">
+        <div className="flex items-center justify-center mb-4">
+          <img
+            src={currentUser?.user?.profilePhoto}
+            alt="Profile"
+            className="h-28 w-28 border-4 border-[lightblue] rounded-full object-cover m-auto"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = 'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?size=626&ext=jpg';
+            }}
+          />
+        </div>
 
-          {/* Upload Profile Photo Section */}
-          <div className="mb-4">
-            <label className="block mb-1">Upload Profile Photo</label>
-            <input type="file" onChange={(e) => setProfilePhoto(e.target.files[0])} className={`w-full p-1 rounded ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'}`} />
-            <button onClick={handleProfilePhotoUpload} className={`mt-2 w-full py-2 rounded ${theme === 'dark' ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-blue-500 text-white hover:bg-blue-600 active:bg-blue-500'}`}>
-              Upload Photo
-            </button>
-          </div>
+        {/* Upload Profile Photo Section */}
+        <div className="mb-4">
+          <label className="block mb-1">Upload Profile Photo</label>
+          <input type="file" onChange={(e) => setProfilePhoto(e.target.files[0])} className="w-full p-1 rounded bg-white text-black" />
+          <button onClick={handleProfilePhotoUpload} className="mt-2 w-full py-2 rounded bg-blue-500 text-white hover:bg-blue-600">
+            Upload Photo
+          </button>
+        </div>
 
-          {/* Display Username */}
-          <div className="mb-4">
-            <label className="block mb-1">Username</label>
-            <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} className={`w-full p-2 rounded ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'}`} disabled={true} />
-          </div>
+        {/* Display Username */}
+        <div className="mb-4">
+          <label className="block mb-1">Username</label>
+          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} className="w-full p-2 rounded bg-white text-black" disabled={true} />
+        </div>
 
-          {/* Display Full Name */}
-          <div className="mb-4">
-            <label className="block mb-1">Full Name</label>
-            <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} className={`w-full p-2 rounded ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'}`} disabled={!isEditing} />
-          </div>
+        {/* Display Full Name */}
+        <div className="mb-4">
+          <label className="block mb-1">Full Name</label>
+          <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} className="w-full p-2 rounded bg-white text-black" disabled={!isEditing} />
+        </div>
 
-          {/* Display Email */}
-          <div className="mb-4">
-            <label className="block mb-1">Email</label>
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className={`w-full p-2 rounded ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'}`} disabled={!isEditing} />
-          </div>
+        {/* Display Email */}
+        <div className="mb-4">
+          <label className="block mb-1">Email</label>
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-2 rounded bg-white text-black" disabled={!isEditing} />
+        </div>
 
-          {/* Editing Section for Password */}
-          {isEditing && (
-            <>
-              <div className="mb-4">
-                <label className="block mb-1">Old Password</label>
-                <input type="password" value={oldPassword} placeholder="Old Password Required for Update" onChange={(e) => setOldPassword(e.target.value)} className={`w-full p-2 rounded ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'}`} />
-              </div>
-              <div className="mb-4">
-                <label className="block mb-1">New Password</label>
-                <input type="password" value={newPassword} placeholder="Optional (Only if changing password)" onChange={(e) => setNewPassword(e.target.value)} className={`w-full p-2 rounded ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'}`} />
-              </div>
-            </>
-          )}
-
-          {/* Buttons for Save or Update Account */}
-          <div className="flex justify-between mt-4">
-            {isEditing ? (
-              <button onClick={handleSave} className="bg-green-500 w-full text-white py-2 px-4 rounded hover:bg-green-600">Save</button>
-            ) : (
-              <button onClick={() => setIsEditing(true)} className="bg-gray-500 w-full text-white py-2 px-4 rounded hover:bg-gray-600">Update Account Details</button>
-            )}
-          </div>
-
-          {/* Delete Account and Logout Buttons */}
-          <div className="flex justify-between mt-4 gap-2">
-            <button className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 w-full" onClick={() => setConfirmDelete(true)}>Delete Account</button>
-            <button className="bg-white text-blue-500 py-2 px-4 rounded hover:bg-blue-500 hover:text-white w-full border" onClick={handleLogout}>Logout</button>
-          </div>
-
-          {/* Error and Success Messages */}
-          {localErrorMessage && (
-            <div className="mt-4 p-2 bg-red-200 text-red-800 border border-red-400 rounded-lg">
-              {localErrorMessage}
+        {/* Editing Section for Password */}
+        {isEditing && (
+          <>
+            <div className="mb-4">
+              <label className="block mb-1">Old Password</label>
+              <input type="password" value={oldPassword} placeholder="Old Password Required for Update" onChange={(e) => setOldPassword(e.target.value)} className="w-full p-2 rounded bg-white text-black" />
             </div>
-          )}
-          {localSuccessMessage && (
-            <div className="mt-4 p-2 bg-green-200 text-green-800 border border-green-400 rounded-lg">
-              {localSuccessMessage}
+            <div className="mb-4">
+              <label className="block mb-1">New Password</label>
+              <input type="password" value={newPassword} placeholder="Optional (Only if changing password)" onChange={(e) => setNewPassword(e.target.value)} className="w-full p-2 rounded bg-white text-black" />
             </div>
+          </>
+        )}
+
+        {/* Buttons for Save or Update Account */}
+        <div className="flex justify-between mt-4">
+          {isEditing ? (
+            <button onClick={handleSave} className="bg-green-500 w-full text-white py-2 px-4 rounded hover:bg-green-600">Save</button>
+          ) : (
+            <button onClick={() => setIsEditing(true)} className="bg-gray-500 w-full text-white py-2 px-4 rounded hover:bg-gray-600">Update Account Details</button>
           )}
         </div>
-      )}
+
+        {/* Delete Account and Logout Buttons */}
+        <div className="flex justify-between mt-4 gap-2">
+          <button className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 w-full" onClick={() => setConfirmDelete(true)}>Delete Account</button>
+          <button className="bg-white text-blue-500 py-2 px-4 rounded hover:bg-blue-500 hover:text-white w-full border" onClick={handleLogout}>Logout</button>
+        </div>
+
+        {/* Error and Success Messages */}
+        {localErrorMessage && (
+          <div className="mt-4 p-2 bg-red-200 text-red-800 border border-red-400 rounded-lg">
+            {localErrorMessage}
+          </div>
+        )}
+        {localSuccessMessage && (
+          <div className="mt-4 p-2 bg-green-200 text-green-800 border border-green-400 rounded-lg">
+            {localSuccessMessage}
+          </div>
+        )}
+      </div>
 
       {/* Confirm Delete Modal */}
       {confirmDelete && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg p-6 w-1/3 dark:bg-gray-800">
+          <div className="bg-white rounded-lg p-6 w-1/3">
             <h2 className="text-lg font-semibold mb-4 text-center">Confirm Account Deletion</h2>
             <p className="mb-4 text-center">Are you sure you want to delete your account? This action cannot be undone.</p>
             <div className="mb-4">
               <label className="block mb-1">Enter Password to Confirm</label>
-              <input type="password" value={oldPassword} onChange={(e) => setOldPassword(e.target.value)} className={`w-full p-2 rounded ${theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-gray-100 text-black'}`} />
+              <input type="password" value={oldPassword} onChange={(e) => setOldPassword(e.target.value)} className="w-full p-2 rounded bg-white text-black" />
             </div>
             <div className="flex justify-between mt-4">
               <button className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600" onClick={handleDelete}>Confirm</button>

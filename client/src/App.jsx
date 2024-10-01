@@ -9,14 +9,11 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Settings from './pages/Settings';
 import Dashboard from './pages/Dashboard';
-import { useSelector } from 'react-redux';
 import PrivateRoute from './components/PrivateRoute';
 import CreatePosts from './pages/CreatePosts'
 
 function App() {
-  const theme = useSelector((state) => state.theme.theme);
   return (
-    <div className={theme === 'dark' ? 'dark bg-gray-900 text-white' : 'light bg-gray-100 text-black'}>
     <BrowserRouter>
       <Header />
       <Routes>
@@ -36,7 +33,6 @@ function App() {
       </Routes>
       <Footer />
     </BrowserRouter>
-    </div>
   );
 }
 

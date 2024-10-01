@@ -18,17 +18,19 @@ export default function Dashboard() {
 
   return (
     <div className='min-h-screen flex flex-col md:flex-row transition-colors duration-300'>
-      <aside className="md:w-64 w-full md:min-h-screen">
+      {/* Sidebar for larger screens */}
+      <aside className="md:w-64 w-full md:min-h-screen bg-white shadow-lg rounded-lg">
         <DashboardSidebar />
       </aside>
 
-      <div className="container mx-auto">
-          {tab === 'profile' && (
-            <DashboardProfile />
-          )}
-          {tab === 'posts' && (
-            <DashboardPosts />
-          )}
+      {/* Main content */}
+      <div className="flex-grow container mx-auto bg-white rounded-lg shadow-lg">
+        {tab === 'profile' && (
+          <DashboardProfile />
+        )}
+        {tab === 'posts' && (
+          <DashboardPosts />
+        )}
       </div>
     </div>
   );
