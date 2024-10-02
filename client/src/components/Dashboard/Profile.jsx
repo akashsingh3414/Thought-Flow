@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { loginSuccess, logoutStart } from '../redux/user/userSlice';
+import { loginSuccess, logoutStart } from '../../redux/user/userSlice';
 
-function DashboardProfile() {
+function Profile() {
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -211,4 +211,4 @@ function DashboardProfile() {
   );
 }
 
-export default DashboardProfile;
+export default Profile;

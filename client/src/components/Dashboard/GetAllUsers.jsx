@@ -1,9 +1,9 @@
 import React from 'react'
 
-function DashboardAllUsers() {
+function GetAllUsers() {
   return (
     <div>All Users</div>
   )
 }
 
-export default DashboardAllUsers
+export default GetAllUsers

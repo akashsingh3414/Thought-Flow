@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 
-const DashboardSidebar = () => {
+const Sidebar = () => {
   const location = useLocation();
   const currentTab = new URLSearchParams(location.search).get('tab') || 'profile';
   const {currentUser} = useSelector(state => state.user)
@@ -21,6 +21,18 @@ const DashboardSidebar = () => {
             }`}
           >
             Profile
+          </Link>
+        </li>
+        <li>
+          <Link
+            to="/dashboard?tab=createPosts"
+            className={`block py-2 px-6 rounded-md transition-all duration-200 ${
+              currentTab === 'createPosts'
+                ? 'bg-blue-600 text-white'
+                : 'hover:bg-gray-700 hover:text-white'
+            }`}
+          >
+            Create Post
           </Link>
         </li>
         <li>
@@ -80,4 +92,4 @@ const DashboardSidebar = () => {
   );
 };
 
-export default DashboardSidebar;
+export default Sidebar;

@@ -8,7 +8,7 @@ function CreatePosts() {
   const selectionOptions = ['Uncategorized', 'Programming Languages', 'Python', 'Web', 'App'];
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [category, setCategory] = useState('uncategorized');
+  const [category, setCategory] = useState('Uncategorized');
   const [imageFiles, setImageFiles] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -43,14 +43,14 @@ function CreatePosts() {
       });
       setSuccessMessage(res.data.message);
     } catch (error) {
-      setErrorMessage(error.response.data.message);
+      setErrorMessage(error.response?.data?.message || 'An error occurred');
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="p-4 min-h-screen rounded-lg mx-auto max-w-2xl" style={{ backgroundColor: '#F5F7F8' }}>
+    <div className="p-4 rounded-lg mx-auto w-full" style={{ backgroundColor: '#E5F7E8', minHeight: '100vh' }}>
       <h1 className="text-center font-semibold text-3xl m-6 text-gray-800">Create Your Post</h1>
       <form className="flex flex-col gap-6 p-8 rounded-lg shadow-lg bg-white text-black" onSubmit={handlePost}>
         <div className="flex flex-row gap-4">
@@ -103,13 +103,13 @@ function CreatePosts() {
           <ReactQuill
             theme="snow"
             placeholder="Flow into your thoughts here..."
-            className="h-36 mb-6 rounded"
+            className="h-36 mb-6 rounded min-h-96"
             onChange={(value) => setContent(value)}
           />
         </div>
 
-        {errorMessage && <p className="text-red-500">{errorMessage}</p>}
-        {successMessage && <p className="text-green-500">{successMessage}</p>}
+        {errorMessage && <p className="text-red-500 text-center">{errorMessage}</p>}
+        {successMessage && <p className="text-green-500 text-center">{successMessage}</p>}
 
         <button
           type="submit"

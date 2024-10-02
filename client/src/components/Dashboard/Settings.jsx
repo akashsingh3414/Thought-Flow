@@ -1,9 +1,9 @@
 import React from 'react'
 
-function DashboardSettings() {
+function Settings() {
   return (
     <div>Settings</div>
   )
 }
 
-export default DashboardSettings
+export default Settings

@@ -106,9 +106,6 @@ function Header() {
           <Link className={`hover:bg-gray-100 px-4 py-2 rounded-md ${isActive('/about')} text-gray-800`} to="/about">
             About
           </Link>
-          <Link className={`hover:bg-gray-100 px-4 py-2 rounded-md ${isActive('/projects')} text-gray-800`} to="/projects">
-            Projects
-          </Link>
         </nav>
 
         <div className="relative">
