@@ -13,13 +13,11 @@ const postSchema = new mongoose.Schema({
     content: {
         type: String,
         required: true,
-        minLength: 20,
     },
     title: {
         type: String,
         required: true,
         unique: true,
-        maxLength: 200,
     },
     images: {
         type: [String],

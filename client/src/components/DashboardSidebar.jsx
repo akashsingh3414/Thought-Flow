@@ -32,7 +32,7 @@ const DashboardSidebar = () => {
                 : 'hover:bg-gray-700 hover:text-white'
             }`}
           >
-            Blogs
+            My Blogs
           </Link>
         </li>
         <li>
