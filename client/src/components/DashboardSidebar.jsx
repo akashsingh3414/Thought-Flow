@@ -20,27 +20,39 @@ const DashboardSidebar = () => {
                 : 'hover:bg-gray-700 hover:text-white'
             }`}
           >
-            My Profile
+            Profile
           </Link>
         </li>
         <li>
           <Link
-            to="/dashboard?tab=posts"
+            to="/dashboard?tab=myPosts"
             className={`block py-2 px-6 rounded-md transition-all duration-200 ${
-              currentTab === 'posts'
+              currentTab === 'myPosts'
                 ? 'bg-blue-600 text-white'
                 : 'hover:bg-gray-700 hover:text-white'
             }`}
           >
-            My Posts
+            Blogs
+          </Link>
+        </li>
+        <li>
+          <Link
+            to="/dashboard?tab=allPosts"
+            className={`block py-2 px-6 rounded-md transition-all duration-200 ${
+              currentTab === 'allPosts'
+                ? 'bg-blue-600 text-white'
+                : 'hover:bg-gray-700 hover:text-white'
+            }`}
+          >
+            All Blogs
           </Link>
         </li>
         {currentUser.user.isAdmin && (
           <li>
           <Link
-            to="/dashboard?tab=users"
+            to="/dashboard?tab=allUsers"
             className={`block py-2 px-6 rounded-md transition-all duration-200 ${
-              currentTab === 'users'
+              currentTab === 'allUsers'
                 ? 'bg-blue-600 text-white'
                 : 'hover:bg-gray-700 hover:text-white'
             }`}

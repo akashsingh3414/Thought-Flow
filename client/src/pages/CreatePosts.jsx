@@ -18,7 +18,7 @@ function CreatePosts() {
 
   const handlePost = async (e) => {
     e.preventDefault();
-    if (!title || !content || !category || imageFiles.length === 0) {
+    if (!title || !content || !category) {
       setErrorMessage('All fields are required, including images.');
       return;
     }

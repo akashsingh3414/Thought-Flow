@@ -9,7 +9,9 @@ export const uploadPost = async (req, res, next) => {
     return res.status(400).json({ message: 'All fields are important' });
   }
 
-  if (!(await User.findById(userId))) {
+  const user = await User.findById(userId);
+
+  if (!(user)) {
     return res.status(400).json({ message: 'Invalid userId' });
   }
 
@@ -26,6 +28,7 @@ export const uploadPost = async (req, res, next) => {
     content,
     title,
     category,
+    authorName: user.fullName,
     images: uploadedImages.length > 0 ? uploadedImages : null,
   });
 

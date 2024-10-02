@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import DashboardSidebar from '../components/DashboardSidebar';
 import DashboardProfile from '../components/DashboardProfile';
-import DashboardPosts from '../components/DashboardPosts';
-import DashboardSettings from '../components/DashboardSettings';
+import DashboardUserPosts from '../components/DashboardUserPosts';
+import DashboardAllPosts from '../components/DashboardAllPosts';
 import DashboardAllUsers from '../components/DashboardAllUsers';
+import DashboardSettings from '../components/DashboardSettings';
 
 export default function Dashboard() {
   const location = useLocation();
@@ -29,14 +30,17 @@ export default function Dashboard() {
         {tab === 'profile' && (
           <DashboardProfile />
         )}
-        {tab === 'posts' && (
-          <DashboardPosts />
+        {tab === 'myPosts' && (
+          <DashboardUserPosts />
+        )}
+        {tab === 'allPosts' && (
+          <DashboardAllPosts />
+        )}
+        {tab === 'allUsers' && (
+          <DashboardAllUsers />
         )}
         {tab === 'settings' && (
           <DashboardSettings />
-        )}
-        {tab === 'users' && (
-          <DashboardAllUsers />
         )}
       </div> 
     </div>

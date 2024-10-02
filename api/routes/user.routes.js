@@ -9,6 +9,7 @@ import { deleteUser } from '../controllers/deleteUser.controllers.js';
 import { uploadMany, uploadSingle } from '../middlewares/multer.middlewares.js';
 import { updateProfilePhoto } from '../controllers/updateUserPhoto.controllers.js';
 import { uploadPost } from '../controllers/uploadPost.controllers.js';
+import { getPosts } from '../controllers/getPosts.controllers.js';
 
 const router = Router();
 
@@ -25,5 +26,6 @@ router.route('/update').patch(verifyjwt, update);
 router.route('/updateProfilePhoto').patch(verifyjwt, uploadSingle, updateProfilePhoto);
 router.route('/delete').delete(verifyjwt, deleteUser);
 router.route('/posts').post(verifyjwt, uploadMany, uploadPost);
+router.route('/getPosts/:userId').get(getPosts);
 
 export default router;
