@@ -1,9 +1,11 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 
 const DashboardSidebar = () => {
   const location = useLocation();
   const currentTab = new URLSearchParams(location.search).get('tab') || 'profile';
+  const {currentUser} = useSelector(state => state.user)
 
   return (
     <div className="h-full p-2 md:sticky top-0 rounded-lg" style={{ backgroundColor: '#F5F7F8' }}>
@@ -18,7 +20,7 @@ const DashboardSidebar = () => {
                 : 'hover:bg-gray-700 hover:text-white'
             }`}
           >
-            Profile
+            My Profile
           </Link>
         </li>
         <li>
@@ -30,10 +32,11 @@ const DashboardSidebar = () => {
                 : 'hover:bg-gray-700 hover:text-white'
             }`}
           >
-            Posts
+            My Posts
           </Link>
         </li>
-        <li>
+        {currentUser.user.isAdmin && (
+          <li>
           <Link
             to="/dashboard?tab=users"
             className={`block py-2 px-6 rounded-md transition-all duration-200 ${
@@ -42,21 +45,24 @@ const DashboardSidebar = () => {
                 : 'hover:bg-gray-700 hover:text-white'
             }`}
           >
-            Users
+            All Users
           </Link>
         </li>
-        <li>
+        )}
+        {currentUser.user.isAdmin && (
+          <li>
           <Link
-            to="/dashboard?tab=comments"
+            to="/dashboard?tab=settings"
             className={`block py-2 px-6 rounded-md transition-all duration-200 ${
-              currentTab === 'comments'
+              currentTab === 'settings'
                 ? 'bg-blue-600 text-white'
                 : 'hover:bg-gray-700 hover:text-white'
             }`}
           >
-            Comments
+            Settings
           </Link>
         </li>
+        )}
       </ul>
     </div>
   );

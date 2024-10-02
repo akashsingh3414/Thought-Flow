@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { loginSuccess, logoutStart } from '../redux/user/userSlice';
 
@@ -107,13 +107,13 @@ function DashboardProfile() {
   };
 
   return (
-    <div className="flex-1 flex-col flex-grow items-center justify-center w-full h-full p-2 rounded-lg" style={{ backgroundColor: '#F5F7F8' }}>
-      <div className="w-full max-w-md rounded-md shadow-lg text-black p-6">
+    <div className="flex-1 flex flex-col items-center justify-center w-full h-full p-2 bg-[#F5F7F8]">
+      <div className="w-full max-w-md bg-white rounded-md shadow-lg text-black p-6">
         <div className="flex items-center justify-center mb-4">
           <img
             src={currentUser?.user?.profilePhoto}
             alt="Profile"
-            className="h-28 w-28 border-4 border-[lightblue] rounded-full object-cover m-auto"
+            className="h-28 w-28 border-4 border-[lightblue] rounded-full object-cover"
             onError={(e) => {
               e.target.onerror = null;
               e.target.src = 'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?size=626&ext=jpg';
@@ -133,7 +133,7 @@ function DashboardProfile() {
         {/* Display Username */}
         <div className="mb-4">
           <label className="block mb-1">Username</label>
-          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} className="w-full p-2 rounded bg-white text-black" disabled={true} />
+          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} className="w-full p-2 rounded bg-white text-black" disabled />
         </div>
 
         {/* Display Full Name */}

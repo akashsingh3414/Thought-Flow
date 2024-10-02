@@ -30,5 +30,5 @@ export const register = async (req, res) => {
         return res.status(500).json({message: "server side error while creating user"});
     }
 
-    return res.status(200).json({ message: "User Registered Successfully", user: userCreated});
+    return res.status(201).json({ message: "User Registered Successfully", user: userCreated});
 };
