@@ -1,32 +1,29 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import axios from 'axios';
 
-export default function DashPosts() {
+export default function ShowAllPosts() {
     const { currentUser } = useSelector((state) => state.user);
     const [userPosts, setUserPosts] = useState([]);
     const [showMore, setShowMore] = useState(true);
-    const [showModal, setShowModal] = useState(false);
-    const [postIdToDelete, setPostIdToDelete] = useState('');
+
+    const fetchPosts = async () => {
+        try {
+            const res = await axios.get(`/api/v1/post/getPosts?limit=10`);
+            if (res.status === 200) {
+                setUserPosts(res.data.posts || []);
+                if (res.data.posts.length < 9) {
+                    setShowMore(false);
+                }
+            }
+        } catch (error) {
+            console.error("Error fetching posts:", error.response ? error.response.data : error.message);
+        }
+    };
 
     useEffect(() => {
-        const fetchPosts = async () => {
-            try {
-                const res = await axios.get(`/api/v1/user/getPosts/${currentUser.user._id}`);
-                if (res.status === 200) {
-                    setUserPosts(res.data.posts || []);
-                    if (res.data.posts.length < 9) {
-                        setShowMore(false);
-                    }
-                }
-            } catch (error) {
-                console.error("Error fetching posts:", error.response ? error.response.data : error.message);
-            }
-        };
-
-        if (currentUser.user.isAdmin) {
+        if (currentUser.user) {
             fetchPosts();
         }
     }, [currentUser.user]);
@@ -34,9 +31,10 @@ export default function DashPosts() {
     const handleShowMore = async () => {
         const startIndex = userPosts.length;
         try {
-            const res = await axios.get(`/api/v1/user/getPosts/${currentUser.user._id}?startIndex=${startIndex}`);
+            const res = await axios.get(`/api/v1/post/getPosts?startIndex=${startIndex}&limit=10
+                `);
             if (res.status === 200) {
-                setUserPosts((prev) => [...prev, ...(res.data.posts || [])]);
+                setUserPosts((prevPosts) => [...prevPosts, ...res.data.posts]);
                 if (res.data.posts.length < 9) {
                     setShowMore(false);
                 }
@@ -46,12 +44,11 @@ export default function DashPosts() {
         }
     };
 
-    const handleDeletePost = async () => {
-        setShowModal(false);
+    const handleDeletePost = async (postId, postOwnerId) => {
         try {
-            const res = await axios.delete(`/api/post/deletepost/${postIdToDelete}/${currentUser.user._id}`);
+            const res = await axios.delete(`/api/v1/post/deletePost/${postId}/${postOwnerId}/${currentUser.user._id}`);
             if (res.status === 200) {
-                setUserPosts((prev) => prev.filter((post) => post._id !== postIdToDelete));
+                setUserPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
             } else {
                 console.log(res.data.message);
             }
@@ -67,9 +64,11 @@ export default function DashPosts() {
                     <table className='min-w-full divide-y divide-gray-200'>
                         <thead>
                             <tr className='bg-gray-100'>
+                                <th className='px-4 py-2 text-left text-sm font-medium text-gray-500'>Date created</th>
                                 <th className='px-4 py-2 text-left text-sm font-medium text-gray-500'>Date updated</th>
                                 <th className='px-4 py-2 text-left text-sm font-medium text-gray-500'>Post image</th>
                                 <th className='px-4 py-2 text-left text-sm font-medium text-gray-500'>Post title</th>
+                                <th className='px-4 py-2 text-left text-sm font-medium text-gray-500'>Author</th>
                                 <th className='px-4 py-2 text-left text-sm font-medium text-gray-500'>Category</th>
                                 <th className='px-4 py-2 text-left text-sm font-medium text-gray-500'>Delete</th>
                                 <th className='px-4 py-2 text-left text-sm font-medium text-gray-500'>Edit</th>
@@ -78,6 +77,9 @@ export default function DashPosts() {
                         <tbody className='divide-y divide-gray-200'>
                             {userPosts.map((post) => (
                                 <tr key={post._id} className='bg-white hover:bg-gray-50'>
+                                    <td className='px-4 py-2 text-sm text-gray-700'>
+                                        {new Date(post.createdAt).toLocaleDateString()}
+                                    </td>
                                     <td className='px-4 py-2 text-sm text-gray-700'>
                                         {new Date(post.updatedAt).toLocaleDateString()}
                                     </td>
@@ -95,13 +97,15 @@ export default function DashPosts() {
                                             {post.title}
                                         </Link>
                                     </td>
+                                    <td className='px-4 py-2'>
+                                        <Link className='font-medium text-gray-900' to={`/post/${post.slug}`}>
+                                            {post.authorName}
+                                        </Link>
+                                    </td>
                                     <td className='px-4 py-2 text-sm text-gray-700'>{post.category}</td>
                                     <td className='px-4 py-2'>
                                         <span
-                                            onClick={() => {
-                                                setShowModal(true);
-                                                setPostIdToDelete(post._id);
-                                            }}
+                                            onClick={() => handleDeletePost(post._id, post.userId)}
                                             className='font-medium text-red-500 hover:underline cursor-pointer'
                                         >
                                             Delete
@@ -126,25 +130,7 @@ export default function DashPosts() {
                     )}
                 </>
             ) : (
-                <p>You have no posts yet!</p>
-            )}
-            {showModal && (
-                <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50'>
-                    <div className='bg-white rounded-lg p-6 shadow-lg'>
-                        <HiOutlineExclamationCircle className='h-14 w-14 text-gray-400 mb-4 mx-auto' />
-                        <h3 className='mb-5 text-lg text-gray-500'>
-                            Are you sure you want to delete this post?
-                        </h3>
-                        <div className='flex justify-center gap-4'>
-                            <button className='bg-red-500 text-white px-4 py-2 rounded' onClick={handleDeletePost}>
-                                Yes, I'm sure
-                            </button>
-                            <button className='bg-gray-300 text-gray-800 px-4 py-2 rounded' onClick={() => setShowModal(false)}>
-                                No, cancel
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                <p>There are no posts yet!</p>
             )}
         </div>
     );

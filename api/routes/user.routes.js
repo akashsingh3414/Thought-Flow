@@ -1,33 +1,22 @@
 import { Router } from 'express';
-import { register } from '../controllers/registerUser.controllers.js';
-import { google, login } from '../controllers/loginUser.controllers.js';
 import { verifyjwt } from '../middlewares/auth.middlewares.js';
-import { logout } from '../controllers/logoutUser.controllers.js';
 import { getUser } from '../controllers/getUserDetails.controllers.js';
-import { update } from '../controllers/updateUser.controllers.js';
-import { deleteUser } from '../controllers/deleteUser.controllers.js';
-import { uploadMany, uploadSingle } from '../middlewares/multer.middlewares.js';
-import { updateProfilePhoto } from '../controllers/updateUserPhoto.controllers.js';
-import { uploadPost } from '../controllers/uploadPost.controllers.js';
-import { getPosts } from '../controllers/getPosts.controllers.js';
-import { getAllPosts } from '../controllers/getAllPosts.controllers.js';
+import { register, google, login, logout, updateUser, updateProfilePhoto, deleteUser } from '../controllers/user.controllers.js';
+import { uploadSingle } from '../middlewares/multer.middlewares.js';
 
-const router = Router();
+const userRouter = Router();
 
-router.route('/test').get((req, res) => {
+userRouter.route('/test').get((req, res) => {
     res.json({ message: 'API is working' });
 });
 
-router.route('/register').post(register);
-router.route('/login').post(login);
-router.route('/logout').post(verifyjwt, logout);
-router.route('/getUser').get(verifyjwt, getUser); 
-router.route('/google').post(google);
-router.route('/update').patch(verifyjwt, update);
-router.route('/updateProfilePhoto').patch(verifyjwt, uploadSingle, updateProfilePhoto);
-router.route('/delete').delete(verifyjwt, deleteUser);
-router.route('/posts').post(verifyjwt, uploadMany, uploadPost);
-router.route('/getPosts/:userId').get(getPosts);
-router.route('/getAllPosts').get(getAllPosts);
+userRouter.route('/register').post(register);
+userRouter.route('/login').post(login);
+userRouter.route('/logout').post(verifyjwt, logout);
+userRouter.route('/getUser').get(verifyjwt, getUser); 
+userRouter.route('/google').post(google);
+userRouter.route('/update').patch(verifyjwt, updateUser);
+userRouter.route('/delete').delete(verifyjwt, deleteUser);
+userRouter.route('/updateProfilePhoto').patch(verifyjwt, uploadSingle, updateProfilePhoto);
 
-export default router;
+export default userRouter;

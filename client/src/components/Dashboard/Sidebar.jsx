@@ -47,18 +47,20 @@ const Sidebar = () => {
             My Blogs
           </Link>
         </li>
-        <li>
-          <Link
-            to="/dashboard?tab=allPosts"
-            className={`block py-2 px-6 rounded-md transition-all duration-200 ${
-              currentTab === 'allPosts'
-                ? 'bg-blue-600 text-white'
-                : 'hover:bg-gray-700 hover:text-white'
-            }`}
-          >
-            All Blogs
-          </Link>
-        </li>
+        {currentUser.user.isAdmin && (
+          <li>
+            <Link
+              to="/dashboard?tab=allPosts"
+              className={`block py-2 px-6 rounded-md transition-all duration-200 ${
+                currentTab === 'allPosts'
+                  ? 'bg-blue-600 text-white'
+                  : 'hover:bg-gray-700 hover:text-white'
+              }`}
+            >
+              All Blogs
+            </Link>
+          </li>
+        )}
         {currentUser.user.isAdmin && (
           <li>
           <Link

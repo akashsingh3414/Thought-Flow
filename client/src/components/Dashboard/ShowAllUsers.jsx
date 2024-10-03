@@ -1,9 +1,9 @@
 import React from 'react'
 
-function GetAllUsers() {
+function ShowAllUsers() {
   return (
     <div>All Users</div>
   )
 }
 
-export default GetAllUsers
+export default ShowAllUsers

@@ -38,7 +38,7 @@ function CreatePosts() {
         formData.append('files', file);
       });
 
-      const res = await axios.post('/api/v1/user/posts', formData, {
+      const res = await axios.post('/api/v1/post/createPost', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       setSuccessMessage(res.data.message);

@@ -18,6 +18,7 @@ function App() {
         <Header />
         <main className="flex-grow">
           <Routes>
+            
             <Route path='/' element={<Home />} />
             <Route path='/home' element={<Home />} />
             <Route path='/about' element={<About />} />
@@ -29,10 +30,9 @@ function App() {
             </Route>
             
             <Route element={<OnlyAdminPrivateRoute />}>
-              {/* Add admin routes here */}
               <Route path='/create-post' element={<CreatePosts />} />
-              {/* More admin routes can be added as needed */}
             </Route>
+
           </Routes>
         </main>
         <Footer />
