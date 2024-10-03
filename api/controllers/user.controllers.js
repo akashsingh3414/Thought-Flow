@@ -1,7 +1,44 @@
-import {User} from '../models/user.models.js'
+import { User } from '../models/user.models.js'
+import { Post } from '../models/posts.models.js'
 import { generateAccessANDrefreshToken } from '../controllers/generate.controllers.js';
 import bcrypt from 'bcrypt'
 import { uploadOnCloudinary } from '../utils/cloudinary.js';
+
+export const getUser = async (req, res, next) => {
+    try {
+      const startIndex = Math.max(0, parseInt(req.query.startIndex) || 0);
+      const limit = Math.max(1, parseInt(req.query.limit) || 10);
+      const sortDirection = req.query.order === 'asc' ? 1 : -1;
+  
+      const queryFilters = {
+        ...(req.query.userId && { _id: req.query.userId }),
+        ...(req.query.slug && { slug: req.query.slug }),
+        ...(req.query.userName && { userName: req.query.userName }),
+        ...(req.query.searchTerm && {
+          $or: [
+            { title: { $regex: req.query.searchTerm, $options: 'i' } },
+            { content: { $regex: req.query.searchTerm, $options: 'i' } },
+          ],
+        }),
+      };
+  
+      const users = await User.find(queryFilters)
+        .select('-password -refreshToken')
+        .sort({ updatedAt: sortDirection })
+        .skip(startIndex)
+        .limit(limit);
+  
+      const totalUsers = await User.countDocuments(queryFilters);
+  
+      return res.status(200).json({
+        users,
+        totalUsers,
+      });
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      next(error);
+    }
+};  
 
 export const register = async (req, res) => {
     const { userName, fullName, emailID, password } = req.body;
@@ -243,21 +280,29 @@ export const updateProfilePhoto = async (req, res) => {
 
 export const deleteUser = async (req, res) => {
     try {
+        const userId = req.params.userId || req.user._id;
         const user = await User.findById(req.user._id);
-        if (!user) {
-            return res.status(404).json({message: "user not found"});
-        }
-        const { password } = req.body;
-        if (!password) {
-            return res.status(400).json({message:"Password is required"});
+
+        if(!(user.isAdmin) && (req.user._id !== userId)) {
+            return res.status(403).json({message: "Deletion operation not allowed"});
         }
 
-        const passwordMatch = await bcrypt.compare(password, user.password);
-        if (!passwordMatch) {
-            return res.status(400).json({message:"Invalid Password"});
+        if(!user.isAdmin && (req.user._id === userId)) {
+            const { password } = req.body;
+            if (!password) {
+                return res.status(400).json({message:"Password is required"});
+            }
+
+            const passwordMatch = await bcrypt.compare(password, user.password);
+            if (!passwordMatch) {
+                return res.status(400).json({message:"Invalid Password"});
+            } 
         }
 
-        const deletedUser = await User.findByIdAndDelete(user._id);
+        const deletedUser = await User.findByIdAndDelete(userId);
+
+        await Post.deleteMany({ userId });
+
         if (!deletedUser) {
             return res.status(500).json({message:"Could not delete user. Please try again"})
         }

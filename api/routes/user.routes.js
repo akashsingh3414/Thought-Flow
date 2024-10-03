@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import { verifyjwt } from '../middlewares/auth.middlewares.js';
-import { getUser } from '../controllers/getUserDetails.controllers.js';
-import { register, google, login, logout, updateUser, updateProfilePhoto, deleteUser } from '../controllers/user.controllers.js';
+import { getUser, register, google, login, logout, updateUser, updateProfilePhoto, deleteUser } from '../controllers/user.controllers.js';
 import { uploadSingle } from '../middlewares/multer.middlewares.js';
 
 const userRouter = Router();
@@ -16,7 +15,7 @@ userRouter.route('/logout').post(verifyjwt, logout);
 userRouter.route('/getUser').get(verifyjwt, getUser); 
 userRouter.route('/google').post(google);
 userRouter.route('/update').patch(verifyjwt, updateUser);
-userRouter.route('/delete').delete(verifyjwt, deleteUser);
+userRouter.route('/delete/:userId').delete(verifyjwt, deleteUser);
 userRouter.route('/updateProfilePhoto').patch(verifyjwt, uploadSingle, updateProfilePhoto);
 
 export default userRouter;

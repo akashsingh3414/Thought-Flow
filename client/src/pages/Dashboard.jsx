@@ -22,12 +22,12 @@ export default function Dashboard() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <div className="flex flex-grow transition-colors duration-300">
-        <aside className="md:w-64 w-full bg-white shadow-lg rounded-lg">
+      <div className="flex flex-grow overflow-hidden">
+        <aside className="md:w-64 w-1/4 bg-white shadow-lg rounded-lg flex-shrink-0">
           <Sidebar />
         </aside>
 
-        <div className="flex-grow container mx-auto bg-white rounded-lg shadow-lg max-w-full md:min-h-screen">
+        <div className="flex-grow bg-white rounded-lg shadow-lg overflow-auto">
           {tab === 'profile' && <Profile />}
           {tab === 'createPosts' && <CreatePosts />}
           {tab === 'myPosts' && <ShowCurrentUserPosts />}

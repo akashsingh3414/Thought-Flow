@@ -50,10 +50,10 @@ function CreatePosts() {
   };
 
   return (
-    <div className="p-4 rounded-lg mx-auto w-full" style={{ backgroundColor: '#E5F7E8', minHeight: '100vh' }}>
+    <div className="flex flex-col h-full p-4 rounded-lg mx-auto w-full" style={{ backgroundColor: '#E5F7E8' }}>
       <h1 className="text-center font-semibold text-3xl m-6 text-gray-800">Create Your Post</h1>
-      <form className="flex flex-col gap-6 p-8 rounded-lg shadow-lg bg-white text-black" onSubmit={handlePost}>
-        <div className="flex flex-row gap-4">
+      <form className="flex flex-col gap-6 p-8 rounded-lg shadow-lg bg-white text-black flex-grow" onSubmit={handlePost}>
+        <div className="flex flex-col md:flex-row gap-4">
           <div className="flex flex-col flex-grow">
             <label htmlFor="title" className="mb-2 text-sm font-semibold text-gray-700">Title</label>
             <input

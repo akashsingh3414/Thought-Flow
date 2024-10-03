@@ -198,7 +198,7 @@ function Profile() {
             <p className="mb-4 text-center">Are you sure you want to delete your account? This action cannot be undone.</p>
             <div className="mb-4">
               <label className="block mb-1">Enter Password to Confirm</label>
-              <input type="password" value={oldPassword} onChange={(e) => setOldPassword(e.target.value)} className="w-full p-2 rounded bg-white text-black" />
+              <input type="password" value={oldPassword} onChange={(e) => setOldPassword(e.target.value)} className="w-full p-2 rounded bg-gray-200 text-black" />
             </div>
             <div className="flex justify-between mt-4">
               <button className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600" onClick={handleDelete}>Confirm</button>
