@@ -7,16 +7,31 @@ import CreatePosts from '../components/Dashboard/CreatePosts';
 import ShowAllPosts from '../components/Dashboard/ShowAllPosts';
 import ShowAllUsers from '../components/Dashboard/ShowAllUsers';
 import ShowCurrentUserPosts from '../components/Dashboard/ShowCurrentUserPosts';
+import UpdateProfile from '../components/Dashboard/UpdateProfile';
+import AdminUpdateUser from '../components/Dashboard/AdminUpdateUser';
 
 export default function Dashboard() {
   const location = useLocation();
   const [tab, setTab] = useState('profile');
 
+  const tabComponents = {
+    profile: <Profile />,
+    updateProfile: <UpdateProfile />,
+    'update-user': <AdminUpdateUser />,
+    createPosts: <CreatePosts />,
+    myPosts: <ShowCurrentUserPosts />,
+    allPosts: <ShowAllPosts />,
+    allUsers: <ShowAllUsers />,
+    settings: <Settings />,
+  };
+
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const tabFromUrl = urlParams.get('tab');
-    if (tabFromUrl) {
+    if (tabFromUrl && tabComponents[tabFromUrl]) {
       setTab(tabFromUrl);
+    } else {
+      setTab('profile');
     }
   }, [location.search]);
 
@@ -28,12 +43,7 @@ export default function Dashboard() {
         </aside>
 
         <div className="flex-grow bg-white rounded-lg shadow-lg overflow-auto">
-          {tab === 'profile' && <Profile />}
-          {tab === 'createPosts' && <CreatePosts />}
-          {tab === 'myPosts' && <ShowCurrentUserPosts />}
-          {tab === 'allPosts' && <ShowAllPosts />}
-          {tab === 'allUsers' && <ShowAllUsers />}
-          {tab === 'settings' && <Settings />}
+          {tabComponents[tab] || <Profile />}
         </div>
       </div>
     </div>

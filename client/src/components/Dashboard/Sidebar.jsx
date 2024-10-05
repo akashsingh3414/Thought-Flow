@@ -25,6 +25,18 @@ const Sidebar = () => {
         </li>
         <li>
           <Link
+            to="/dashboard?tab=updateProfile"
+            className={`block py-2 px-6 rounded-md transition-all duration-200 ${
+              currentTab === 'updateProfile'
+                ? 'bg-blue-600 text-white'
+                : 'hover:bg-gray-700 hover:text-white'
+            }`}
+          >
+            Update Profile
+          </Link>
+        </li>
+        <li>
+          <Link
             to="/dashboard?tab=createPosts"
             className={`block py-2 px-6 rounded-md transition-all duration-200 ${
               currentTab === 'createPosts'

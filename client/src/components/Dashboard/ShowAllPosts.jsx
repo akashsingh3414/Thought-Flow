@@ -71,7 +71,6 @@ export default function ShowAllPosts() {
                                 <th className='px-4 py-2 text-left text-sm font-medium text-gray-500'>Author</th>
                                 <th className='px-4 py-2 text-left text-sm font-medium text-gray-500'>Category</th>
                                 <th className='px-4 py-2 text-left text-sm font-medium text-gray-500'>Delete</th>
-                                <th className='px-4 py-2 text-left text-sm font-medium text-gray-500'>Edit</th>
                             </tr>
                         </thead>
                         <tbody className='divide-y divide-gray-200'>
@@ -84,21 +83,21 @@ export default function ShowAllPosts() {
                                         {new Date(post.updatedAt).toLocaleDateString()}
                                     </td>
                                     <td className='px-4 py-2'>
-                                        <Link to={`/post/${post.slug}`}>
+                                        <Link to={`/post/${post.title}`}>
                                             <img
                                                 src={post?.images?.length > 0 ? post.images[0] : ''}
                                                 alt={'N/A'}
-                                                className='w-20 h-10 object-cover'
+                                                className='w-20 h-10 object-contain'
                                             />
                                         </Link>
                                     </td>
                                     <td className='px-4 py-2'>
-                                        <Link className='font-medium text-gray-900' to={`/post/${post.slug}`}>
+                                        <Link className='font-medium text-gray-900' to={`/post/${post.title}`}>
                                             {post.title}
                                         </Link>
                                     </td>
                                     <td className='px-4 py-2'>
-                                        <Link className='font-medium text-gray-900' to={`/post/${post.slug}`}>
+                                        <Link className='font-medium text-gray-900' to={`/post/${post.title}`}>
                                             {post.authorName}
                                         </Link>
                                     </td>
@@ -110,11 +109,6 @@ export default function ShowAllPosts() {
                                         >
                                             Delete
                                         </span>
-                                    </td>
-                                    <td className='px-4 py-2'>
-                                        <Link className='text-teal-500 hover:underline' to={`/update-post/${post._id}`}>
-                                            Edit
-                                        </Link>
                                     </td>
                                 </tr>
                             ))}

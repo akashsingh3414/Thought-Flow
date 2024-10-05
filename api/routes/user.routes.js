@@ -15,7 +15,7 @@ userRouter.route('/logout').post(verifyjwt, logout);
 userRouter.route('/getUser').get(verifyjwt, getUser); 
 userRouter.route('/google').post(google);
 userRouter.route('/update').patch(verifyjwt, updateUser);
-userRouter.route('/delete/:userId').delete(verifyjwt, deleteUser);
+userRouter.route('/delete').delete(verifyjwt, deleteUser);
 userRouter.route('/updateProfilePhoto').patch(verifyjwt, uploadSingle, updateProfilePhoto);
 
 export default userRouter;

@@ -10,6 +10,7 @@ import Dashboard from './pages/Dashboard';
 import PrivateRoute from './components/PrivateRoute';
 import CreatePosts from './components/Dashboard/CreatePosts';
 import OnlyAdminPrivateRoute from './components/OnlyAdminPrivateRoute';
+import AdminUpdateUser from './components/Dashboard/AdminUpdateUser';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
             
             <Route element={<OnlyAdminPrivateRoute />}>
               <Route path='/create-post' element={<CreatePosts />} />
+              <Route path='/update-post' element={<AdminUpdateUser />} />
             </Route>
 
           </Routes>

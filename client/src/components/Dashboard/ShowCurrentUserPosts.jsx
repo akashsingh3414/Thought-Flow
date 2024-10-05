@@ -86,7 +86,7 @@ export default function ShowCurrentUserPosts() {
                                             <img
                                                 src={post?.images?.length > 0 ? post.images[0] : ''}
                                                 alt={'N/A'}
-                                                className='w-20 h-10 object-cover'
+                                                className='w-20 h-10 object-contain'
                                             />
                                         </Link>
                                     </td>
