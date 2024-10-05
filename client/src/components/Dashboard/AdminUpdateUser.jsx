@@ -70,6 +70,7 @@ const AdminUpdateUser = () => {
         setIsEditing(false);
       }
     } catch (error) {
+      console.log(error)
       setMessages({ error: error.response?.data?.message || 'Error updating details', success: null });
     } finally {
       setLoading(false);

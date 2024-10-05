@@ -3,7 +3,6 @@ import { Post } from '../models/posts.models.js';
 import { generateAccessANDrefreshToken } from '../controllers/generate.controllers.js';
 import bcrypt from 'bcrypt';
 import { uploadOnCloudinary } from '../utils/cloudinary.js';
-import { isAction } from '@reduxjs/toolkit';
 
 export const getUser = async (req, res) => {
     try {
@@ -169,7 +168,6 @@ export const logout = async (req, res) => {
 
 export const updateUser = async (req, res) => {
     try {
-        console.log(req)
         const userId = req.query.userId || req.user._id.toString();
         const loggedInUser = await User.findById(req.user._id);
 
@@ -179,6 +177,11 @@ export const updateUser = async (req, res) => {
 
         if (!loggedInUser.isAdmin && userId !== req.user._id.toString()) {
             return res.status(403).json({ message: "Operation not allowed" });
+        }
+
+        const checkUserName = await User.findOne({userName: req.body.userName})
+        if(checkUserName && checkUserName.userName !== req.body.userName) {
+            return res.status(403).json({message: 'Username already taken'});
         }
 
         const updates = {
@@ -210,6 +213,9 @@ export const updateUser = async (req, res) => {
 
         return res.status(200).json({ user: updatedUser, message: 'User details updated successfully' });
     } catch (error) {
+        if (error.code === 11000) {
+            return res.status(400).json({ message: 'Uh Oh! Sorry, Username already taken. Please try something else' });
+        }
         return res.status(error.statusCode || 500).json({ message: error.message || 'An unexpected error occurred' });
     }
 };
