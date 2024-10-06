@@ -8,12 +8,9 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Dashboard from './pages/Dashboard';
 import PrivateRoute from './components/PrivateRoute';
-import CreatePost from './components/Dashboard/CreatePost';
 import OnlyAdminPrivateRoute from './components/OnlyAdminPrivateRoute';
-import AdminUpdateUser from './components/Dashboard/AdminUpdateUser';
 import PostPage from './pages/PostPage';
-import UpdatePost from './components/Dashboard/UpdatePost';
-import UpdateProfile from './components/Dashboard/UpdateProfile';
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -22,7 +19,6 @@ function App() {
         <Header />
         <main className="flex-grow">
           <Routes>
-            
             <Route path='/' element={<Home />} />
             <Route path='/home' element={<Home />} />
             <Route path='/about' element={<About />} />
@@ -31,19 +27,13 @@ function App() {
             
             <Route element={<PrivateRoute />}>
               <Route path='/dashboard' element={<Dashboard />} />
-              <Route path='/updateProfile' element={<UpdateProfile />} />
-              <Route path='/updatePost' element={<UpdatePost />} />
-
             </Route>
             
             <Route element={<OnlyAdminPrivateRoute />}>
-              <Route path='/createPost' element={<CreatePost />} />
-              <Route path='/updateUser' element={<AdminUpdateUser />} />
             </Route>
 
             <Route path='/post/:postSlug' element={<PostPage />} />
-            <Route path='/updatePost' element={<UpdatePost />} />
-
+            <Route path='/profile' element={<Profile />} />
           </Routes>
         </main>
         <Footer />

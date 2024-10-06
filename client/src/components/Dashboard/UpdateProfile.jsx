@@ -15,6 +15,7 @@ function UpdateProfile() {
   const [email, setEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [oldPassword, setOldPassword] = useState('');
+  const [bio, setBio] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState(null);
@@ -35,6 +36,7 @@ function UpdateProfile() {
       setUsername(currentUser.user.userName || '');
       setFullName(currentUser.user.fullName || '');
       setEmail(currentUser.user.emailID || '');
+      setBio(currentUser.user.bio || '');
     }
   }, [location.search, currentUser]);
 
@@ -81,6 +83,7 @@ function UpdateProfile() {
       emailID: email,
       oldPassword: oldPassword,
       newPassword: newPassword,
+      bio: bio,
     };
 
     try {
@@ -92,6 +95,7 @@ function UpdateProfile() {
       setUsername(res.data.user.userName);
       setFullName(res.data.user.fullName);
       setEmail(res.data.user.emailID);
+      setBio(res.data.user.bio);
       setSuccessMessage(res.data.message);
       dispatch(loginSuccess(res.data));
       setIsEditing(false);
@@ -150,6 +154,11 @@ function UpdateProfile() {
         <div className="mb-4">
           <label className="block mb-1">Full Name</label>
           <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} className="w-full p-2 rounded bg-white text-black" disabled={!isEditing} />
+        </div>
+
+        <div className="mb-4">
+          <label className="block mb-1">Bio</label>
+          <input type="text" value={bio} onChange={(e) => setBio(e.target.value)} className="w-full p-2 rounded bg-white text-black" disabled={!isEditing} />
         </div>
 
         <div className="mb-4">

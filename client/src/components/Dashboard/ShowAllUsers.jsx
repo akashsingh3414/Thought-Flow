@@ -83,7 +83,7 @@ export default function ShowAllUsers() {
                                         {new Date(user.createdAt).toLocaleDateString()}
                                     </td>
                                     <td className='px-4 py-2'>
-                                        <Link to={`/user/${user.title}`}>
+                                        <Link to={`/profile?userId=${user?._id}`}>
                                             {user?.profilePhoto ? (
                                                 <img
                                                     src={user.profilePhoto}
@@ -96,24 +96,20 @@ export default function ShowAllUsers() {
                                         </Link>
                                     </td>
                                     <td className="px-4 py-2">
-                                        <Link className="font-medium text-gray-900" to={`/user/${user?.userName}`}>
+                                        <Link className="font-medium text-gray-900" to={`/profile?userId=${user?._id}`}>
                                             {user.userName}
                                         </Link>
                                     </td>
                                     <td className="px-4 py-2">
-                                        <Link className="font-medium text-gray-900" to={`/user/${user?.userName}`}>
+                                        <Link className="font-medium text-gray-900" to={`/profile?userId=${user?._id}`}>
                                             {user.fullName}
                                         </Link>
                                     </td>
                                     <td className="px-4 py-2">
-                                        <Link className="font-medium text-gray-900" to={`/user/${user?.userName}`}>
-                                            {user.emailID}
-                                        </Link>
+                                        {user.emailID}
                                     </td>
                                     <td className="px-4 py-2">
-                                        <Link className="font-medium text-gray-900" to={`/user/${user?.userName}`}>
-                                            {user.isAdmin ? 'Yes' : 'No'}
-                                        </Link>
+                                        {user.isAdmin ? 'Yes' : 'No'}
                                     </td>
                                     <td className="px-4 py-2">
                                         <button

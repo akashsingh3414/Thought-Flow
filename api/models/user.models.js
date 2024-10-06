@@ -16,6 +16,9 @@ const userSchema = new mongoose.Schema({
         trim: true,
         index: true,
     },
+    bio: {
+        type: String,
+    },
     emailID: {
         type: String,
         required: true,

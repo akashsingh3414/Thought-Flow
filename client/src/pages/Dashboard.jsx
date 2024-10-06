@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import Profile from '../components/Dashboard/Profile';
+import Profile from './Profile';
 import UpdateProfile from '../components/Dashboard/UpdateProfile';
 import UpdatePost from "../components/Dashboard/UpdatePost";
 import ShowAllUsers from "../components/Dashboard/ShowAllUsers";
@@ -10,13 +10,15 @@ import ShowCurrentUserPosts from "../components/Dashboard/ShowCurrentUserPosts";
 import ShowAllPosts from "../components/Dashboard/ShowAllPosts";
 import Settings from "../components/Dashboard/Settings";
 import Sidebar from '../components/Dashboard/Sidebar';
+import { useSelector } from 'react-redux';
 
 export default function Dashboard() {
   const location = useLocation();
   const [tab, setTab] = useState('profile');
+  const { currentUser } = useSelector(state => state.user);
 
   const tabComponents = {
-    profile: <Profile />,
+    profile: <Profile dashUserId={currentUser.user._id} />,
     updateProfile: <UpdateProfile />,
     updateUser: <AdminUpdateUser />,
     updatePost: <UpdatePost />,
@@ -30,6 +32,7 @@ export default function Dashboard() {
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const tabFromUrl = urlParams.get('tab');
+
     if (tabFromUrl && tabComponents[tabFromUrl]) {
       setTab(tabFromUrl);
     } else {
@@ -45,7 +48,7 @@ export default function Dashboard() {
         </aside>
 
         <div className="flex-grow bg-white rounded-lg shadow-lg overflow-auto">
-          {tabComponents[tab] || <Profile />}
+          {tabComponents[tab] || <Profile dashUserId={currentUser.user._id} />}
         </div>
       </div>
     </div>

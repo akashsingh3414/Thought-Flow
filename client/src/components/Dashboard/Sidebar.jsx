@@ -5,7 +5,7 @@ import { Link, useLocation } from 'react-router-dom';
 const Sidebar = () => {
   const location = useLocation();
   const currentTab = new URLSearchParams(location.search).get('tab') || 'profile';
-  const {currentUser} = useSelector(state => state.user)
+  const { currentUser } = useSelector(state => state.user);
 
   return (
     <div className="h-full p-2 md:sticky top-0 rounded-lg" style={{ backgroundColor: '#F5F7F8' }}>
@@ -13,11 +13,9 @@ const Sidebar = () => {
       <ul className="flex flex-col gap-2">
         <li>
           <Link
-            to="/dashboard?tab=profile"
+            to={`/dashboard?tab=profile&userId=${currentUser.user._id}`} // Corrected query parameter
             className={`block py-2 px-6 rounded-md transition-all duration-200 ${
-              currentTab === 'profile'
-                ? 'bg-blue-600 text-white'
-                : 'hover:bg-gray-700 hover:text-white'
+              currentTab === 'profile' ? 'bg-blue-600 text-white' : 'hover:bg-gray-700 hover:text-white'
             }`}
           >
             Profile
@@ -27,9 +25,7 @@ const Sidebar = () => {
           <Link
             to="/dashboard?tab=updateProfile"
             className={`block py-2 px-6 rounded-md transition-all duration-200 ${
-              currentTab === 'updateProfile'
-                ? 'bg-blue-600 text-white'
-                : 'hover:bg-gray-700 hover:text-white'
+              currentTab === 'updateProfile' ? 'bg-blue-600 text-white' : 'hover:bg-gray-700 hover:text-white'
             }`}
           >
             Update Profile
@@ -39,9 +35,7 @@ const Sidebar = () => {
           <Link
             to="/dashboard?tab=createPost"
             className={`block py-2 px-6 rounded-md transition-all duration-200 ${
-              currentTab === 'createPost'
-                ? 'bg-blue-600 text-white'
-                : 'hover:bg-gray-700 hover:text-white'
+              currentTab === 'createPost' ? 'bg-blue-600 text-white' : 'hover:bg-gray-700 hover:text-white'
             }`}
           >
             Create Post
@@ -51,55 +45,45 @@ const Sidebar = () => {
           <Link
             to="/dashboard?tab=myPosts"
             className={`block py-2 px-6 rounded-md transition-all duration-200 ${
-              currentTab === 'myPosts'
-                ? 'bg-blue-600 text-white'
-                : 'hover:bg-gray-700 hover:text-white'
+              currentTab === 'myPosts' ? 'bg-blue-600 text-white' : 'hover:bg-gray-700 hover:text-white'
             }`}
           >
             My Blogs
           </Link>
         </li>
         {currentUser.user.isAdmin && (
-          <li>
-            <Link
-              to="/dashboard?tab=allPosts"
-              className={`block py-2 px-6 rounded-md transition-all duration-200 ${
-                currentTab === 'allPosts'
-                  ? 'bg-blue-600 text-white'
-                  : 'hover:bg-gray-700 hover:text-white'
-              }`}
-            >
-              All Blogs
-            </Link>
-          </li>
-        )}
-        {currentUser.user.isAdmin && (
-          <li>
-          <Link
-            to="/dashboard?tab=allUsers"
-            className={`block py-2 px-6 rounded-md transition-all duration-200 ${
-              currentTab === 'allUsers'
-                ? 'bg-blue-600 text-white'
-                : 'hover:bg-gray-700 hover:text-white'
-            }`}
-          >
-            All Users
-          </Link>
-        </li>
-        )}
-        {currentUser.user.isAdmin && (
-          <li>
-          <Link
-            to="/dashboard?tab=settings"
-            className={`block py-2 px-6 rounded-md transition-all duration-200 ${
-              currentTab === 'settings'
-                ? 'bg-blue-600 text-white'
-                : 'hover:bg-gray-700 hover:text-white'
-            }`}
-          >
-            Settings
-          </Link>
-        </li>
+          <>
+            <li>
+              <Link
+                to="/dashboard?tab=allPosts"
+                className={`block py-2 px-6 rounded-md transition-all duration-200 ${
+                  currentTab === 'allPosts' ? 'bg-blue-600 text-white' : 'hover:bg-gray-700 hover:text-white'
+                }`}
+              >
+                All Blogs
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/dashboard?tab=allUsers"
+                className={`block py-2 px-6 rounded-md transition-all duration-200 ${
+                  currentTab === 'allUsers' ? 'bg-blue-600 text-white' : 'hover:bg-gray-700 hover:text-white'
+                }`}
+              >
+                All Users
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/dashboard?tab=settings"
+                className={`block py-2 px-6 rounded-md transition-all duration-200 ${
+                  currentTab === 'settings' ? 'bg-blue-600 text-white' : 'hover:bg-gray-700 hover:text-white'
+                }`}
+              >
+                Settings
+              </Link>
+            </li>
+          </>
         )}
       </ul>
     </div>

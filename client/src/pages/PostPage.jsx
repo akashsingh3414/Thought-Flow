@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { ClipLoader } from 'react-spinners';
 
@@ -8,6 +8,7 @@ function PostPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [post, setPost] = useState(null);
+    const navigate = useNavigate();
 
     const fetchPost = async (postSlug) => {
         try {
@@ -16,13 +17,12 @@ function PostPage() {
             if (res.status === 200) {
                 setPost(res.data.posts[0]);
                 setError(null);
-                setLoading(false);
             } else {
                 setError(res.data?.message);
-                setLoading(false);
             }
         } catch (error) {
             setError(error.response?.data?.message);
+        } finally {
             setLoading(false);
         }
     };
@@ -42,6 +42,10 @@ function PostPage() {
         );
     }
 
+    const handleAuthorProfile = (userId) => {
+        navigate(`/profile?userId=${userId}`);
+    };
+
     return (
         <main className="p-5 flex flex-col items-center max-w-4xl mx-auto min-h-screen">
             <h1 className="text-4xl mt-10 text-center font-semibold font-serif w-full text-gray-800 lg:text-5xl leading-tight">
@@ -50,7 +54,13 @@ function PostPage() {
 
             {post && post.authorName && (
                 <p className="mt-2 text-center text-gray-500 text-sm">
-                    By <span className="font-medium text-gray-700">{post.authorName}</span>
+                    By 
+                    <button 
+                        className="font-medium text-gray-700 ml-1" 
+                        onClick={() => handleAuthorProfile(post.userId)}
+                    >
+                        {post.authorName}
+                    </button>
                 </p>
             )}
 
@@ -69,7 +79,6 @@ function PostPage() {
                     />
                 </div>
             )}
-
 
             <div className="flex justify-between gap-2 border-b border-gray-300 mx-auto w-full max-w-2xl text-sm text-gray-600 mt-6 pb-3">
                 <span>Created: {post && new Date(post.createdAt).toLocaleDateString()}</span>

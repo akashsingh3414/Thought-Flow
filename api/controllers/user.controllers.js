@@ -222,6 +222,7 @@ export const updateUser = async (req, res) => {
             userName: req.body.userName,
             fullName: req.body.fullName,
             emailID: req.body.emailID,
+            bio: req.body.bio,
             isAdmin: req.body.admin,
         };
 
