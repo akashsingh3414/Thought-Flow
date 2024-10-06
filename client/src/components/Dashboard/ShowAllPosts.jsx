@@ -31,8 +31,7 @@ export default function ShowAllPosts() {
     const handleShowMore = async () => {
         const startIndex = userPosts.length;
         try {
-            const res = await axios.get(`/api/v1/post/getPosts?startIndex=${startIndex}&limit=10
-                `);
+            const res = await axios.get(`/api/v1/post/getPosts?startIndex=${startIndex}&limit=10`);
             if (res.status === 200) {
                 setUserPosts((prevPosts) => [...prevPosts, ...res.data.posts]);
                 if (res.data.posts.length < 9) {
@@ -83,7 +82,7 @@ export default function ShowAllPosts() {
                                         {new Date(post.updatedAt).toLocaleDateString()}
                                     </td>
                                     <td className='px-4 py-2'>
-                                        <Link to={`/post/${post.title}`}>
+                                        <Link to={`/post/${post.slug}`}>
                                             <img
                                                 src={post?.images?.length > 0 ? post.images[0] : ''}
                                                 alt={'N/A'}
@@ -92,12 +91,12 @@ export default function ShowAllPosts() {
                                         </Link>
                                     </td>
                                     <td className='px-4 py-2'>
-                                        <Link className='font-medium text-gray-900' to={`/post/${post.title}`}>
+                                        <Link className='font-medium text-gray-900' to={`/post/${post.slug}`}>
                                             {post.title}
                                         </Link>
                                     </td>
                                     <td className='px-4 py-2'>
-                                        <Link className='font-medium text-gray-900' to={`/post/${post.title}`}>
+                                        <Link className='font-medium text-gray-900' to={`/post/${post.slug}`}>
                                             {post.authorName}
                                         </Link>
                                     </td>

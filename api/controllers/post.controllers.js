@@ -10,6 +10,12 @@ export const createPost = async (req, res, next) => {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
+    const slug = req.body.title
+    .split(' ')
+    .join('-')
+    .toLowerCase()
+    .replace(/[^a-zA-Z0-9-]/g,'');
+
     const user = await User.findById(userId);
     if (!user) {
       return res.status(400).json({ message: 'Invalid userId' });
@@ -29,6 +35,7 @@ export const createPost = async (req, res, next) => {
       title,
       category,
       authorName: user.fullName,
+      slug,
       images: uploadedImages.length > 0 ? uploadedImages : null,
     });
 

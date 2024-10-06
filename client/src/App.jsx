@@ -11,6 +11,7 @@ import PrivateRoute from './components/PrivateRoute';
 import CreatePosts from './components/Dashboard/CreatePosts';
 import OnlyAdminPrivateRoute from './components/OnlyAdminPrivateRoute';
 import AdminUpdateUser from './components/Dashboard/AdminUpdateUser';
+import PostPage from './pages/PostPage';
 
 function App() {
   return (
@@ -34,6 +35,8 @@ function App() {
               <Route path='/create-post' element={<CreatePosts />} />
               <Route path='/update-post' element={<AdminUpdateUser />} />
             </Route>
+
+            <Route path='/post/:postSlug' element={<PostPage />} />
 
           </Routes>
         </main>

@@ -166,6 +166,40 @@ export const logout = async (req, res) => {
     return res.status(200).json({ message: "User logged out" });
 };
 
+export const updateProfilePhoto = async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id);
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+
+        const userProfilePhoto = req.file?.path;
+        if (!userProfilePhoto) {
+            return res.status(400).json({ success: false, message: 'Profile photo is required' });
+        }
+
+        const userProfile = await uploadOnCloudinary(userProfilePhoto);
+        if (!userProfile || !userProfile.url) {
+            return res.status(500).json({ success: false, message: 'Failed to upload profile photo' });
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(
+            req.user._id,
+            { $set: { profilePhoto: userProfile.url } },
+            { new: true }
+        ).select('-password -refreshToken');
+
+        return res.status(200).json({
+            success: true,
+            message: 'Profile photo updated successfully',
+            user: updatedUser,
+        });
+    } catch (error) {
+        console.error("Error occurred:", error);
+        return res.status(500).json({ success: false, message: error.message });
+    }
+};
+
 export const updateUser = async (req, res) => {
     try {
         const userId = req.query.userId || req.user._id.toString();
@@ -217,40 +251,6 @@ export const updateUser = async (req, res) => {
             return res.status(400).json({ message: 'Uh Oh! Sorry, Username already taken. Please try something else' });
         }
         return res.status(error.statusCode || 500).json({ message: error.message || 'An unexpected error occurred' });
-    }
-};
-
-export const updateProfilePhoto = async (req, res) => {
-    try {
-        const user = await User.findById(req.user._id);
-        if (!user) {
-            return res.status(404).json({ success: false, message: 'User not found' });
-        }
-
-        const userProfilePhoto = req.file?.path;
-        if (!userProfilePhoto) {
-            return res.status(400).json({ success: false, message: 'Profile photo is required' });
-        }
-
-        const userProfile = await uploadOnCloudinary(userProfilePhoto);
-        if (!userProfile || !userProfile.url) {
-            return res.status(500).json({ success: false, message: 'Failed to upload profile photo' });
-        }
-
-        const updatedUser = await User.findByIdAndUpdate(
-            req.user._id,
-            { $set: { profilePhoto: userProfile.url } },
-            { new: true }
-        ).select('-password -refreshToken');
-
-        return res.status(200).json({
-            success: true,
-            message: 'Profile photo updated successfully',
-            user: updatedUser,
-        });
-    } catch (error) {
-        console.error("Error occurred:", error);
-        return res.status(500).json({ success: false, message: error.message });
     }
 };
 
