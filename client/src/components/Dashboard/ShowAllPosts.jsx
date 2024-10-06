@@ -83,11 +83,15 @@ export default function ShowAllPosts() {
                                     </td>
                                     <td className='px-4 py-2'>
                                         <Link to={`/post/${post.slug}`}>
-                                            <img
-                                                src={post?.images?.length > 0 ? post.images[0] : ''}
-                                                alt={'N/A'}
-                                                className='w-20 h-10 object-contain'
-                                            />
+                                            {post && post.images && post.images.length > 0 ? (
+                                                <img
+                                                    src={post.images[0]}
+                                                    alt={post.title || 'N/A'}
+                                                    className='w-20 h-10 object-contain'
+                                                />
+                                            ) : (
+                                                <span className="text-gray-400">No Image</span>
+                                            )}
                                         </Link>
                                     </td>
                                     <td className='px-4 py-2'>

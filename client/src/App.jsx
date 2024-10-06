@@ -8,10 +8,12 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Dashboard from './pages/Dashboard';
 import PrivateRoute from './components/PrivateRoute';
-import CreatePosts from './components/Dashboard/CreatePosts';
+import CreatePost from './components/Dashboard/CreatePost';
 import OnlyAdminPrivateRoute from './components/OnlyAdminPrivateRoute';
 import AdminUpdateUser from './components/Dashboard/AdminUpdateUser';
 import PostPage from './pages/PostPage';
+import UpdatePost from './components/Dashboard/UpdatePost';
+import UpdateProfile from './components/Dashboard/UpdateProfile';
 
 function App() {
   return (
@@ -29,14 +31,18 @@ function App() {
             
             <Route element={<PrivateRoute />}>
               <Route path='/dashboard' element={<Dashboard />} />
+              <Route path='/updateProfile' element={<UpdateProfile />} />
+              <Route path='/updatePost' element={<UpdatePost />} />
+
             </Route>
             
             <Route element={<OnlyAdminPrivateRoute />}>
-              <Route path='/create-post' element={<CreatePosts />} />
-              <Route path='/update-post' element={<AdminUpdateUser />} />
+              <Route path='/createPost' element={<CreatePost />} />
+              <Route path='/updateUser' element={<AdminUpdateUser />} />
             </Route>
 
             <Route path='/post/:postSlug' element={<PostPage />} />
+            <Route path='/updatePost' element={<UpdatePost />} />
 
           </Routes>
         </main>

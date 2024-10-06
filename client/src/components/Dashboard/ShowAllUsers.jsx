@@ -82,13 +82,17 @@ export default function ShowAllUsers() {
                                     <td className="px-4 py-2 text-sm text-gray-700">
                                         {new Date(user.createdAt).toLocaleDateString()}
                                     </td>
-                                    <td className="px-4 py-2">
+                                    <td className='px-4 py-2'>
                                         <Link to={`/user/${user.title}`}>
-                                            <img
-                                                src={user?.profilePhoto ? user.profilePhoto : ''}
-                                                alt="Profile Photo"
-                                                className="w-20 h-10 object-contain rounded-full"
-                                            />
+                                            {user?.profilePhoto ? (
+                                                <img
+                                                    src={user.profilePhoto}
+                                                    alt={user.userName || 'N/A'}
+                                                    className='w-10 h-10 object-contain rounded-full'
+                                                />
+                                            ) : (
+                                                <span className="text-gray-400">No Image</span>
+                                            )}
                                         </Link>
                                     </td>
                                     <td className="px-4 py-2">
@@ -121,8 +125,8 @@ export default function ShowAllUsers() {
                                     </td>
                                     <td className="px-4 py-2">
                                         <Link
-                                            to={`/dashboard?tab=update-user&id=${user._id}`}
-                                            className="font-medium text-blue-500 hover:underline cursor-pointer"
+                                            to={`/dashboard?tab=updateUser&id=${user._id}`}
+                                            className="font-medium text-teal-500 hover:underline cursor-pointer"
                                         >
                                             Edit
                                         </Link>

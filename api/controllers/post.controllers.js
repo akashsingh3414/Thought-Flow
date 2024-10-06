@@ -84,6 +84,60 @@ export const getPosts = async (req, res, next) => {
   }
 };
 
+export const updatePost = async (req, res, next) => {
+  try {
+    const { postOwnerId, content, title, category, postId } = req.body;
+    const requestedByUser = req.user._id;
+
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(400).json({ message: 'Post not found' });
+    }
+
+    if (requestedByUser.toString() !== postOwnerId) {
+      return res.status(403).json({ message: 'Operation not allowed' });
+    }
+
+    const images = req.files ? req.files : [];
+    const uploadedImages = [];
+
+    for (const image of images) {
+      try {
+        const uploadedImage = await uploadOnCloudinary(image.path);
+        uploadedImages.push(uploadedImage.url);
+      } catch (error) {
+        return res.status(500).json({ message: 'Image upload failed' });
+      }
+    }
+
+    const slug = title
+      .split(' ')
+      .join('-')
+      .toLowerCase()
+      .replace(/[^a-zA-Z0-9-]/g, '');
+
+    const updatedPost = await Post.findByIdAndUpdate(
+      postId,
+      {
+        content,
+        title,
+        category,
+        slug,
+        images: uploadedImages,
+      },
+      { new: true }
+    );
+
+    if (!updatedPost) {
+      return res.status(500).json({ message: 'Error updating post' });
+    }
+
+    return res.status(200).json({ message: 'Post updated successfully', post: updatedPost });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const deletePost = async (req, res, next) => {
   const postId = req.params.postId;
   const postOwnerId = req.params.postOwnerId;

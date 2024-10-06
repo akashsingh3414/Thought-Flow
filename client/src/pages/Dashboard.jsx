@@ -1,14 +1,15 @@
-import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import Sidebar from '../components/Dashboard/Sidebar';
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import Profile from '../components/Dashboard/Profile';
-import Settings from '../components/Dashboard/Settings';
-import CreatePosts from '../components/Dashboard/CreatePosts';
-import ShowAllPosts from '../components/Dashboard/ShowAllPosts';
-import ShowAllUsers from '../components/Dashboard/ShowAllUsers';
-import ShowCurrentUserPosts from '../components/Dashboard/ShowCurrentUserPosts';
 import UpdateProfile from '../components/Dashboard/UpdateProfile';
-import AdminUpdateUser from '../components/Dashboard/AdminUpdateUser';
+import UpdatePost from "../components/Dashboard/UpdatePost";
+import ShowAllUsers from "../components/Dashboard/ShowAllUsers";
+import AdminUpdateUser from "../components/Dashboard/AdminUpdateUser";
+import CreatePost from "../components/Dashboard/CreatePost";
+import ShowCurrentUserPosts from "../components/Dashboard/ShowCurrentUserPosts";
+import ShowAllPosts from "../components/Dashboard/ShowAllPosts";
+import Settings from "../components/Dashboard/Settings";
+import Sidebar from '../components/Dashboard/Sidebar';
 
 export default function Dashboard() {
   const location = useLocation();
@@ -17,8 +18,9 @@ export default function Dashboard() {
   const tabComponents = {
     profile: <Profile />,
     updateProfile: <UpdateProfile />,
-    'update-user': <AdminUpdateUser />,
-    createPosts: <CreatePosts />,
+    updateUser: <AdminUpdateUser />,
+    updatePost: <UpdatePost />,
+    createPost: <CreatePost />,
     myPosts: <ShowCurrentUserPosts />,
     allPosts: <ShowAllPosts />,
     allUsers: <ShowAllUsers />,

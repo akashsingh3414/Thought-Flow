@@ -1,67 +1,87 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { ClipLoader } from 'react-spinners'
+import { ClipLoader } from 'react-spinners';
 
 function PostPage() {
     const { postSlug } = useParams();
-    const [ loading, setLoading ] = useState(true);
-    const [ error, setError, ] = useState(null);
-    const [ post, setPost ] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [post, setPost] = useState(null);
 
     const fetchPost = async (postSlug) => {
         try {
             setLoading(true);
-            const res = await axios.get(`/api/v1/post/getPosts?slug=${postSlug}`)
-            if(res.status === 200) {
+            const res = await axios.get(`/api/v1/post/getPosts?slug=${postSlug}`);
+            if (res.status === 200) {
                 setPost(res.data.posts[0]);
-                setError(null)
-                setLoading(false)
+                setError(null);
+                setLoading(false);
             } else {
-                setError(res.data?.message)
+                setError(res.data?.message);
                 setLoading(false);
             }
         } catch (error) {
-            setError(error.response?.data?.message)
-            setLoading(false)
+            setError(error.response?.data?.message);
+            setLoading(false);
         }
-    }
+    };
 
-    useEffect(()=>{
-        if(postSlug) {
+    useEffect(() => {
+        if (postSlug) {
             fetchPost(postSlug);
         }
-    },[postSlug])
+    }, [postSlug]);
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center h-screen">
-                <ClipLoader color={"blue"} loading={loading} size={50} />
+            <div className="flex justify-center items-center h-screen bg-gray-100">
+                <ClipLoader color={"#3b82f6"} loading={loading} size={60} />
+                <p className="ml-4 text-lg text-gray-600">Loading post...</p>
             </div>
         );
     }
-    
+
+    return (
+        <main className="p-5 flex flex-col items-center max-w-4xl mx-auto min-h-screen">
+            <h1 className="text-4xl mt-10 text-center font-semibold font-serif w-full text-gray-800 lg:text-5xl leading-tight">
+                {post && post.title}
+            </h1>
+
+            {post && post.authorName && (
+                <p className="mt-2 text-center text-gray-500 text-sm">
+                    By <span className="font-medium text-gray-700">{post.authorName}</span>
+                </p>
+            )}
+
+            <Link to={`/api/v1/post/search?category=${post && post.category}`}>
+                <button className="rounded-full bg-blue-500 text-white text-sm px-4 py-2 mt-4 hover:bg-blue-600 transition duration-200">
+                    {post && post.category}
+                </button>
+            </Link>
+
+            {post && post.images && post.images.length > 0 && (
+                <div className="w-full max-w-2xl mt-6">
+                    <img 
+                        src={post.images[0]} 
+                        alt={post.title} 
+                        className="w-full h-auto object-cover rounded-lg shadow-md" 
+                    />
+                </div>
+            )}
 
 
-  return (
-    <main className='p-3 flex flex-col items-center max-w-6xl mx-auto min-h-screen'>
-    <h1 className='text-3xl mt-10 text-center font-serif w-full mx-auto lg:text-4xl'>
-        {post && post.title}
-    </h1>
-    <Link to={`/api/v1/post/search?category=${post && post.category}`}>
-        <button className='rounded-lg text-blue-500 text-center mt-4'>
-            {post && post.category}
-        </button>
-    </Link>
-    <img src={post && post.images[0]} alt={post && post.title} className='mt-10 p-3 max-h-[600px] w-full object-contain'/>
-    <div className='flex justify-between gap-2 border-b border-slate-500 mx-auto w-full max-w-2xl text-xs'>
-        <span>{post && new Date(post.createdAt).toLocaleDateString()}</span>
-        <span>{post && (post.content.length/1000).toFixed(0)} mins read</span>
-    </div>
-    <div className='p-3 w-full mx-auto post-content' dangerouslySetInnerHTML={{__html:post && post.content}}></div>
-</main>
+            <div className="flex justify-between gap-2 border-b border-gray-300 mx-auto w-full max-w-2xl text-sm text-gray-600 mt-6 pb-3">
+                <span>Created: {post && new Date(post.createdAt).toLocaleDateString()}</span>
+                <span>Last Update: {post && new Date(post.updatedAt).toLocaleDateString()}</span>
+                <span>{post && (post.content.length / 1000).toFixed(0)} mins read</span>
+            </div>
 
-  )
+            <div className="mt-6 w-full max-w-2xl text-lg leading-relaxed text-gray-700 post-content">
+                <div dangerouslySetInnerHTML={{ __html: post && post.content }}></div>
+            </div>
+        </main>
+    );
 }
 
-export default PostPage
+export default PostPage;

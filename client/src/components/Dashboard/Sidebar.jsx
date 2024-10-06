@@ -37,9 +37,9 @@ const Sidebar = () => {
         </li>
         <li>
           <Link
-            to="/dashboard?tab=createPosts"
+            to="/dashboard?tab=createPost"
             className={`block py-2 px-6 rounded-md transition-all duration-200 ${
-              currentTab === 'createPosts'
+              currentTab === 'createPost'
                 ? 'bg-blue-600 text-white'
                 : 'hover:bg-gray-700 hover:text-white'
             }`}

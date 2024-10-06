@@ -83,11 +83,15 @@ export default function ShowCurrentUserPosts() {
                                     </td>
                                     <td className='px-4 py-2'>
                                         <Link to={`/post/${post.slug}`}>
-                                            <img
-                                                src={post?.images?.length > 0 ? post.images[0] : ''}
-                                                alt={'N/A'}
-                                                className='w-20 h-10 object-contain'
-                                            />
+                                            {post && post.images && post.images.length > 0 ? (
+                                                <img
+                                                    src={post.images[0]}
+                                                    alt={post.title || 'N/A'}
+                                                    className='w-20 h-10 object-contain'
+                                                />
+                                            ) : (
+                                                <span className="text-gray-400">No Image</span>
+                                            )}
                                         </Link>
                                     </td>
                                     <td className='px-4 py-2'>
@@ -105,7 +109,7 @@ export default function ShowCurrentUserPosts() {
                                         </span>
                                     </td>
                                     <td className='px-4 py-2'>
-                                        <Link className='text-teal-500 hover:underline' to={`/update-post/${post._id}`}>
+                                        <Link className='text-teal-500 hover:underline' to={`/dashboard?tab=updatePost&postId=${post._id}`}>
                                             Edit
                                         </Link>
                                     </td>
