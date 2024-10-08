@@ -3,22 +3,30 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
+const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString();
+};
+
 export default function ShowCurrentUserPosts() {
     const { currentUser } = useSelector((state) => state.user);
     const [userPosts, setUserPosts] = useState([]);
     const [showMore, setShowMore] = useState(true);
+    const [loading, setLoading] = useState(false);
 
-    const fetchPosts = async () => {
+    const fetchPosts = async (startIndex = 0) => {
+        setLoading(true);
         try {
-            const res = await axios.get(`/api/v1/post/getPosts?userId=${currentUser.user._id}&limit=10`);
+            const res = await axios.get(`/api/v1/post/getPosts?userId=${currentUser.user._id}&startIndex=${startIndex}&limit=10`);
             if (res.status === 200) {
-                setUserPosts(res.data.posts || []);
-                if (res.data.posts.length < 9) {
+                setUserPosts((prevPosts) => [...prevPosts, ...(res.data.posts || [])]);
+                if (res.data.posts.length < 10) {
                     setShowMore(false);
                 }
             }
         } catch (error) {
             console.error("Error fetching posts:", error.response ? error.response.data : error.message);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -28,19 +36,9 @@ export default function ShowCurrentUserPosts() {
         }
     }, [currentUser.user]);
 
-    const handleShowMore = async () => {
+    const handleShowMore = () => {
         const startIndex = userPosts.length;
-        try {
-            const res = await axios.get(`/api/v1/post/getPosts?userId=${currentUser.user._id}&startIndex=${startIndex}&limit=10`);
-            if (res.status === 200) {
-                setUserPosts((prevPosts) => [...prevPosts, ...res.data.posts]);
-                if (res.data.posts.length < 9) {
-                    setShowMore(false);
-                }
-            }
-        } catch (error) {
-            console.error("Error fetching more posts:", error.response ? error.response.data : error.message);
-        }
+        fetchPosts(startIndex);
     };
 
     const handleDeletePost = async (postId, postOwnerId) => {
@@ -75,15 +73,11 @@ export default function ShowCurrentUserPosts() {
                         <tbody className='divide-y divide-gray-200'>
                             {userPosts.map((post) => (
                                 <tr key={post._id} className='bg-white hover:bg-gray-50'>
-                                    <td className='px-4 py-2 text-sm text-gray-700'>
-                                        {new Date(post.createdAt).toLocaleDateString()}
-                                    </td>
-                                    <td className='px-4 py-2 text-sm text-gray-700'>
-                                        {new Date(post.updatedAt).toLocaleDateString()}
-                                    </td>
+                                    <td className='px-4 py-2 text-sm text-gray-700'>{formatDate(post.createdAt)}</td>
+                                    <td className='px-4 py-2 text-sm text-gray-700'>{formatDate(post.updatedAt)}</td>
                                     <td className='px-4 py-2'>
                                         <Link to={`/post/${post.slug}`}>
-                                            {post && post.images && post.images.length > 0 ? (
+                                            {post.images && post.images.length > 0 ? (
                                                 <img
                                                     src={post.images[0]}
                                                     alt={post.title || 'N/A'}
@@ -121,8 +115,9 @@ export default function ShowCurrentUserPosts() {
                         <button
                             onClick={handleShowMore}
                             className='mt-4 text-teal-500 self-center text-sm py-2'
+                            disabled={loading}
                         >
-                            Show more
+                            {loading ? "Loading..." : "Show more"}
                         </button>
                     )}
                 </>

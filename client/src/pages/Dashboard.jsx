@@ -18,7 +18,7 @@ export default function Dashboard() {
   const { currentUser } = useSelector(state => state.user);
 
   const tabComponents = {
-    profile: <Profile dashUserId={currentUser.user._id} />,
+    profile: <Profile dashUserName={currentUser.user.userName} />,
     updateProfile: <UpdateProfile />,
     updateUser: <AdminUpdateUser />,
     updatePost: <UpdatePost />,
@@ -48,7 +48,7 @@ export default function Dashboard() {
         </aside>
 
         <div className="flex-grow bg-white rounded-lg shadow-lg overflow-auto">
-          {tabComponents[tab] || <Profile dashUserId={currentUser.user._id} />}
+          {tabComponents[tab] || <Profile dashUserName={currentUser.user.userName} />}
         </div>
       </div>
     </div>

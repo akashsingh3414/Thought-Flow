@@ -2,12 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { ClipLoader } from 'react-spinners';
+import ConnectionCard from '../components/ConnectionCard';
+import PostCard from '../components/PostCard';
+import ConnectionCard from '../components/ConnectionCard';
+import PostCard from '../components/PostCard';
 
 function PostPage() {
     const { postSlug } = useParams();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [post, setPost] = useState(null);
+    const [recentPosts, setRecentPosts] = useState(null);
     const navigate = useNavigate();
 
     const fetchPost = async (postSlug) => {
@@ -27,11 +32,38 @@ function PostPage() {
         }
     };
 
+    const fetchRecentPosts = async () => {
+        try {
+            setLoading(true);
+            const res = await axios.get(`/api/v1/post/getPosts?limit=5`);
+            if (res.status === 200) {
+                setRecentPosts(res.data.posts);
+                setError(null);
+            } else {
+                setError(res.data?.message);
+            }
+        } catch (error) {
+            setError(error.response?.data?.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(()=>{
+        try {
+            fetchRecentPosts();
+        } catch (error) {
+            
+        }
+    },[])
+
     useEffect(() => {
         if (postSlug) {
             fetchPost(postSlug);
+        } else {
+            navigate('/home');
         }
-    }, [postSlug]);
+    }, [postSlug, navigate]);
 
     if (loading) {
         return (
@@ -65,7 +97,7 @@ function PostPage() {
             )}
 
             <Link to={`/api/v1/post/search?category=${post && post.category}`}>
-                <button className="rounded-full bg-blue-500 text-white text-sm px-4 py-2 mt-4 hover:bg-blue-600 transition duration-200">
+                <button className="rounded-full bg-blue-500 text-white text-sm px-2 py-1 mt-4 hover:bg-blue-600 transition duration-200">
                     {post && post.category}
                 </button>
             </Link>
@@ -88,6 +120,24 @@ function PostPage() {
 
             <div className="mt-6 w-full max-w-2xl text-lg leading-relaxed text-gray-700 post-content">
                 <div dangerouslySetInnerHTML={{ __html: post && post.content }}></div>
+            </div>
+            <div className='border-none gap-2 p-2 m-2 w-full h-full'>
+                <h1 className='text-2xl font-bold text-left'>Recent Posts</h1>
+                <div className='flex flex-row w-full'>
+                    {recentPosts && recentPosts.length > 0 ? (
+                        recentPosts.map((post) => (
+                            <Link key={post._id} className='w-full p-1' to={`/post/${post.slug}`}>
+                                <PostCard post={post} />
+                            </Link>
+                        ))
+                    ) : (
+                        <p>No Posts to display</p>
+                    )}
+                </div>
+
+            </div>
+            <div className='max-w-4xl mx-auto w-full'>
+                <ConnectionCard />
             </div>
         </main>
     );

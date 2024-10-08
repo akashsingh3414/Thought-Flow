@@ -52,7 +52,7 @@ export const createPost = async (req, res, next) => {
 export const getPosts = async (req, res, next) => {
   try {
     const startIndex = parseInt(req.query.startIndex) || 0;
-    const limit = parseInt(req.query.limit) || 10;
+    const limit = Math.max(1, Math.min(parseInt(req.query.limit) || 10, 100));
     const sortDirection = req.query.order === 'asc' ? 1 : -1;
 
     const queryFilters = {
@@ -80,6 +80,7 @@ export const getPosts = async (req, res, next) => {
       totalPosts,
     });
   } catch (error) {
+    console.error('Error fetching posts:', error);
     next(error);
   }
 };

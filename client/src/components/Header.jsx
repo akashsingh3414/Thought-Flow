@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { GiHamburgerMenu } from 'react-icons/gi';
@@ -89,13 +89,11 @@ function Header() {
   }, [currentUser]);
 
   return (
-    <header className="flex justify-between items-center p-4 bg-white shadow-md rounded-lg">
-      {/* Logo Section */}
+    <header className="flex justify-between items-center h-16 p-4 bg-white shadow-md rounded-lg fixed top-0 left-0 right-0 z-20">
       <Link to="/" className="flex items-center space-x-2 text-xl font-bold text-indigo-700">
         <span>Thought Flow</span>
       </Link>
 
-      {/* Search and Navigation */}
       <div className="flex items-center space-x-4 flex-grow justify-end">
         <SearchInput />
 
@@ -138,23 +136,18 @@ function Header() {
           )}
         </div>
 
-        {/* Hamburger Menu for Small Screens */}
         <button className="lg:hidden h-10 w-10 flex items-center justify-center" onClick={toggleMenuOptions}>
           <GiHamburgerMenu className="text-2xl text-gray-800" />
         </button>
       </div>
 
-      {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="absolute right-4 top-16 bg-white shadow-md rounded-lg py-3 px-2 flex flex-col space-y-2 lg:hidden">
-          <Link className={`hover:bg-gray-100 px-4 py-2 rounded-md ${isActive('/home')} text-gray-800`} to="/home" onClick={toggleMenuOptions}>
+        <div className="absolute right-4 top-16 bg-white shadow-md rounded-lg py-2 px-2 flex flex-col space-y-1 lg:hidden">
+          <Link className={`hover:bg-gray-200 px-4 py-2 rounded-md ${isActive('/home')} text-gray-800`} to="/home" onClick={toggleMenuOptions}>
             Home
           </Link>
-          <Link className={`hover:bg-gray-100 px-4 py-2 rounded-md ${isActive('/about')} text-gray-800`} to="/about" onClick={toggleMenuOptions}>
+          <Link className={`hover:bg-gray-200 px-4 py-2 rounded-md ${isActive('/about')} text-gray-800`} to="/about" onClick={toggleMenuOptions}>
             About
-          </Link>
-          <Link className={`hover:bg-gray-100 px-4 py-2 rounded-md ${isActive('/projects')} text-gray-800`} to="/projects" onClick={toggleMenuOptions}>
-            Projects
           </Link>
         </div>
       )}

@@ -2,23 +2,26 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { ClipLoader } from 'react-spinners';
 
 export default function ShowAllPosts() {
     const { currentUser } = useSelector((state) => state.user);
     const [userPosts, setUserPosts] = useState([]);
     const [showMore, setShowMore] = useState(true);
+    const [loading, setLoading] = useState(true);
 
     const fetchPosts = async () => {
+        setLoading(true);
         try {
             const res = await axios.get(`/api/v1/post/getPosts?limit=10`);
             if (res.status === 200) {
                 setUserPosts(res.data.posts || []);
-                if (res.data.posts.length < 9) {
-                    setShowMore(false);
-                }
+                setShowMore(res.data.posts.length >= 10);
             }
         } catch (error) {
             console.error("Error fetching posts:", error.response ? error.response.data : error.message);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -34,9 +37,7 @@ export default function ShowAllPosts() {
             const res = await axios.get(`/api/v1/post/getPosts?startIndex=${startIndex}&limit=10`);
             if (res.status === 200) {
                 setUserPosts((prevPosts) => [...prevPosts, ...res.data.posts]);
-                if (res.data.posts.length < 9) {
-                    setShowMore(false);
-                }
+                setShowMore(res.data.posts.length >= 10);
             }
         } catch (error) {
             console.error("Error fetching more posts:", error.response ? error.response.data : error.message);
@@ -58,7 +59,12 @@ export default function ShowAllPosts() {
 
     return (
         <div className='overflow-x-auto p-4'>
-            {currentUser.user.isAdmin && userPosts.length > 0 ? (
+            {loading ? (
+                <div className="flex justify-center items-center h-screen bg-gray-100">
+                    <ClipLoader color={"#3b82f6"} loading={loading} size={60} />
+                    <p className="ml-4 text-lg text-gray-600">Loading posts...</p>
+                </div>
+            ) : currentUser.user.isAdmin && userPosts.length > 0 ? (
                 <>
                     <table className='min-w-full divide-y divide-gray-200'>
                         <thead>

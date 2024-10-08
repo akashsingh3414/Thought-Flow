@@ -13,11 +13,12 @@ import PostPage from './pages/PostPage';
 import Profile from './pages/Profile';
 
 function App() {
+
   return (
     <BrowserRouter>
       <div className="flex flex-col min-h-screen">
-        <Header />
-        <main className="flex-grow">
+        <Header/>
+        <main className="flex-grow mt-16">
           <Routes>
             <Route path='/' element={<Home />} />
             <Route path='/home' element={<Home />} />
