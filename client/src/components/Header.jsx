@@ -41,11 +41,13 @@ const ProfileOptions = ({ user, toggleOptions, onLogout }) => (
   </div>
 );
 
-const SearchInput = () => (
-  <form className="relative flex-1 max-w-72">
+const SearchInput = ({ searchTerm, setSearchTerm, handleSearch }) => (
+  <form className="relative flex-1 max-w-72" onSubmit={handleSearch}>
     <input
       type="text"
       placeholder="Search..."
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
       className="pl-10 pr-4 py-2 w-full border border-gray-300 bg-gray-100 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 backdrop-blur-lg bg-opacity-60"
       style={{ backdropFilter: 'blur(10px)' }}
     />
@@ -57,12 +59,25 @@ function Header() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const { currentUser } = useSelector((state) => state.user);
   const [profileOptions, setProfileOptions] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
-  const isActive = useCallback((path) => (pathname === path ? 'text-indigo-500 font-semibold' : ''), [pathname]);
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const searchTermFromUrl = urlParams.get('searchTerm');
+    if (searchTermFromUrl) {
+      setSearchTerm(searchTermFromUrl);
+    }
+  }, [location.search]);
+
+  const isActive = useCallback(
+    (path) => (pathname === path ? 'text-indigo-500 font-semibold' : ''),
+    [pathname]
+  );
 
   const toggleProfileOptions = useCallback(() => {
     setProfileOptions((prev) => !prev);
@@ -82,6 +97,14 @@ function Header() {
     }
   };
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.set('searchTerm', searchTerm);
+    const searchQuery = urlParams.toString();
+    navigate(`/search?${searchQuery}`);
+  };
+
   useEffect(() => {
     if (currentUser) {
       setProfileOptions(false);
@@ -95,7 +118,7 @@ function Header() {
       </Link>
 
       <div className="flex items-center space-x-4 flex-grow justify-end">
-        <SearchInput />
+        <SearchInput searchTerm={searchTerm} setSearchTerm={setSearchTerm} handleSearch={handleSearch} />
 
         <nav className="hidden lg:flex space-x-6">
           <Link className={`hover:bg-gray-100 px-4 py-2 rounded-md ${isActive('/home')} text-gray-800`} to="/home">

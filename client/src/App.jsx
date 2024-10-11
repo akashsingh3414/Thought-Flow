@@ -13,6 +13,7 @@ import Profile from './pages/Profile';
 import ScrollToTop from './components/ScrollToTop';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsAndConditions from './pages/TermsAndConditions';
+import Search from './pages/Search';
 
 function App() {
 
@@ -36,6 +37,7 @@ function App() {
             <Route path='/profile' element={<Profile />} />
             <Route path='/privacyPolicy' element={<PrivacyPolicy />} />
             <Route path='/termsAndconditions' element={<TermsAndConditions />} />
+            <Route path='/search' element={<Search />} />
           </Routes>
         </main>
         <ScrollToTop/>

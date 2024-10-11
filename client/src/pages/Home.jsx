@@ -18,8 +18,8 @@ export default function Home() {
   return (
     <div className='min-h-screen bg-gray-50 dark:bg-slate-800'>
       <div className='flex flex-col gap-4 p-6 lg:p-16 px-4 max-w-6xl mx-auto'>
-        <h1 className='text-4xl lg:text-6xl font-bold text-gray-800 dark:text-white text-center'>
-          Welcome! to Thought Flow
+        <h1 className='text-4xl lg:text-5xl font-bold text-gray-800 dark:text-white text-center'>
+          Welcome:) to <span className='text-indigo-700'>Thought Flow</span>
         </h1>
         <p className='text-gray-600 dark:text-gray-400 text-md sm:text-lg text-center'>
           Let your thoughts flow. Express!
@@ -44,7 +44,7 @@ export default function Home() {
             </h2>
             <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
               {posts.map((post) => (
-                <PostCard key={post._id} post={post} />
+                <Link key={post._id} to={`/post/${post.slug}`}><PostCard post={post} /></Link>
               ))}
             </div>
             <Link
