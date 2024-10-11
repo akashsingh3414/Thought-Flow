@@ -62,16 +62,6 @@ const Sidebar = () => {
                 All Users
               </Link>
             </li>
-            <li>
-              <Link
-                to="/dashboard?tab=settings"
-                className={`block py-2 px-6 rounded-md transition-all duration-200 ${
-                  currentTab === 'settings' ? 'bg-blue-600 text-white' : 'hover:bg-gray-700 hover:text-white'
-                }`}
-              >
-                Settings
-              </Link>
-            </li>
           </>
         )}
       </ul>

@@ -112,6 +112,10 @@ function PostPage() {
         navigate(`/profile?userId=${userId}`);
     };
 
+    const handleDeleteComment = (commentId) => {
+        setComments(prevComments => prevComments.filter(comment => comment._id !== commentId));
+    };
+
     const handleUpvote = async (postId) => {
         try {
             const res = await axios.post('/api/v1/post/likes/updateLike', { postId });
@@ -203,7 +207,6 @@ function PostPage() {
                     </div>
                 </div>
             )}
-
             {post && (
                 <div className="m-4 p-6 w-full bg-gray-50 rounded-lg shadow-lg border border-gray-200">
                     <div className="mb-6">
@@ -212,7 +215,11 @@ function PostPage() {
                             <ul className="space-y-2">
                                 {comments.map((comment) => (
                                     <li key={comment._id} className="flex justify-between items-center">
-                                        <Comment comment={comment} postId={post._id}/>
+                                        <Comment 
+                                            comment={comment} 
+                                            postId={post._id} 
+                                            onDelete={handleDeleteComment}
+                                        />
                                     </li>
                                 ))}
                             </ul>

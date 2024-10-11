@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-export default function Comment({ comment, postId }) {
+export default function Comment({ comment, postId, onDelete }) {
     const { currentUser } = useSelector(state => state.user);
     const [isEditing, setIsEditing] = useState(false);
     const [editedText, setEditedText] = useState(comment.commentMessage);
@@ -29,7 +29,7 @@ export default function Comment({ comment, postId }) {
     const handleDelete = () => {
         axios.delete(`/api/v1/post/comments/deleteComment?postId=${postId}&commentId=${comment._id}`)
             .then(() => {
-                // Optionally handle successful delete (e.g., dispatch an action)
+                onDelete(comment._id);
             })
             .catch(error => {
                 console.error('Error deleting comment:', error);
@@ -38,7 +38,7 @@ export default function Comment({ comment, postId }) {
 
     return (
         <div className="bg-gray-100 border border-gray-300 rounded-lg p-2 gap-2 w-full">
-            <div className=" flex items-center justify-between">
+            <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-700">
                     <Link to={`/profile?userName=${comment.userName}`} className="font-semibold text-blue-600 hover:underline">
                         @{comment.userName}
@@ -56,20 +56,22 @@ export default function Comment({ comment, postId }) {
                 )}
                 <p className="text-xs text-gray-400">{moment(comment.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</p>
             </div>
-            {currentUser.user._id===comment.userId && (<div className="flex items-center justify-end gap-1 justify-begin">
-                <button 
-                    onClick={handleEdit}
-                    className="bg-blue-500 h-5 text-md p-2 text-white flex justify-center items-center rounded-md hover:bg-blue-600"
-                >
-                    {isEditing ? 'Save' : 'Edit'}
-                </button>
-                <button 
-                    onClick={handleDelete}
-                    className="bg-red-500 h-5 text-md p-2 text-white flex justify-center items-center rounded-md hover:bg-red-600"
-                >
-                    Delete
-                </button>
-            </div>)}
+            {currentUser.user._id === comment.userId || currentUser.user.isAdmin && (
+                <div className="flex items-center justify-end gap-1">
+                    <button 
+                        onClick={handleEdit}
+                        className="bg-blue-500 h-5 text-md px-2 py-3 text-white flex justify-center items-center rounded-md hover:bg-blue-600"
+                    >
+                        {isEditing ? 'Save' : 'Edit'}
+                    </button>
+                    <button 
+                        onClick={handleDelete}
+                        className="bg-red-500 h-5 text-md p-2 py-3 text-white flex justify-center items-center rounded-md hover:bg-red-600"
+                    >
+                        Delete
+                    </button>
+                </div>
+            )}
         </div>
     );
 }

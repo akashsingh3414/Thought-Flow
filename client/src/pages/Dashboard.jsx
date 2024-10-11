@@ -8,7 +8,6 @@ import AdminUpdateUser from "../components/Dashboard/AdminUpdateUser";
 import CreatePost from "../components/Dashboard/CreatePost";
 import ShowCurrentUserPosts from "../components/Dashboard/ShowCurrentUserPosts";
 import ShowAllPosts from "../components/Dashboard/ShowAllPosts";
-import Settings from "../components/Dashboard/Settings";
 import Sidebar from '../components/Dashboard/Sidebar';
 import { useSelector } from 'react-redux';
 
@@ -26,7 +25,6 @@ export default function Dashboard() {
     myPosts: <ShowCurrentUserPosts />,
     allPosts: <ShowAllPosts />,
     allUsers: <ShowAllUsers />,
-    settings: <Settings />,
   };
 
   useEffect(() => {
