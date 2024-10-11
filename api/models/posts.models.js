@@ -17,7 +17,7 @@ const postSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true,
-        unique: true,
+        index: true,
     },
     images: {
         type: [String],
@@ -30,8 +30,8 @@ const postSchema = new mongoose.Schema({
     slug: {
         type: String,
         required: true,
-        unique: true,
+        index: true,
     }
-},{timestamps: true})
+},{timestamps: true});
 
-export const Post = mongoose.model('Post', postSchema)
+export const Post = mongoose.model('Post', postSchema);

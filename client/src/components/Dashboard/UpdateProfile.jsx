@@ -10,12 +10,8 @@ function UpdateProfile() {
   const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState('profile');
-  const [username, setUsername] = useState('');
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [oldPassword, setOldPassword] = useState('');
-  const [bio, setBio] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState(null);
@@ -27,16 +23,25 @@ function UpdateProfile() {
 
   const { currentUser } = useSelector((state) => state.user);
 
+  const [formData, setFormData] = useState({
+    userName: '',
+    fullName: '',
+    emailID: '',
+    bio: ''
+  });
+
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const tabUrl = urlParams.get('tab') || 'profile';
     setActiveTab(tabUrl);
 
     if (currentUser && currentUser.user) {
-      setUsername(currentUser.user.userName || '');
-      setFullName(currentUser.user.fullName || '');
-      setEmail(currentUser.user.emailID || '');
-      setBio(currentUser.user.bio || '');
+      setFormData({
+        userName: currentUser.user.userName || '',
+        fullName: currentUser.user.fullName || '',
+        emailID: currentUser.user.emailID || '',
+        bio: currentUser.user.bio || ''
+      });
     }
   }, [location.search, currentUser]);
 
@@ -71,37 +76,34 @@ function UpdateProfile() {
     } catch (error) {
       setImageLoading(false);
       setLocalErrorMessage(error.response.data.message);
-      console.error(error.response.data.message);
     }
   };
 
   const handleSave = async () => {
     setLoading(true);
-    const formData = {
-      userName: username,
-      fullName: fullName,
-      emailID: email,
+    const updateData = {
+      ...formData,
       oldPassword: oldPassword,
-      newPassword: newPassword,
-      bio: bio,
+      newPassword: newPassword
     };
 
     try {
-      const res = await axios.patch('/api/v1/user/update', formData, {
+      const res = await axios.patch('/api/v1/user/update', updateData, {
         headers: { 'Content-Type': 'application/json' },
         params: { userId: currentUser.user._id }
       });
       setLoading(false);
-      setUsername(res.data.user.userName);
-      setFullName(res.data.user.fullName);
-      setEmail(res.data.user.emailID);
-      setBio(res.data.user.bio);
+      setFormData({
+        userName: res.data.user.userName,
+        fullName: res.data.user.fullName,
+        emailID: res.data.user.emailID,
+        bio: res.data.user.bio
+      });
       setSuccessMessage(res.data.message);
       dispatch(loginSuccess(res.data));
       setIsEditing(false);
     } catch (error) {
       setLoading(false);
-      console.error(error.response.data.message);
       setLocalErrorMessage(error.response.data.message);
     }
   };
@@ -119,18 +121,21 @@ function UpdateProfile() {
     } catch (error) {
       setDeleting(false);
       setLocalErrorMessage(error.response?.data?.message || 'Error deleting account');
-      console.log(error.response?.data?.message);
     }
   };
 
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
   return (
-    <div className="flex-1 flex flex-col items-center justify-center w-full h-full p-2 bg-[#F5F7F8]">
-      <div className="w-full max-w-md bg-white rounded-md shadow-lg text-black p-6">
-        <div className="flex items-center justify-center mb-4">
+    <div className="flex flex-col items-center justify-center w-full h-full p-4 bg-[#F5F7F8]">
+      <div className="w-full max-w-lg bg-white rounded-lg shadow-lg text-black p-8">
+        <div className="flex items-center justify-center mb-6">
           <img
             src={currentUser?.user?.profilePhoto}
             alt="Profile"
-            className="h-28 w-28 border-4 border-[lightblue] rounded-full object-cover"
+            className="h-32 w-32 border-4 border-blue-400 rounded-full object-cover shadow-md"
             onError={(e) => {
               e.target.onerror = null;
               e.target.src = 'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?size=626&ext=jpg';
@@ -138,92 +143,93 @@ function UpdateProfile() {
           />
         </div>
 
-        <div className="mb-4">
-          <label className="block mb-1">Upload Profile Photo</label>
-          <input type="file" onChange={(e) => setProfilePhoto(e.target.files[0])} className="w-full p-1 rounded bg-white text-black" />
-          <button onClick={handleProfilePhotoUpload} className="mt-2 w-full py-2 rounded bg-blue-500 text-white hover:bg-blue-600">
-            {imageLoading ? 'Setting you up' : 'Upload Photo'}
+        <div className="mb-6">
+          <label className="block text-sm font-semibold mb-2">Upload Profile Photo</label>
+          <input type="file" onChange={(e) => setProfilePhoto(e.target.files[0])} className="w-full p-2 rounded border bg-gray-100 text-black" />
+          <button onClick={handleProfilePhotoUpload} className="mt-4 w-full py-2 rounded bg-blue-500 text-white hover:bg-blue-600 transition duration-300 ease-in-out shadow">
+            {imageLoading ? 'Setting you up...' : 'Upload Photo'}
           </button>
         </div>
 
-        <div className="mb-4">
-          <label className="block mb-1">Username</label>
-          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} className="w-full p-2 rounded bg-white text-black" disabled />
-        </div>
-
-        <div className="mb-4">
-          <label className="block mb-1">Full Name</label>
-          <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} className="w-full p-2 rounded bg-white text-black" disabled={!isEditing} />
-        </div>
-
-        <div className="mb-4">
-          <label className="block mb-1">Bio</label>
-          <input type="text" value={bio} onChange={(e) => setBio(e.target.value)} className="w-full p-2 rounded bg-white text-black" disabled={!isEditing} />
-        </div>
-
-        <div className="mb-4">
-          <label className="block mb-1">Email</label>
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-2 rounded bg-white text-black" disabled={!isEditing} />
-        </div>
+        {[
+          { label: 'User Name', name: 'userName' },
+          { label: 'Full Name', name: 'fullName' },
+          { label: 'Bio', name: 'bio' },
+          { label: 'Email', name: 'emailID' }
+        ].map((field, index) => (
+          <div className="mb-4" key={index}>
+            <label className="block text-sm font-semibold mb-2">{field.label}</label>
+            <input
+              type={field.name === 'emailID' ? 'email' : 'text'}
+              name={field.name}
+              value={formData[field.name]}
+              onChange={handleChange}
+              className="w-full p-3 rounded border bg-gray-100 text-black focus:ring-2 focus:ring-blue-300 transition duration-200 ease-in-out"
+              disabled={!isEditing && field.name !== 'userName'}
+            />
+          </div>
+        ))}
 
         {isEditing && (
           <>
             <div className="mb-4">
-              <label className="block mb-1">Old Password</label>
-              <input type="password" value={oldPassword} placeholder="Old Password Required for Update" onChange={(e) => setOldPassword(e.target.value)} className="w-full p-2 rounded bg-white text-black" />
+              <label className="block text-sm font-semibold mb-2">Old Password</label>
+              <input
+                type="password"
+                value={oldPassword}
+                placeholder="Old Password Required for Update"
+                onChange={(e) => setOldPassword(e.target.value)}
+                className="w-full p-3 rounded border bg-gray-100 text-black focus:ring-2 focus:ring-blue-300 transition duration-200 ease-in-out"
+              />
             </div>
             <div className="mb-4">
-              <label className="block mb-1">New Password</label>
-              <input type="password" value={newPassword} placeholder="Optional (Only if changing password)" onChange={(e) => setNewPassword(e.target.value)} className="w-full p-2 rounded bg-white text-black" />
+              <label className="block text-sm font-semibold mb-2">New Password</label>
+              <input
+                type="password"
+                value={newPassword}
+                placeholder="Optional (Only if changing password)"
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="w-full p-3 rounded border bg-gray-100 text-black focus:ring-2 focus:ring-blue-300 transition duration-200 ease-in-out"
+              />
             </div>
           </>
         )}
 
-        <div className="flex justify-between mt-4">
+        <div className="flex justify-between mt-6">
           {isEditing ? (
-            <button onClick={handleSave} className="bg-green-500 w-full text-white py-2 px-4 rounded hover:bg-green-600">
-              {loading ? 'Saving details' : 'Save'}
+            <button onClick={handleSave} className="bg-green-500 w-full text-white py-2 px-4 rounded hover:bg-green-600 transition duration-300 ease-in-out shadow">
+              {loading ? 'Saving details...' : 'Save'}
             </button>
           ) : (
-            <button onClick={() => setIsEditing(true)} className="bg-gray-500 w-full text-white py-2 px-4 rounded hover:bg-gray-600">Update Account Details</button>
+            <button onClick={() => setIsEditing(true)} className="bg-gray-500 w-full text-white py-2 px-4 rounded hover:bg-gray-600 transition duration-300 ease-in-out shadow">
+              Edit Account Details
+            </button>
           )}
         </div>
 
-        <div className="flex justify-between mt-4 gap-2">
-          <button className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 w-full" onClick={() => setConfirmDelete(true)}>
+        <div className="flex justify-between mt-6 gap-4">
+          <button className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition duration-300 ease-in-out shadow w-full" onClick={() => setConfirmDelete(true)}>
             {deleting ? 'Deleting...' : 'Delete Account'}
           </button>
-          <button className="bg-white text-blue-500 py-2 px-4 rounded hover:bg-blue-500 hover:text-white w-full border" onClick={handleLogout}>Logout</button>
+          <button onClick={handleLogout} className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300 ease-in-out shadow w-full">
+            Log Out
+          </button>
         </div>
 
-        {localErrorMessage && (
-          <div className="mt-4 p-2 bg-red-200 text-red-800 border border-red-400 rounded-lg">
-            {localErrorMessage}
-          </div>
-        )}
-
-        {localSuccessMessage && (
-          <div className="mt-4 p-2 bg-green-200 text-green-800 border border-green-400 rounded-lg">
-            {localSuccessMessage}
-          </div>
-        )}
-      </div>
-
-      {confirmDelete && (
-        <div className="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-60 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <p className="text-lg font-semibold mb-4">Are you sure you want to delete your account?</p>
-            <div className="flex gap-4 justify-center">
-              <button className="bg-red-500 text-white py-2 px-4 rounded-lg" onClick={handleDelete}>
-                Yes, Delete
+        {confirmDelete && (
+          <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
+            <div className="bg-white w-full max-w-md p-6 rounded-md shadow-lg text-center">
+              <h3 className="text-xl mb-4">Are you sure you want to delete your account?</h3>
+              <button onClick={handleDelete} className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 w-full">
+                Confirm Delete
               </button>
-              <button className="bg-gray-500 text-white py-2 px-4 rounded-lg" onClick={() => setConfirmDelete(false)}>
-                No, Cancel
+              <button onClick={() => setConfirmDelete(false)} className="bg-white text-blue-500 py-2 px-4 rounded hover:bg-blue-500 hover:text-white w-full border mt-4">
+                Cancel
               </button>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

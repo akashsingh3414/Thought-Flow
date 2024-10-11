@@ -11,6 +11,7 @@ import PrivateRoute from './components/PrivateRoute';
 import OnlyAdminPrivateRoute from './components/OnlyAdminPrivateRoute';
 import PostPage from './pages/PostPage';
 import Profile from './pages/Profile';
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
 
@@ -37,6 +38,7 @@ function App() {
             <Route path='/profile' element={<Profile />} />
           </Routes>
         </main>
+        <ScrollToTop/>
         <Footer />
       </div>
     </BrowserRouter>

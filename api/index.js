@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import connectToMongoDB from './db/index.js';
 import userRouter from './routes/user.routes.js';
 import postRouter from './routes/post.routes.js';
+import likesRouter from './routes/likes.routes.js'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 
@@ -32,6 +33,6 @@ connectToMongoDB().then(() => {
 
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/post', postRouter);
-
+app.use('/api/v1/post/likes', likesRouter);
 
 export { app };

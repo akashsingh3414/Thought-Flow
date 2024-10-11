@@ -9,7 +9,6 @@ const Sidebar = () => {
 
   return (
     <div className="h-full p-2 md:sticky top-0 rounded-lg" style={{ backgroundColor: '#F5F7F8' }}>
-      <h2 className="text-xl font-bold mb-4 text-left text-blue-800 px-4">Dashboard</h2>
       <ul className="flex flex-col gap-2">
         <li>
           <Link
@@ -19,16 +18,6 @@ const Sidebar = () => {
             }`}
           >
             Profile
-          </Link>
-        </li>
-        <li>
-          <Link
-            to="/dashboard?tab=updateProfile"
-            className={`block py-2 px-6 rounded-md transition-all duration-200 ${
-              currentTab === 'updateProfile' ? 'bg-blue-600 text-white' : 'hover:bg-gray-700 hover:text-white'
-            }`}
-          >
-            Update Profile
           </Link>
         </li>
         <li>

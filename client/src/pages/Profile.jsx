@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ClipLoader } from 'react-spinners';
 import PostCard from '../components/PostCard';
+import { useSelector } from 'react-redux';
 
 function Profile({ dashUserName }) {
   const location = useLocation();
@@ -12,6 +13,7 @@ function Profile({ dashUserName }) {
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const {currentUser} = useSelector(state => state.user)
 
   const fetchUser = async (userName) => {
     setLoadingUser(true);
@@ -84,13 +86,18 @@ function Profile({ dashUserName }) {
 
   return (
     <div className="container mx-auto mt-10 px-4">
+      {user._id === currentUser.user._id ? (<div className='flex w-full justify-end'>
+        <Link to={'/dashboard?tab=updateProfile'} className=' bg-gray-800 p-2 rounded text-white hover:bg-gray-600 font-semibold rounded-lg'>
+          Update Profile
+        </Link>
+      </div>):('')}
       <div className="bg-white border-b border-black p-6 flex flex-col items-center text-center max-w-full mx-auto">
         <img
           className="w-32 h-32 rounded-full object-cover mb-4"
           src={user.profilePhoto || '/default-profile.png'}
           alt={user.fullName || 'User'}
         />
-        <p className="text-xl text-gray-800">{user.userName || 'N/A'}</p>
+        <p className="text-xl text-gray-800">{'@'+user.userName || 'N/A'}</p>
         <h1 className="text-3xl font-semibold text-gray-800">{user.fullName || 'N/A'}</h1>
         {user.bio && (
           <p className="text-gray-600 mt-2">{user.bio}</p>
@@ -101,7 +108,14 @@ function Profile({ dashUserName }) {
       </div>
 
       <div className="mt-8">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-6">Posts</h2>
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-semibold text-gray-800">Posts</h2>
+          {user._id === currentUser.user._id && (
+            <Link to="/create-post" className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 rounded-lg font-semibold">
+              Create Post
+            </Link>
+          )}
+        </div>
         {loadingPosts ? (
           <div className="flex justify-center items-center h-screen bg-gray-100">
             <ClipLoader color={"#3b82f6"} loading={loadingPosts} size={60} />

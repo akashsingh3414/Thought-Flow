@@ -19,7 +19,7 @@ function CreatePosts() {
   const handlePost = async (e) => {
     e.preventDefault();
     if (!title || !content || !category) {
-      setErrorMessage('All fields are required, including images.');
+      setErrorMessage('Title & Content are required');
       return;
     }
 
