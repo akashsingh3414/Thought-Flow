@@ -8,10 +8,11 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Dashboard from './pages/Dashboard';
 import PrivateRoute from './components/PrivateRoute';
-import OnlyAdminPrivateRoute from './components/OnlyAdminPrivateRoute';
 import PostPage from './pages/PostPage';
 import Profile from './pages/Profile';
 import ScrollToTop from './components/ScrollToTop';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsAndConditions from './pages/TermsAndConditions';
 
 function App() {
 
@@ -31,11 +32,10 @@ function App() {
               <Route path='/dashboard' element={<Dashboard />} />
             </Route>
             
-            <Route element={<OnlyAdminPrivateRoute />}>
-            </Route>
-
             <Route path='/post/:postSlug' element={<PostPage />} />
             <Route path='/profile' element={<Profile />} />
+            <Route path='/privacyPolicy' element={<PrivacyPolicy />} />
+            <Route path='/termsAndconditions' element={<TermsAndConditions />} />
           </Routes>
         </main>
         <ScrollToTop/>
