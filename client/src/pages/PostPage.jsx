@@ -6,6 +6,7 @@ import ConnectionCard from '../components/ConnectionCard';
 import PostCard from '../components/PostCard';
 import CommentSection from '../components/CommentSection';
 import { useSelector } from 'react-redux';
+import Comment from '../components/Comment';
 
 function PostPage() {
     const { currentUser } = useSelector(state=>state.user)
@@ -16,6 +17,7 @@ function PostPage() {
     const [recentPosts, setRecentPosts] = useState([]);
     const [likes, setLikes] = useState(0);
     const [hasLiked, setHasLiked] = useState(false);
+    const [comments, setComments] = useState([]);
     const navigate = useNavigate();
 
     const fetchPost = async (postSlug) => {
@@ -23,7 +25,7 @@ function PostPage() {
             const res = await axios.get(`/api/v1/post/getPosts?slug=${postSlug}`);
             if (res.status === 200) {
                 const fetchedPost = res.data.posts[0];
-                setPost(fetchedPost);
+                if(fetchedPost) { setPost(fetchedPost) }
                 setLikes(fetchedPost.likes.length);
                 setError(null);
             } else {
@@ -64,22 +66,38 @@ function PostPage() {
         }
     };
 
+    const fetchComments = async (postId) => {
+        try {
+            const res = await axios.get(`/api/v1/post/comments/getComments?postId=${postId}`)
+            console.log(res)
+            if(res.status===200)  {
+                setComments(res.data.comments);
+            }
+        } catch (error) {
+            console.log('internal error occured while fetching comments')
+        }
+    }
+
     useEffect(() => {
         const loadData = async () => {
-            await fetchRecentPosts();
-            if (postSlug) {
-                await fetchPost(postSlug);
-                if (post && post._id) {
-                    await fetchLikes(post._id);
+            try {
+                await fetchRecentPosts();
+                if (postSlug) {
+                    await fetchPost(postSlug);
+                    if (post && post._id) {
+                        await fetchLikes(post._id);
+                        await fetchComments(post._id);
+                    }
+                } else {
+                    navigate('/home');
                 }
-            } else {
-                navigate('/home');
+            } catch (error) {
+            } finally {
+                setLoading(false);
             }
-            setLoading(false);
-        };
-    
+        };    
         loadData();
-    }, [postSlug, navigate, post?._id]);    
+    }, [postSlug, navigate, post?._id]);  
 
     if (loading) {
         return (
@@ -173,25 +191,38 @@ function PostPage() {
                             <span className="text-xl">&hearts;</span>
                             {<span className="ml-2 text-lg">{likes}</span>}
                         </button>) : (
-                                    <div className="text-md text-gray-500 my-5">
-                                        <Link
-                                            to="/signin"
-                                            className="m-2 bg-blue-500 px-2 py-1 rounded-lg text-white font-semibold hover:bg-blue-600"
-                                        >
-                                            Sign In
-                                        </Link>
-                                    </div>
+                            <div className="text-md text-gray-500 my-5">
+                                <Link
+                                    to="/signin"
+                                    className="m-2 bg-blue-500 px-2 py-1 rounded-lg text-white font-semibold hover:bg-blue-600"
+                                >
+                                    Sign In
+                                </Link>
+                            </div>
                         )}
                     </div>
                 </div>
             )}
 
             {post && (
-                <div className='m-4 p-4 max-w-4xl w-full bg-gray-100 rounded-lg shadow-lg'>
+                <div className="m-4 p-6 w-full bg-gray-50 rounded-lg shadow-lg border border-gray-200">
+                    <div className="mb-6">
+                        <h2 className="text-2xl font-semibold mb-4 text-gray-800">Comments</h2>
+                        {comments.length > 0 ? (
+                            <ul className="space-y-2">
+                                {comments.map((comment) => (
+                                    <li key={comment._id} className="flex justify-between items-center">
+                                        <Comment comment={comment} postId={post._id}/>
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p className="text-gray-600 text-lg italic">No comments yet. Be the first to comment!</p>
+                        )}
+                    </div>
                     <CommentSection postId={post._id} />
                 </div>
             )}
-
             <div className='border-none gap-2 p-2 m-2 w-full h-full'>
                 <h1 className='text-2xl font-bold text-left'>Recent Posts</h1>
                 <div className='flex flex-row w-full'>

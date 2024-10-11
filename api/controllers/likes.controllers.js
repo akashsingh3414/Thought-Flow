@@ -45,14 +45,12 @@ export const updateLike = async (req, res) => {
 
 export const getLikes = async (req, res) => {
     const { postId } = req.query;
-    console.log(postId)
     try {
         if (!postId) {
             return res.status(404).json({ message: 'Post not found' });
         }
 
         const likes = await Like.find({ postId });
-        console.log('Likes found:', likes);
         const hasLiked = likes.some(like => like.userId.toString() === req.user._id.toString());
 
         return res.status(200).json({

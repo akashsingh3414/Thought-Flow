@@ -111,7 +111,7 @@ function Profile({ dashUserName }) {
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-semibold text-gray-800">Posts</h2>
           {user._id === currentUser.user._id && (
-            <Link to="/create-post" className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 rounded-lg font-semibold">
+            <Link to="/dashboard?tab=createPost" className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 rounded-lg font-semibold">
               Create Post
             </Link>
           )}

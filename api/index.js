@@ -6,6 +6,7 @@ import postRouter from './routes/post.routes.js';
 import likesRouter from './routes/likes.routes.js'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
+import commentRouter from './routes/comment.routes.js';
 
 dotenv.config();
 
@@ -34,5 +35,7 @@ connectToMongoDB().then(() => {
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/post', postRouter);
 app.use('/api/v1/post/likes', likesRouter);
+app.use('/api/v1/post/comments', commentRouter);
+
 
 export { app };

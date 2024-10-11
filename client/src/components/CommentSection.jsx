@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -6,20 +7,38 @@ function CommentSection({ postId }) {
     const { currentUser } = useSelector((state) => state.user);
     const [comment, setComment] = useState('');
     const [charCount, setCharCount] = useState(200);
+    const [error, setError] = useState(null);
 
     const handleChange = (e) => {
         setComment(e.target.value);
         setCharCount(200 - e.target.value.length);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        setComment('');
-        setCharCount(200);
+
+        if (!comment.trim()) {
+            return setError('Comment cannot be empty.');
+        }
+
+        try {
+            const res = await axios.post('/api/v1/post/comments/createComment', {
+                postId,
+                comment
+            });
+
+            setComment('');
+            setCharCount(200);
+            setError(null);
+
+        } catch (error) {
+            console.error(error);
+            setError('Error submitting comment. Please try again.');
+        }
     };
 
     return (
-        <div className="max-w-2xl mx-auto p-5 bg-gray-50 rounded-lg shadow-md">
+        <div className="mx-auto p-5 bg-gray-50 rounded-lg shadow-md">
             {currentUser ? (
                 <div className="flex items-center mb-4 text-gray-700">
                     <img
@@ -59,6 +78,7 @@ function CommentSection({ postId }) {
                         className="border border-gray-300 rounded-lg p-2 resize-none focus:outline-none focus:ring focus:ring-blue-300"
                         rows="4"
                     />
+                    {error && <p className="text-red-500 text-sm">{error}</p>}
                     <div className="flex justify-between items-center text-sm text-gray-500">
                         <span>{charCount} Characters Remaining</span>
                         <button
