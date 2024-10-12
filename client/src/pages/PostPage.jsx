@@ -18,6 +18,8 @@ function PostPage() {
     const [likes, setLikes] = useState(0);
     const [hasLiked, setHasLiked] = useState(false);
     const [comments, setComments] = useState([]);
+    const [visiblePostCount, setVisiblePostCount] = useState(3);
+
     const navigate = useNavigate();
 
     const fetchPost = async (postSlug) => {
@@ -77,6 +79,10 @@ function PostPage() {
             console.log('internal error occured while fetching comments')
         }
     }
+
+    const handleSeeMore = () => {
+        setVisiblePostCount((prevCount) => prevCount + 3);
+    };
 
     useEffect(() => {
         const loadData = async () => {
@@ -232,10 +238,10 @@ function PostPage() {
             )}
             <div className='border-none gap-2 p-2 m-2 w-full h-full'>
                 <h1 className='text-2xl font-bold text-left'>Recent Posts</h1>
-                <div className='flex flex-row w-full'>
+                <div className='flex flex-row flex-wrap w-full'>
                     {recentPosts.length > 0 ? (
-                        recentPosts.map((recentPost) => (
-                            <Link key={recentPost._id} className='w-full p-1' to={`/post/${recentPost.slug}`}>
+                        recentPosts.slice(0, visiblePostCount).map((recentPost) => (
+                            <Link key={recentPost._id} className='w-full sm:w-1/2 lg:w-1/3 p-1' to={`/post/${recentPost.slug}`}>
                                 <PostCard post={recentPost} />
                             </Link>
                         ))
@@ -243,8 +249,12 @@ function PostPage() {
                         <p>No Posts to display</p>
                     )}
                 </div>
+                {recentPosts.length > visiblePostCount && (
+                    <button onClick={handleSeeMore} className='mt-4 inline-block text-blue-600 hover:underline'>
+                        See More
+                    </button>
+                )}
             </div>
-
             <div className='max-w-4xl mx-auto w-full'>
                 <ConnectionCard />
             </div>

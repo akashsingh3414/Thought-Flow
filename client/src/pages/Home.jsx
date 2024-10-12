@@ -22,7 +22,7 @@ export default function Home() {
           Welcome:) to <span className='text-indigo-700'>Thought Flow</span>
         </h1>
         <p className='text-gray-600 dark:text-gray-400 text-md sm:text-lg text-center'>
-          Let your thoughts flow. Express!
+          Let your thoughts flow. Express them freely!
         </p>
         <Link
           to='/search'
@@ -38,11 +38,11 @@ export default function Home() {
 
       <div className='max-w-6xl mx-auto p-4 lg:p-8'>
         {posts && posts.length > 0 && (
-          <div className='flex flex-col gap-6'>
+          <div className='flex flex-col gap-4'>
             <h2 className='text-3xl font-semibold text-center text-gray-800 dark:text-white'>
               Recent Posts
             </h2>
-            <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
+            <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
               {posts.map((post) => (
                 <Link key={post._id} to={`/post/${post.slug}`}><PostCard post={post} /></Link>
               ))}

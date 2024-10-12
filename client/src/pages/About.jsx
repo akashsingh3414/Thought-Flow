@@ -19,6 +19,14 @@ function About() {
           <p>
             Thought Flow is created by <strong>Akash Singh</strong>, a pre-final year student at IIIT Manipur, with a passion for technology and community-driven discussions.
           </p>
+          <p className="text-gray-700">
+            Please contact me at 
+            <span className="text-indigo-600 font-semibold text-lg ml-1">
+                <a href="mailto:akashsingh3414@gmail.com" className="hover:underline">
+                    akashsingh3414@gmail.com
+                </a>.
+            </span>
+          </p>
         </div>
       </div>
     </div>

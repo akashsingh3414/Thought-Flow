@@ -7,7 +7,7 @@ export default function Search() {
   const [sidebarData, setSidebarData] = useState({
     searchTerm: '',
     sort: 'desc',
-    category: 'uncategorized',
+    category: 'none',
   });
 
   const [posts, setPosts] = useState([]);
@@ -17,14 +17,12 @@ export default function Search() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Fetch posts when the search parameters (in the URL) change
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const searchTermFromUrl = urlParams.get('searchTerm');
     const sortFromUrl = urlParams.get('sort');
     const categoryFromUrl = urlParams.get('category');
 
-    // Update the sidebarData state with URL parameters
     setSidebarData((prevData) => ({
       ...prevData,
       searchTerm: searchTermFromUrl || prevData.searchTerm,
@@ -38,7 +36,7 @@ export default function Search() {
         const searchQuery = new URLSearchParams({
           searchTerm: searchTermFromUrl || '',
           sort: sortFromUrl || 'desc',
-          category: categoryFromUrl || 'uncategorized',
+          category: categoryFromUrl || 'none',
         }).toString();
 
         const res = await axios.get(`/api/v1/post/getposts?${searchQuery}`);
@@ -52,7 +50,7 @@ export default function Search() {
     };
 
     fetchPosts();
-  }, [location.search]); // Only trigger when location.search (URL parameters) changes
+  }, [location.search]);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -75,8 +73,8 @@ export default function Search() {
       const urlParams = new URLSearchParams({
         searchTerm: sidebarData.searchTerm || '',
         sort: sidebarData.sort || 'desc',
-        category: sidebarData.category || 'uncategorized',
-        startIndex: numberOfPosts, // Pagination
+        category: sidebarData.category || 'none',
+        startIndex: numberOfPosts,
       });
 
       const res = await axios.get(`/api/v1/post/getposts?${urlParams.toString()}`);
@@ -89,7 +87,6 @@ export default function Search() {
 
   return (
     <div className="flex flex-col md:flex-row">
-      {/* Sidebar */}
       <div className="p-7 border-b md:border-r md:min-h-screen border-gray-500 bg-gray-100">
         <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
           <div className="flex items-center gap-2">
@@ -125,6 +122,7 @@ export default function Search() {
               onChange={handleChange}
               className="border border-gray-300 rounded px-3 py-2 w-full"
             >
+              <option value="none">None</option>
               <option value="uncategorized">Uncategorized</option>
               <option value="programming languages">Programming Languages</option>
               <option value="python">Python</option>
@@ -142,12 +140,11 @@ export default function Search() {
         </form>
       </div>
 
-      {/* Posts Section */}
       <div className="w-full">
         <h1 className="text-3xl font-semibold border-b border-gray-500 p-3 mt-5">
           Post Results:
         </h1>
-        <div className="p-7 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="p-5 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {!loading && posts.length === 0 && (
             <p className="text-xl text-gray-500">No posts found.</p>
           )}

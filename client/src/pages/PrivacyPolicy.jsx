@@ -40,7 +40,11 @@ function PrivacyPolicy() {
 
       <p className="text-gray-700">
         If you have any questions or concerns regarding this Privacy Policy, please contact us at 
-        <span className="text-indigo-600 font-semibold text-lg"> akashsingh3414@gmail.com</span>.
+        <span className="text-indigo-600 font-semibold text-lg ml-1">
+            <a href="mailto:akashsingh3414@gmail.com" className="hover:underline">
+                akashsingh3414@gmail.com
+            </a>.
+        </span>
       </p>
     </div>
   );

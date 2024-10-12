@@ -55,18 +55,26 @@ export const getPosts = async (req, res, next) => {
     const limit = Math.max(1, Math.min(parseInt(req.query.limit) || 10, 100));
     const sortDirection = req.query.sort === 'asc' ? 1 : -1;
 
-    const queryFilters = {
-      ...(req.query.userId && { userId: req.query.userId }),
-      ...(req.query.category && { category: req.query.category }),
-      ...(req.query.slug && { slug: req.query.slug }),
-      ...(req.query.postId && { _id: req.query.postId }),
-      ...(req.query.searchTerm && {
-        $or: [
-          { title: { $regex: req.query.searchTerm, $options: 'i' } },
-          { content: { $regex: req.query.searchTerm, $options: 'i' } },
-        ],
-      }),
-    };
+    const queryFilters = {};
+
+    if (req.query.userId) {
+      queryFilters.userId = req.query.userId;
+    }
+    if (req.query.category && req.query.category !== 'none') {
+      queryFilters.category = req.query.category;
+    }
+    if (req.query.slug) {
+      queryFilters.slug = req.query.slug;
+    }
+    if (req.query.postId) {
+      queryFilters._id = req.query.postId;
+    }
+    if (req.query.searchTerm) {
+      queryFilters.$or = [
+        { title: { $regex: req.query.searchTerm, $options: 'i' } },
+        { content: { $regex: req.query.searchTerm, $options: 'i' } },
+      ];
+    }
 
     const posts = await Post.find(queryFilters)
       .sort({ updatedAt: sortDirection })
