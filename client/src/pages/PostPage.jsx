@@ -235,7 +235,8 @@ function PostPage() {
                                     <li key={comment._id} className="flex justify-between items-center">
                                         <Comment 
                                             comment={comment} 
-                                            postId={post._id} 
+                                            postId={post._id}
+                                            postAuthorId={post.userId} 
                                             onDelete={handleDeleteComment}
                                         />
                                     </li>

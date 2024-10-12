@@ -25,7 +25,7 @@ const ProfileOptions = ({ user, toggleOptions, onLogout }) => (
 
       <Link
         to="/dashboard"
-        className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
+        className="block px-4 py-2 rounded-lg text-sm text-gray-800 hover:bg-gray-100"
         onClick={toggleOptions}
       >
         Dashboard
@@ -33,7 +33,7 @@ const ProfileOptions = ({ user, toggleOptions, onLogout }) => (
 
       <button
         onClick={onLogout}
-        className="w-full px-4 py-2 text-sm text-red-600 hover:bg-red-500 hover:text-white"
+        className="w-full px-4 py-2 text-sm rounded-lg text-red-600 hover:bg-red-500 hover:text-white"
       >
         Logout
       </button>
@@ -112,8 +112,8 @@ function Header() {
   }, [currentUser]);
 
   return (
-    <header className="flex justify-between items-center h-16 p-4 bg-white shadow-md rounded-lg fixed top-0 left-0 right-0 z-20">
-      <Link to="/" className="flex items-center space-x-2 text-xl font-bold text-indigo-700">
+    <header className="flex justify-between items-center h-16 p-4 bg-gray-200 bg-opacity-80 backdrop-blur-lg shadow-md rounded-lg fixed top-0 left-0 right-0 z-20">
+      <Link to="/" className="flex items-center space-x-2 text-xl sm:text-2xl md:text-3xl font-bold text-indigo-700">
         <span>Thought Flow</span>
       </Link>
 
@@ -121,10 +121,10 @@ function Header() {
         <SearchInput searchTerm={searchTerm} setSearchTerm={setSearchTerm} handleSearch={handleSearch} />
 
         <nav className="hidden lg:flex space-x-6">
-          <Link className={`hover:bg-gray-100 px-4 py-2 rounded-md ${isActive('/home')} text-gray-800`} to="/home">
+          <Link className={`hover:bg-gray-300 px-4 py-2 rounded-md ${isActive('/home')} text-gray-800`} to="/home">
             Home
           </Link>
-          <Link className={`hover:bg-gray-100 px-4 py-2 rounded-md ${isActive('/about')} text-gray-800`} to="/about">
+          <Link className={`hover:bg-gray-300 px-4 py-2 rounded-md ${isActive('/about')} text-gray-800`} to="/about">
             About
           </Link>
         </nav>
@@ -165,11 +165,11 @@ function Header() {
       </div>
 
       {isMenuOpen && (
-        <div className="absolute right-4 top-16 bg-white shadow-md rounded-lg py-2 px-2 flex flex-col space-y-1 lg:hidden">
-          <Link className={`hover:bg-gray-200 px-4 py-2 rounded-md ${isActive('/home')} text-gray-800`} to="/home" onClick={toggleMenuOptions}>
+        <div className="absolute right-4 top-16 bg-gray-200 bg-opacity-80 backdrop-blur-lg shadow-md rounded-lg py-2 px-2 flex flex-col space-y-1 lg:hidden">
+          <Link className={`hover:bg-gray-300 px-4 py-2 rounded-md ${isActive('/home')} text-gray-800`} to="/home" onClick={toggleMenuOptions}>
             Home
           </Link>
-          <Link className={`hover:bg-gray-200 px-4 py-2 rounded-md ${isActive('/about')} text-gray-800`} to="/about" onClick={toggleMenuOptions}>
+          <Link className={`hover:bg-gray-300 px-4 py-2 rounded-md ${isActive('/about')} text-gray-800`} to="/about" onClick={toggleMenuOptions}>
             About
           </Link>
         </div>

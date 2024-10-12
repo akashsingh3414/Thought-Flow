@@ -1,5 +1,6 @@
 import { User } from '../models/user.models.js';
 import { Post } from '../models/posts.models.js';
+import { Like } from '../models/likes.models.js';
 import { generateAccessANDrefreshToken } from '../controllers/generate.controllers.js';
 import bcrypt from 'bcrypt';
 import { uploadOnCloudinary } from '../utils/cloudinary.js';
@@ -22,8 +23,7 @@ export const getUser = async (req, res, next) => {
       console.error('Error fetching user:', error);
       return res.status(500).json({ message: 'Server error' });
     }
-  };
-  
+};
 
 export const getUsers = async (req, res) => {
     if(!req.user.isAdmin) {
@@ -125,7 +125,7 @@ export const login = async (req, res) => {
     const options = {
         httpOnly: true,
         secure: true,
-        maxAge: 24 * 60 * 60 * 1000
+        maxAge: 24 * 60 * 60 * 1000 //1d
     };
 
     res.cookie('accessToken', accessToken, options);
@@ -144,6 +144,7 @@ export const google = async (req, res) => {
         const options = {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
+            maxAge: 24 * 60 * 60 * 1000 //1d
         };
 
         let accessToken, refreshToken;
@@ -188,7 +189,8 @@ export const logout = async (req, res) => {
 
     const options = {
         httpOnly: true,
-        secure: true
+        secure: true,
+        maxAge: 24 * 60 * 60 * 1000 //1d
     };
 
     res.clearCookie('accessToken', options);
@@ -301,6 +303,8 @@ export const deleteUser = async (req, res) => {
 
         await User.findByIdAndDelete(userId);
         await Post.deleteMany({ userId });
+        await Comment.deleteMany({ userId });
+        await Like.deleteMany({ userId });
 
         return res.status(200).json({ message: "User deleted successfully" });
     } catch (error) {

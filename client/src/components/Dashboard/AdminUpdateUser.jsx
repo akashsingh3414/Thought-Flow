@@ -26,7 +26,7 @@ const AdminUpdateUser = () => {
     try {
       const response = await axios.get(`/api/v1/user/getUser?userId=${userId}`);
       if (response.status === 200) {
-        const user = response.data.users[0];
+        const user = response.data.user;
         setUserDetails(user);
         setFormData({
           userName: user.userName,
@@ -96,23 +96,41 @@ const AdminUpdateUser = () => {
           />
         </div>
 
-        {[
-          { label: 'User Name', name: 'userName' },
-          { label: 'Full Name', name: 'fullName' },
-          { label: 'Email', name: 'emailID' }
-        ].map((field, index) => (
-          <div className="mb-6" key={index}>
-            <label className="block mb-2 capitalize text-lg font-semibold">{field.label}</label>
-            <input
-              type={field.name === 'emailID' ? 'email' : 'text'}
-              name={field.name}
-              value={formData[field.name]}
-              onChange={handleChange}
-              className="w-full p-3 rounded-lg bg-gray-100 border border-gray-300 text-black"
-              disabled={!isEditing}
-            />
-          </div>
-        ))}
+        <div className="mb-6">
+          <label className="block mb-2 capitalize text-lg font-semibold">User Name</label>
+          <input
+            type="text"
+            name="userName"
+            value={formData.userName}
+            onChange={handleChange}
+            className="w-full p-3 rounded-lg bg-gray-100 border border-gray-300 text-black"
+            disabled={!isEditing}
+          />
+        </div>
+
+        <div className="mb-6">
+          <label className="block mb-2 capitalize text-lg font-semibold">Full Name</label>
+          <input
+            type="text"
+            name="fullName"
+            value={formData.fullName}
+            onChange={handleChange}
+            className="w-full p-3 rounded-lg bg-gray-100 border border-gray-300 text-black"
+            disabled={!isEditing}
+          />
+        </div>
+
+        <div className="mb-6">
+          <label className="block mb-2 capitalize text-lg font-semibold">Email</label>
+          <input
+            type="email"
+            name="emailID"
+            value={formData.emailID}
+            onChange={handleChange}
+            className="w-full p-3 rounded-lg bg-gray-100 border border-gray-300 text-black"
+            disabled={!isEditing}
+          />
+        </div>
 
 
         <div className="mb-6 flex items-center">

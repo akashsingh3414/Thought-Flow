@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-export default function Comment({ comment, postId, onDelete }) {
+export default function Comment({ comment, postId, onDelete, postAuthorId }) {
     const { currentUser } = useSelector(state => state.user);
     const [isEditing, setIsEditing] = useState(false);
     const [editedText, setEditedText] = useState(comment.commentMessage);
@@ -56,7 +56,9 @@ export default function Comment({ comment, postId, onDelete }) {
                 )}
                 <p className="text-xs text-gray-400">{moment(comment.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</p>
             </div>
-            {currentUser.user._id === comment.userId || currentUser.user.isAdmin && (
+            {(currentUser.user._id === comment.userId || 
+              currentUser.user._id === postAuthorId || 
+              currentUser.user.isAdmin) && (
                 <div className="flex items-center justify-end gap-1">
                     <button 
                         onClick={handleEdit}

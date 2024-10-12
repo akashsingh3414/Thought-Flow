@@ -55,8 +55,8 @@ export const refreshAccessToken = async (req, res) => {
 
         return res
             .status(200)
-            .cookie("accessToken", accessToken, { ...options, maxAge: 3600000 }) // Access token valid for 1 hour
-            .cookie("refreshToken", newRefreshToken, { ...options, maxAge: 604800000 }) // Refresh token valid for 7 days
+            .cookie("accessToken", accessToken, { ...options, maxAge: 86400000 }) // Access token valid for 7 hours
+            .cookie("refreshToken", newRefreshToken, { ...options, maxAge: 864000000 }) // Refresh token valid for 7 days
             .json({ message: "Access token refreshed", accessToken, refreshToken: newRefreshToken });
     } catch (error) {
         return res.status(500).json({ message: error.message || "Internal server error" });
