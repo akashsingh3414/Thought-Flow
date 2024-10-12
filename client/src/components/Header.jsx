@@ -9,7 +9,7 @@ import { logoutStart } from '../redux/user/userSlice.js';
 const ProfileOptions = ({ user, toggleOptions, onLogout }) => (
   <div className="absolute right-0 mt-2 w-48 border border-gray-200 bg-white text-black rounded-lg shadow-lg z-10">
     <div className="text-center">
-      <div className="px-4 py-3">
+      <div className="px-2 py-3">
         <img
           src={user.profilePhoto}
           alt="Profile"

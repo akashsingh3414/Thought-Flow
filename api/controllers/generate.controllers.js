@@ -8,8 +8,11 @@ export const generateAccessANDrefreshToken = async (userId) => {
             return { status: 404, message: "User not found" };
         }
 
-        const accessToken = user.generateAccessToken();
-        const refreshToken = user.generateRefreshToken();
+        // Generate access token
+        const accessToken = jwt.sign({ _id: user._id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
+
+        // Generate refresh token
+        const refreshToken = jwt.sign({ _id: user._id }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
 
         user.refreshToken = refreshToken;
         await user.save({ validateBeforeSave: false });
@@ -41,7 +44,7 @@ export const refreshAccessToken = async (req, res) => {
 
         const options = {
             httpOnly: true,
-            secure: true
+            secure: process.env.NODE_ENV === 'production',
         };
 
         const { accessToken, refreshToken: newRefreshToken } = await generateAccessANDrefreshToken(user._id);

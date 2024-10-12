@@ -118,16 +118,22 @@ export const google = async (req, res) => {
         const user = await User.findOne({ emailID }).select('-password -refreshToken');
         const options = {
             httpOnly: true,
-            secure: true,
+            secure: process.env.NODE_ENV === 'production',
         };
+
+        let accessToken, refreshToken;
+
         if (user) {
-            const { accessToken, refreshToken } = generateAccessANDrefreshToken(user._id);
-            return res.cookie('accessToken', accessToken, options)
+            // User exists
+            ({ accessToken, refreshToken } = await generateAccessANDrefreshToken(user._id));
+            return res
+                .cookie('accessToken', accessToken, options)
                 .cookie('refreshToken', refreshToken, options)
                 .status(200)
                 .json({ message: 'Logged in using Google', user });
         } else {
-            const generatedPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
+            // Create new user
+            const generatedPassword = Math.random().toString(36).slice(-16); // Example for generating a password
             const hashedPassword = bcrypt.hashSync(generatedPassword, 8);
             const newUser = await User.create({
                 userName: userName.split(" ").join("").toLowerCase(),
@@ -136,15 +142,15 @@ export const google = async (req, res) => {
                 profilePhoto: googlePhotoUrl,
                 fullName: userName
             });
-            const createdUser = await User.findById(newUser._id).select('-password -refreshToken');
-            const { accessToken, refreshToken } = generateAccessANDrefreshToken(newUser._id);
-            return res.status(200)
+            ({ accessToken, refreshToken } = await generateAccessANDrefreshToken(newUser._id));
+            return res
                 .cookie('accessToken', accessToken, options)
                 .cookie('refreshToken', refreshToken, options)
-                .json({ message: 'Account created successfully', user: createdUser });
+                .status(200)
+                .json({ message: 'Account created successfully', user: newUser });
         }
     } catch (error) {
-        next(error);
+        return res.status(500).json({ message: error.message || "Internal server error" });
     }
 };
 
