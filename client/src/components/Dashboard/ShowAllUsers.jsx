@@ -16,7 +16,7 @@ export default function ShowAllUsers() {
         setLoading(true);
         setError(null);
         try {
-            const res = await axios.get(`/api/v1/user/getUser?startIndex=${startIndex}&limit=10`);
+            const res = await axios.get(`/api/v1/user/getUsers?startIndex=${startIndex}&limit=10`);
             if (res.status === 200) {
                 setUsers((prevUsers) => [...prevUsers, ...res.data.users]);
                 setShowMore(res.data.users.length === 10);

@@ -12,7 +12,7 @@ const Sidebar = () => {
       <ul className="flex flex-col gap-2">
         <li>
           <Link
-            to={`/dashboard?tab=profile&userId=${currentUser.user._id}`}
+            to={`/dashboard?tab=profile&userName=${currentUser.user.userName}`}
             className={`block py-2 px-6 rounded-md transition-all duration-200 ${
               currentTab === 'profile' ? 'bg-blue-600 text-white' : 'hover:bg-gray-700 hover:text-white'
             }`}

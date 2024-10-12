@@ -13,14 +13,14 @@ function Profile({ dashUserName }) {
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const {currentUser} = useSelector(state => state.user)
+  const { currentUser } = useSelector(state => state.user);
 
   const fetchUser = async (userName) => {
     setLoadingUser(true);
     try {
       const response = await axios.get(`/api/v1/user/getUser?userName=${userName}`);
-      if (response.status === 200 && response.data.users.length > 0) {
-        const userData = response.data.users[0];
+      if (response.status === 200 && response.data.user) {
+        const userData = response.data.user;
         setUser(userData);
       } else {
         setError('User not found.');
@@ -52,18 +52,14 @@ function Profile({ dashUserName }) {
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
-    let userName = urlParams.get('userName');
-
-    if (!userName && dashUserName) {
-      userName = dashUserName;
-    }
+    let userName = urlParams.get('userName') || dashUserName;
 
     if (userName) {
       fetchUser(userName);
     } else {
-      navigate('/home');
+      navigate('/home'); // Navigate to home if userName is invalid
     }
-  }, [location.search, dashUserName]);
+  }, [location.search, dashUserName, navigate]);
 
   useEffect(() => {
     if (user._id) {
@@ -86,18 +82,20 @@ function Profile({ dashUserName }) {
 
   return (
     <div className="container mx-auto mt-10 px-4">
-      {user._id === currentUser.user._id ? (<div className='flex w-full justify-end'>
-        <Link to={'/dashboard?tab=updateProfile'} className=' bg-gray-800 p-2 rounded text-white hover:bg-gray-600 font-semibold rounded-lg'>
-          Update Profile
-        </Link>
-      </div>):('')}
+      {user._id === currentUser.user._id && (
+        <div className='flex w-full justify-end'>
+          <Link to={'/dashboard?tab=updateProfile'} className='bg-gray-800 p-2 rounded text-white hover:bg-gray-600 font-semibold rounded-lg'>
+            Update Profile
+          </Link>
+        </div>
+      )}
       <div className="bg-white border-b border-black p-6 flex flex-col items-center text-center max-w-full mx-auto">
         <img
           className="w-32 h-32 rounded-full object-cover mb-4"
           src={user.profilePhoto || '/default-profile.png'}
           alt={user.fullName || 'User'}
         />
-        <p className="text-xl text-gray-800">{'@'+user.userName || 'N/A'}</p>
+        <p className="text-xl text-gray-800">{'@' + (user.userName || 'N/A')}</p>
         <h1 className="text-3xl font-semibold text-gray-800">{user.fullName || 'N/A'}</h1>
         {user.bio && (
           <p className="text-gray-600 mt-2">{user.bio}</p>

@@ -114,10 +114,22 @@ function PostPage() {
         );
     }
 
-    const handleAuthorProfile = (userId) => {
-        navigate(`/profile?userId=${userId}`);
+    const handleAuthorProfile = async (userId) => {
+        let userName;
+        try {
+            const response = await axios.get(`/api/v1/user/getUser?userId=${userId}`);
+            if (response.status === 200 && response.data.user) {
+                const userData = response.data.user;
+                userName = userData.userName;
+            } else {
+                setError('User not found.');
+            }
+        } catch (error) {
+            console.error('Error fetching user:', error);
+        }
+        navigate(`/profile?userName=${userName}`);
     };
-
+    
     const handleDeleteComment = (commentId) => {
         setComments(prevComments => prevComments.filter(comment => comment._id !== commentId));
     };

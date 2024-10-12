@@ -4,7 +4,32 @@ import { generateAccessANDrefreshToken } from '../controllers/generate.controlle
 import bcrypt from 'bcrypt';
 import { uploadOnCloudinary } from '../utils/cloudinary.js';
 
-export const getUser = async (req, res) => {
+export const getUser = async (req, res, next) => {
+    try {
+      const { userName, userId } = req.query;
+      const query = {};
+      if (userName) query.userName = userName;
+      if (userId) query._id = userId;
+  
+      const user = await User.findOne(query).select('-password -refreshToken');
+  
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+  
+      res.status(200).json({ message: 'User found', user });
+    } catch (error) {
+      console.error('Error fetching user:', error);
+      return res.status(500).json({ message: 'Server error' });
+    }
+  };
+  
+
+export const getUsers = async (req, res) => {
+    if(!req.user.isAdmin) {
+        return res.status(403)
+        .json({message: 'Only admin can have access to all users'})
+    }
     try {
         const startIndex = Math.max(0, parseInt(req.query.startIndex) || 0);
         const limit = Math.max(1, parseInt(req.query.limit) || 10);
