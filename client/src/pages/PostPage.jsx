@@ -117,9 +117,9 @@ function PostPage() {
         let userName;
         try {
             const response = await axios.get(`/api/v1/user/getUser?userId=${userId}`);
-            if (response.status === 200 && response.data.user) {
+            if (response.status === 200 && response.data?.user) {
                 const userData = response.data.user;
-                userName = userData.userName;
+                userName = userData?.userName;
             } else {
                 setError('User not found.');
             }
@@ -203,7 +203,7 @@ function PostPage() {
                         <span className="text-lg font-medium text-gray-800 mb-4 sm:mb-0">
                             Loved Reading? Support us with a like!
                         </span>
-                        {currentUser ? (<button
+                        {currentUser && currentUser._id ? (<button
                             type="button"
                             className={`flex items-center justify-center px-3 py-2 font-semibold rounded-full transition duration-300 ease-in-out ${hasLiked ? 'bg-green-500 hover:bg-green-600' : 'bg-red-500 hover:bg-red-600'} text-white`}
                             onClick={() => handleUpvote(post._id)}
