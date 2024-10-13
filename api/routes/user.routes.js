@@ -12,7 +12,7 @@ userRouter.route('/test').get((req, res) => {
 userRouter.route('/register').post(register);
 userRouter.route('/login').post(login);
 userRouter.route('/logout').post(verifyjwt, logout);
-userRouter.route('/getUser').get(verifyjwt, getUser);
+userRouter.route('/getUser').get(getUser);
 userRouter.route('/getUsers').get(verifyjwt, getUsers); 
 userRouter.route('/google').post(google);
 userRouter.route('/update').patch(verifyjwt, updateUser);

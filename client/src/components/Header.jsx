@@ -75,7 +75,7 @@ function Header() {
   }, [location.search]);
 
   const isActive = useCallback(
-    (path) => (pathname === path ? 'text-indigo-500 font-semibold' : ''),
+    (path) => (pathname === path ? 'text-indigo-700 text-md font-semibold' : ''),
     [pathname]
   );
 
@@ -154,7 +154,9 @@ function Header() {
             </>
           ) : (
             <Link to="/signin">
-              <button className="px-4 py-2 text-gray-800 hover:bg-gray-100 rounded-md">Sign In</button>
+              <button className={`px-4 py-2 text-gray-800 hover:bg-gray-700 hover:text-white rounded-md ${isActive('/signin')}`}>
+                Sign In
+              </button>
             </Link>
           )}
         </div>
@@ -165,11 +167,11 @@ function Header() {
       </div>
 
       {isMenuOpen && (
-        <div className="absolute right-4 top-16 bg-gray-200 bg-opacity-80 backdrop-blur-lg shadow-md rounded-lg py-2 px-2 flex flex-col space-y-1 lg:hidden">
-          <Link className={`hover:bg-gray-300 px-4 py-2 rounded-md ${isActive('/home')} text-gray-800`} to="/home" onClick={toggleMenuOptions}>
+        <div className="absolute right-4 top-16 bg-gray-200 bg-opacity-95 backdrop-blur-lg shadow-md rounded-lg py-2 px-2 flex flex-col space-y-1 lg:hidden">
+          <Link className={`hover:bg-gray-700 hover:text-white px-4 py-2 rounded-md ${isActive('/home')} text-gray-800`} to="/home" onClick={toggleMenuOptions}>
             Home
           </Link>
-          <Link className={`hover:bg-gray-300 px-4 py-2 rounded-md ${isActive('/about')} text-gray-800`} to="/about" onClick={toggleMenuOptions}>
+          <Link className={`hover:bg-gray-700 hover:text-white px-4 py-2 rounded-md ${isActive('/about')} text-gray-800`} to="/about" onClick={toggleMenuOptions}>
             About
           </Link>
         </div>

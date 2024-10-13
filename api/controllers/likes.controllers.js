@@ -51,7 +51,10 @@ export const getLikes = async (req, res) => {
         }
 
         const likes = await Like.find({ postId });
-        const hasLiked = likes.some(like => like.userId.toString() === req.user._id.toString());
+        let hasLiked;
+        if(req.user && req.user?._id) {
+            hasLiked = likes.some(like => like.userId.toString() === req.user?._id.toString());
+        }
 
         return res.status(200).json({
             message: 'Likes fetched successfully',

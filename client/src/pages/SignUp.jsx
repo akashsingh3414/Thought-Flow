@@ -51,7 +51,7 @@ function SignUp() {
 
   return (
     <div className='mt-10 m-auto p-5 w-full max-w-lg rounded-lg flex flex-col items-center justify-center shadow-lg text-black'>
-      <h2 className='text-2xl font-bold mb-4'>Create your account here!</h2>
+      <h2 className='bg-clip-text text-2xl font-bold text-transparent bg-gradient-to-r from-indigo-500 to-blue-900 mb-4'>Create your account here!</h2>
 
       <div className='flex items-center p-5 rounded-lg w-full shadow-md' style={{ backgroundColor: '#F5F7F8' }}>
         <form className='flex flex-col space-y-4 w-full' onSubmit={handleRegister}>

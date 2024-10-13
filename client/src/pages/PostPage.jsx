@@ -71,7 +71,6 @@ function PostPage() {
     const fetchComments = async (postId) => {
         try {
             const res = await axios.get(`/api/v1/post/comments/getComments?postId=${postId}`)
-            console.log(res)
             if(res.status===200)  {
                 setComments(res.data.comments);
             }
