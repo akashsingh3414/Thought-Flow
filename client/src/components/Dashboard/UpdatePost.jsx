@@ -3,7 +3,6 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
 function UpdatePost() {
     const { postSlug } = useParams();
@@ -17,8 +16,6 @@ function UpdatePost() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
-
-    const currentUser = useSelector((state) => state.user.currentUser);
 
     useEffect(() => {
         const fetchPost = async () => {

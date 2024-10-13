@@ -56,9 +56,9 @@ export default function Comment({ comment, postId, onDelete, postAuthorId }) {
                 )}
                 <p className="text-xs text-gray-400">{moment(comment.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</p>
             </div>
-            {(currentUser.user._id === comment.userId || 
-              currentUser.user._id === postAuthorId || 
-              currentUser.user.isAdmin) && (
+            {(currentUser && currentUser?.user?._id === comment.userId || 
+              currentUser && currentUser?.user?._id === postAuthorId || 
+              currentUser?.user?.isAdmin) && (
                 <div className="flex items-center justify-end gap-1">
                     <button 
                         onClick={handleEdit}

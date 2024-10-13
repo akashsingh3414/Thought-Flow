@@ -82,7 +82,7 @@ function Profile({ dashUserName }) {
 
   return (
     <div className="container mx-auto mt-10 px-4">
-      {user._id === currentUser.user._id && (
+      {user._id === currentUser?.user?._id && (
         <div className='flex w-full justify-end'>
           <Link to={'/dashboard?tab=updateProfile'} className='bg-gray-800 p-2 rounded text-white hover:bg-gray-600 font-semibold rounded-lg'>
             Update Profile
@@ -108,7 +108,7 @@ function Profile({ dashUserName }) {
       <div className="mt-8">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-semibold text-gray-800">Posts</h2>
-          {user._id === currentUser.user._id && (
+          {user._id === currentUser?.user?._id && (
             <Link to="/dashboard?tab=createPost" className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 rounded-lg font-semibold">
               Create Post
             </Link>

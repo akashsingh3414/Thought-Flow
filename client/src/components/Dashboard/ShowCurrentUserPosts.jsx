@@ -16,7 +16,7 @@ export default function ShowCurrentUserPosts() {
     const fetchPosts = async (startIndex = 0) => {
         setLoading(true);
         try {
-            const res = await axios.get(`/api/v1/post/getPosts?userId=${currentUser.user._id}&startIndex=${startIndex}&limit=10`);
+            const res = await axios.get(`/api/v1/post/getPosts?userId=${currentUser?.user._id}&startIndex=${startIndex}&limit=10`);
             if (res.status === 200) {
                 setUserPosts((prevPosts) => [...prevPosts, ...(res.data.posts || [])]);
                 if (res.data.posts.length < 10) {
@@ -31,10 +31,10 @@ export default function ShowCurrentUserPosts() {
     };
 
     useEffect(() => {
-        if (currentUser.user) {
+        if (currentUser?.user) {
             fetchPosts();
         }
-    }, [currentUser.user]);
+    }, [currentUser?.user]);
 
     const handleShowMore = () => {
         const startIndex = userPosts.length;
@@ -43,7 +43,7 @@ export default function ShowCurrentUserPosts() {
 
     const handleDeletePost = async (postId, postOwnerId) => {
         try {
-            const res = await axios.delete(`/api/v1/post/deletePost/${postId}/${postOwnerId}/${currentUser.user._id}`);
+            const res = await axios.delete(`/api/v1/post/deletePost/${postId}/${postOwnerId}/${currentUser?.user?._id}`);
             if (res.status === 200) {
                 setUserPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
             } else {
@@ -56,7 +56,7 @@ export default function ShowCurrentUserPosts() {
 
     return (
         <div className='overflow-x-auto p-4'>
-            {currentUser.user && userPosts.length > 0 ? (
+            {currentUser?.user && userPosts.length > 0 ? (
                 <>
                     <table className='min-w-full divide-y divide-gray-200'>
                         <thead>

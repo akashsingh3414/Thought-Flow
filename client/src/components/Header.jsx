@@ -109,7 +109,7 @@ function Header() {
     if (currentUser) {
       setProfileOptions(false);
     }
-  }, [currentUser]);
+  }, [currentUser, currentUser?.user]);
 
   return (
     <header className="flex justify-between items-center h-16 p-4 bg-gray-200 bg-opacity-80 backdrop-blur-lg shadow-md rounded-lg fixed top-0 left-0 right-0 z-20">
@@ -130,7 +130,7 @@ function Header() {
         </nav>
 
         <div className="relative">
-          {currentUser && currentUser.user ? (
+          {currentUser && currentUser?.user ? (
             <>
               <button
                 className="w-10 h-10 rounded-full overflow-hidden hover:bg-gray-200"
@@ -138,7 +138,7 @@ function Header() {
                 aria-label="Profile Options"
               >
                 <img
-                  src={currentUser.user.profilePhoto}
+                  src={currentUser?.user?.profilePhoto}
                   alt="Profile"
                   className="h-full w-full object-cover"
                   onError={(e) => {
@@ -149,7 +149,7 @@ function Header() {
               </button>
 
               {profileOptions && (
-                <ProfileOptions user={currentUser.user} toggleOptions={toggleProfileOptions} onLogout={handleLogout} />
+                <ProfileOptions user={currentUser?.user} toggleOptions={toggleProfileOptions} onLogout={handleLogout} />
               )}
             </>
           ) : (

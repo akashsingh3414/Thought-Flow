@@ -61,7 +61,7 @@ const AdminUpdateUser = () => {
           isAdmin: formData.admin
         }));
 
-        if (userDetails._id === currentUser.user._id) {
+        if (userDetails._id === currentUser?.user?._id) {
           dispatch(loginSuccess(res.data));
         }
 

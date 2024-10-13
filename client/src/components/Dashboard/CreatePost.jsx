@@ -14,7 +14,7 @@ function CreatePosts() {
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
-  const currentUser = useSelector((state) => state.user.currentUser);
+  const {currentUser} = useSelector((state) => state.user);
 
   const handlePost = async (e) => {
     e.preventDefault();
@@ -32,7 +32,7 @@ function CreatePosts() {
       formData.append('title', title);
       formData.append('content', content);
       formData.append('category', category);
-      formData.append('userId', currentUser.user._id);
+      formData.append('userId', currentUser?.user._id);
 
       Array.from(imageFiles).forEach((file) => {
         formData.append('files', file);

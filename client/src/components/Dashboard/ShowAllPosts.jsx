@@ -26,10 +26,10 @@ export default function ShowAllPosts() {
     };
 
     useEffect(() => {
-        if (currentUser.user) {
+        if (currentUser?.user) {
             fetchPosts();
         }
-    }, [currentUser.user]);
+    }, [currentUser?.user]);
 
     const handleShowMore = async () => {
         const startIndex = userPosts.length;
@@ -46,7 +46,7 @@ export default function ShowAllPosts() {
 
     const handleDeletePost = async (postId, postOwnerId) => {
         try {
-            const res = await axios.delete(`/api/v1/post/deletePost/${postId}/${postOwnerId}/${currentUser.user._id}`);
+            const res = await axios.delete(`/api/v1/post/deletePost/${postId}/${postOwnerId}/${currentUser?.user?._id}`);
             if (res.status === 200) {
                 setUserPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
             } else {
@@ -64,7 +64,7 @@ export default function ShowAllPosts() {
                     <ClipLoader color={"#3b82f6"} loading={loading} size={60} />
                     <p className="ml-4 text-lg text-gray-600">Loading posts...</p>
                 </div>
-            ) : currentUser.user.isAdmin && userPosts.length > 0 ? (
+            ) : currentUser?.user && currentUser?.user?.isAdmin && userPosts.length > 0 ? (
                 <>
                     <table className='min-w-full divide-y divide-gray-200'>
                         <thead>

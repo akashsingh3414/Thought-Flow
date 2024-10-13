@@ -39,20 +39,20 @@ function CommentSection({ postId }) {
 
     return (
         <div className="mx-auto p-5 bg-gray-50 rounded-lg shadow-md">
-            {currentUser ? (
+            {currentUser && currentUser?.user ? (
                 <div className="flex items-center mb-4 text-gray-700">
                     <img
-                        src={currentUser.user.profilePhoto}
+                        src={currentUser?.user?.profilePhoto}
                         alt="Profile"
                         className="h-8 w-8 rounded-full object-cover mr-2"
                     />
                     <span className="font-semibold">
                         Signed in as:
                         <Link 
-                            to={`/profile?userName=${currentUser.user.userName}`} 
+                            to={`/profile?userName=${currentUser?.user?.userName}`} 
                             className="text-blue-600 hover:text-blue-800 ml-1 hover:underline transition duration-200"
                         >
-                           @{currentUser.user.userName}
+                           @{currentUser?.user?.userName}
                         </Link>
                     </span>
                 </div>
@@ -68,7 +68,7 @@ function CommentSection({ postId }) {
                 </div>
             )}
 
-            {currentUser && (
+            {currentUser && currentUser?.user && (
                 <form onSubmit={handleSubmit} className="flex flex-col gap-3">
                     <textarea
                         placeholder="Leave your thoughts"
