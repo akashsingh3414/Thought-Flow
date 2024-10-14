@@ -151,6 +151,15 @@ function PostPage() {
         }
     };
 
+    const handleCategorySearch = (postCategory) => {
+        const urlParams = new URLSearchParams(location.search);
+        urlParams.set('searchTerm', '');
+        urlParams.set('sort', '');
+        urlParams.set('category', postCategory);
+        const searchQuery = urlParams.toString();
+        navigate(`/search?${searchQuery}`);
+    }
+
     return (
         <main className="p-5 flex flex-col items-center max-w-4xl mx-auto min-h-screen">
             <h1 className="text-4xl mt-10 text-center font-semibold font-serif w-full text-gray-800 lg:text-5xl leading-tight">
@@ -169,11 +178,9 @@ function PostPage() {
                 </p>
             )}
 
-            <Link to={`/api/v1/post/search?category=${post?.category}`}>
-                <button className="rounded-full bg-blue-500 text-white text-sm px-2 py-1 mt-4 hover:bg-blue-600 transition duration-200">
-                    {post?.category}
-                </button>
-            </Link>
+            <button className="rounded-full bg-blue-500 text-white text-sm px-2 py-1 mt-4 hover:bg-blue-600 transition duration-200" onClick={()=>{handleCategorySearch(post?.category)}}>
+                {post?.category}
+            </button>
 
             {post?.images?.length > 0 && (
                 <div className="w-full max-w-2xl mt-6">

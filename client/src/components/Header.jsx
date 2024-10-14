@@ -121,10 +121,10 @@ function Header() {
         <SearchInput searchTerm={searchTerm} setSearchTerm={setSearchTerm} handleSearch={handleSearch} />
 
         <nav className="hidden lg:flex space-x-6">
-          <Link className={`hover:bg-gray-300 px-4 py-2 rounded-md ${isActive('/home')} text-gray-800`} to="/home">
+          <Link className={`hover:bg-gray-700 hover:text-white px-4 py-2 rounded-md ${isActive('/home')} text-gray-800`} to="/home">
             Home
           </Link>
-          <Link className={`hover:bg-gray-300 px-4 py-2 rounded-md ${isActive('/about')} text-gray-800`} to="/about">
+          <Link className={`hover:bg-gray-700 hover:text-white px-4 py-2 rounded-md ${isActive('/about')} text-gray-800`} to="/about">
             About
           </Link>
         </nav>
