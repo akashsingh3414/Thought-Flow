@@ -63,6 +63,7 @@ function SignUp() {
               type='text'
               id='userName'
               ref={userName}
+              placeholder='johnsmith'
               required
               className='p-3 rounded-lg border border-gray-300 w-full'
             />
@@ -76,6 +77,7 @@ function SignUp() {
               type='text'
               id='fullName'
               ref={fullName}
+              placeholder='John Smith'
               required
               className='p-3 rounded-lg border border-gray-300 w-full'
             />
@@ -89,6 +91,7 @@ function SignUp() {
               type='email'
               id='emailID'
               ref={emailID}
+              placeholder='johnsmith@xyz.com'
               required
               className='p-3 rounded-lg border border-gray-300 w-full'
             />
@@ -102,6 +105,7 @@ function SignUp() {
               type='password'
               id='password'
               ref={password}
+              placeholder='at least 8 characters'
               required
               className='p-3 rounded-lg border border-gray-300 w-full'
             />

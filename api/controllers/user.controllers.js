@@ -65,6 +65,14 @@ export const getUsers = async (req, res) => {
 export const register = async (req, res) => {
     const { userName, fullName, emailID, password } = req.body;
 
+    if (userName.search(' ') >= 0) {
+        return res.status(400).json({ message: 'Username cannot contain spaces' });
+    }
+    
+    if (password.length < 8) {
+        return res.status(400).json({ message: 'Password must be at least 8 characters' });
+    }
+
     if (!userName || !fullName || !emailID || !password || [userName, fullName, emailID, password].some(field => String(field).trim() === "")) {
         return res.status(400).json({ message: "All fields are required" });
     }
@@ -95,7 +103,7 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
     const { userName, emailID, password } = req.body;
-
+    
     if (!userName || !emailID || !password) {
         return res.status(400).json({ message: "Please fill all fields" });
     }
