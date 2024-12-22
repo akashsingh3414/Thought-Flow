@@ -6,7 +6,6 @@ export const updateLike = async (req, res) => {
     const { postId } = req.body;
 
     try {
-        console.log('User ID:', req.user._id);
         const user = await User.findById(req.user._id);
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
@@ -23,12 +22,10 @@ export const updateLike = async (req, res) => {
         });
 
         if (existingLike) {
-            console.log('Existing like found, removing...');
             await Like.deleteOne({ userId: req.user._id, postId });
             return res.status(200).json({ message: 'Like removed successfully' });
         }
 
-        console.log('No existing like found, adding...');
         await Like.create({
             postId,
             userId: req.user._id
@@ -36,7 +33,6 @@ export const updateLike = async (req, res) => {
         return res.status(200).json({ message: 'Like added successfully' });
 
     } catch (error) {
-        console.error('Error updating like:', error);
         return res.status(500).json({ message: 'Some error occurred while adding likes' });
     }
 };
@@ -63,7 +59,6 @@ export const getLikes = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Error fetching likes:', error);
         return res.status(500).json({ message: 'Some error occurred while fetching likes' });
     }
 };

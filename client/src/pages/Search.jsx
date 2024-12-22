@@ -87,7 +87,7 @@ export default function Search() {
 
   return (
     <div className="flex flex-col md:flex-row">
-      <div className="p-7 border-b md:border-r md:min-h-screen border-gray-500 bg-gray-100">
+      <div className="p-7 shadow md:min-h-screen bg-gray-100">
         <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
           <div className="flex items-center gap-2">
             <label className="whitespace-nowrap font-semibold">Search Term:</label>
@@ -96,7 +96,7 @@ export default function Search() {
               id="searchTerm"
               value={sidebarData.searchTerm}
               onChange={handleChange}
-              className="border border-gray-300 rounded px-3 py-2 w-full"
+              className="rounded px-3 py-2 w-full"
               placeholder="Search..."
             />
           </div>
@@ -107,7 +107,7 @@ export default function Search() {
               id="sort"
               value={sidebarData.sort}
               onChange={handleChange}
-              className="border border-gray-300 rounded px-3 py-2 w-full"
+              className="rounded px-3 py-2 w-full"
             >
               <option value="desc">Latest</option>
               <option value="asc">Oldest</option>
@@ -120,7 +120,7 @@ export default function Search() {
               id="category"
               value={sidebarData.category}
               onChange={handleChange}
-              className="border border-gray-300 rounded px-3 py-2 w-full"
+              className="rounded px-3 py-2 w-full"
             >
               <option value="none">None</option>
               <option value="uncategorized">Uncategorized</option>
@@ -141,7 +141,7 @@ export default function Search() {
       </div>
 
       <div className="w-full">
-        <h1 className="text-3xl font-semibold border-b border-gray-500 p-3 mt-5">
+        <h1 className="text-3xl font-semibold p-3 mt-5">
           Post Results:
         </h1>
         <div className="p-5 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">

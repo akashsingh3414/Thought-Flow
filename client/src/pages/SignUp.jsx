@@ -36,7 +36,6 @@ function SignUp() {
         headers: { 'Content-Type': 'application/json' },
       })
       .then((response) => {
-        console.log(response)
         setSuccessMessage('Registration successful! Please log in with your credentials.');
         setErrorMessage('');
         dispatch(loginSuccess(response.data.user));

@@ -10,7 +10,6 @@ import Dashboard from './pages/Dashboard';
 import PrivateRoute from './components/PrivateRoute';
 import PostPage from './pages/PostPage';
 import Profile from './pages/Profile';
-import ScrollToTop from './components/ScrollToTop';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsAndConditions from './pages/TermsAndConditions';
 import Search from './pages/Search';
@@ -40,7 +39,6 @@ function App() {
             <Route path='/search' element={<Search />} />
           </Routes>
         </main>
-        <ScrollToTop/>
         <Footer />
       </div>
     </BrowserRouter>

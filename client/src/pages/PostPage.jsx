@@ -75,7 +75,6 @@ function PostPage() {
                 setComments(res.data.comments);
             }
         } catch (error) {
-            console.log('internal error occured while fetching comments')
         }
     }
 

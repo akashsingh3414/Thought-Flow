@@ -88,7 +88,6 @@ export const getPosts = async (req, res, next) => {
       totalPosts,
     });
   } catch (error) {
-    console.error('Error fetching posts:', error);
     next(error);
   }
 };

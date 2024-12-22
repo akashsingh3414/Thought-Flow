@@ -49,8 +49,6 @@ export default function ShowAllPosts() {
             const res = await axios.delete(`/api/v1/post/deletePost/${postId}/${postOwnerId}/${currentUser?.user?._id}`);
             if (res.status === 200) {
                 setUserPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
-            } else {
-                console.log(res.data.message);
             }
         } catch (error) {
             console.error("Error deleting post:", error.response ? error.response.data : error.message);

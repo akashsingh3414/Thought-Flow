@@ -17,14 +17,6 @@ function ConnectionCard() {
           Connect on LinkedIn
         </a>
       </div>
-
-      <div className="flex-shrink-0 p-4 md:p-6">
-        <img 
-          src="https://media.licdn.com/dms/image/v2/D5603AQGLS_BLsZOv-w/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1724617544361?e=1733961600&v=beta&t=sF2-AY08zwu1cfW7uETjjTgprfftnW9NLRvTtdDKthQ" 
-          alt="Profile" 
-          className="w-36 h-36 rounded-full border-4 border-blue-500 object-cover hover:scale-105 transition transform duration-300"
-        />
-      </div>
     </div>
   );
 }
