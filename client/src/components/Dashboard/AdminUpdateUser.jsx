@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
-import { loginSuccess } from '../../redux/user/userSlice';
+import { loginSuccess, logoutStart } from '../../redux/user/userSlice';
 
 const AdminUpdateUser = () => {
   const location = useLocation();
@@ -24,9 +24,9 @@ const AdminUpdateUser = () => {
     setLoading(true);
     setMessages({ error: null, success: null });
     try {
-      const response = await axios.get(`/api/v1/user/getUser?userId=${userId}`);
-      if (response.status === 200) {
-        const user = response.data.user;
+      const res = await axios.get(`/api/v1/user/getUser?userId=${userId}`);
+      if (res.status === 200) {
+        const user = res.data?.user;
         setUserDetails(user);
         setFormData({
           userName: user.userName,
@@ -34,6 +34,9 @@ const AdminUpdateUser = () => {
           emailID: user.emailID,
           admin: user.isAdmin
         });
+      }
+      if(res.status === 401 ) {
+        dispatch(logoutStart())
       }
     } catch (error) {
       setMessages({ error: error.response?.data?.message || 'Error fetching user', success: null });
@@ -67,6 +70,9 @@ const AdminUpdateUser = () => {
 
         setMessages({ success: res.data.message, error: null });
         setIsEditing(false);
+      }
+      if(res.status === 401 ) {
+        dispatch(logoutStart())
       }
     } catch (error) {
       setMessages({ error: error.response?.data?.message || 'Error updating details', success: null });

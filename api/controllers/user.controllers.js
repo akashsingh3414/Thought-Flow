@@ -131,7 +131,6 @@ export const login = async (req, res) => {
     const options = {
         httpOnly: true,
         secure: true,
-        maxAge: 24 * 60 * 60 * 1000 //1d
     };
 
     res.cookie('accessToken', accessToken, options);
@@ -150,7 +149,6 @@ export const google = async (req, res) => {
         const options = {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            maxAge: 24 * 60 * 60 * 1000 //1d
         };
 
         let accessToken, refreshToken;
@@ -196,7 +194,6 @@ export const logout = async (req, res) => {
     const options = {
         httpOnly: true,
         secure: true,
-        maxAge: 24 * 60 * 60 * 1000 //1d
     };
 
     res.clearCookie('accessToken', options);

@@ -10,7 +10,7 @@ userRouter.route('/test').get((req, res) => {
 });
 
 userRouter.route('/register').post(register);
-userRouter.route('/login').post(login);
+userRouter.route('/signin').post(login);
 userRouter.route('/logout').post(verifyjwt, logout);
 userRouter.route('/getUser').get(getUser);
 userRouter.route('/getUsers').get(verifyjwt, getUsers); 

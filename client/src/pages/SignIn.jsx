@@ -29,7 +29,7 @@ function SignIn() {
     dispatch(loginStart());
 
     axios
-      .post('/api/v1/user/login', formData, {
+      .post('/api/v1/user/signin', formData, {
         headers: { 'Content-Type': 'application/json' },
       })
       .then((res) => {
@@ -46,7 +46,7 @@ function SignIn() {
   return (
     <div className='mt-10 m-auto p-5 w-full max-w-lg rounded-lg flex flex-col items-center justify-center shadow-lg text-black'>
       <span className='bg-clip-text text-2xl font-bold text-transparent bg-gradient-to-r from-indigo-500 to-blue-900 mb-4'>
-        Welcome back, Login
+        Welcome back, Signin
       </span>
 
       <div className='flex items-center p-5 rounded-lg w-full shadow-md' style={{ backgroundColor: '#F5F7F8' }}>
@@ -100,7 +100,7 @@ function SignIn() {
               loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700'
             }`}
           >
-            {loading ? 'Loading...' : 'Login'}
+            {loading ? 'Loading...' : 'Signin'}
           </button>
 
           <OAuth />

@@ -65,6 +65,10 @@ function UpdatePost() {
             const res = await axios.patch(`/api/v1/post/updatePost`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
+            
+            if(res.status === 401 ) {
+                dispatch(logoutStart())
+            }
     
             setSuccessMessage(res.data.message);
         } catch (error) {

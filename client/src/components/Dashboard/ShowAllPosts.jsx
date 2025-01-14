@@ -18,6 +18,9 @@ export default function ShowAllPosts() {
                 setUserPosts(res.data.posts || []);
                 setShowMore(res.data.posts.length >= 10);
             }
+            if(res.status === 401 ) {
+                dispatch(logoutStart())
+            }
         } catch (error) {
             console.error("Error fetching posts:", error.response ? error.response.data : error.message);
         } finally {
@@ -39,6 +42,9 @@ export default function ShowAllPosts() {
                 setUserPosts((prevPosts) => [...prevPosts, ...res.data.posts]);
                 setShowMore(res.data.posts.length >= 10);
             }
+            if(res.status === 401 ) {
+                dispatch(logoutStart())
+            }
         } catch (error) {
             console.error("Error fetching more posts:", error.response ? error.response.data : error.message);
         }
@@ -49,6 +55,9 @@ export default function ShowAllPosts() {
             const res = await axios.delete(`/api/v1/post/deletePost/${postId}/${postOwnerId}/${currentUser?.user?._id}`);
             if (res.status === 200) {
                 setUserPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
+            }
+            if(res.status === 401 ) {
+                dispatch(logoutStart())
             }
         } catch (error) {
             console.error("Error deleting post:", error.response ? error.response.data : error.message);

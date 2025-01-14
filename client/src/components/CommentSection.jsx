@@ -26,6 +26,9 @@ function CommentSection({ postId }) {
                 postId,
                 comment
             });
+            if(res.status === 401 ) {
+                dispatch(logoutStart())
+            }
 
             setComment('');
             setCharCount(200);

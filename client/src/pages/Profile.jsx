@@ -22,7 +22,11 @@ function Profile({ dashUserName }) {
       if (response.status === 200 && response.data.user) {
         const userData = response.data.user;
         setUser(userData);
-      } else {
+      } 
+      else if(response.status === 401 ) {
+        dispatch(logoutStart())
+      }
+      else {
         setError('User not found.');
       }
     } catch (error) {
@@ -39,7 +43,11 @@ function Profile({ dashUserName }) {
       const res = await axios.get(`/api/v1/post/getPosts?userId=${userId}`);
       if (res.status === 200) {
         setPosts(res.data.posts);
-      } else {
+      } 
+      else if(res.status === 401 ) {
+        dispatch(logoutStart())
+      }
+      else {
         setError('Failed to load posts.');
       }
     } catch (error) {
@@ -57,7 +65,7 @@ function Profile({ dashUserName }) {
     if (userName) {
       fetchUser(userName);
     } else {
-      navigate('/home'); // Navigate to home if userName is invalid
+      navigate('/');
     }
   }, [location.search, dashUserName, navigate]);
 

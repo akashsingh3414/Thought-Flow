@@ -30,7 +30,11 @@ function PostPage() {
                 if(fetchedPost) { setPost(fetchedPost) }
                 setLikes(fetchedPost.likes.length);
                 setError(null);
-            } else {
+            } 
+            else if(res.status === 401 ) {
+                dispatch(logoutStart())
+            }
+            else {
                 setError(res.data?.message);
             }
         } catch (error) {
@@ -46,6 +50,9 @@ function PostPage() {
                 setLikes(likeCount);
                 setHasLiked(hasLiked);
                 setError(null);
+            } 
+            else if (res.status === 401 ) {
+                dispatch(logoutStart())
             } else {
                 setError(res.data?.message);
             }
@@ -60,6 +67,8 @@ function PostPage() {
             if (res.status === 200) {
                 setRecentPosts(res.data.posts);
                 setError(null);
+            } else if (res.status === 401 ) {
+                dispatch(logoutStart())
             } else {
                 setError(res.data?.message);
             }
@@ -71,8 +80,11 @@ function PostPage() {
     const fetchComments = async (postId) => {
         try {
             const res = await axios.get(`/api/v1/post/comments/getComments?postId=${postId}`)
-            if(res.status===200)  {
+            if(res.status === 200)  {
                 setComments(res.data.comments);
+            }
+            if(res.status === 401 ) {
+                dispatch(logoutStart())
             }
         } catch (error) {
         }
@@ -119,7 +131,11 @@ function PostPage() {
             if (response.status === 200 && response.data?.user) {
                 const userData = response.data.user;
                 userName = userData?.userName;
-            } else {
+            } 
+            else if (res.status === 401 ) {
+                dispatch(logoutStart())
+            }
+            else {
                 setError('User not found.');
             }
         } catch (error) {
@@ -144,6 +160,9 @@ function PostPage() {
                     setHasLiked(false);
                     setLikes((prevLikes) => Math.max(prevLikes - 1, 0));
                 }
+            }
+            if(res.status === 401 ) {
+                dispatch(logoutStart())
             }
         } catch (error) {
             console.error('Error while updating the like:', error);

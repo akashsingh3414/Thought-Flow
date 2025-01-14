@@ -21,6 +21,9 @@ export default function ShowAllUsers() {
                 setUsers((prevUsers) => [...prevUsers, ...res.data.users]);
                 setShowMore(res.data.users.length === 10);
             }
+            if(res.status === 401 ) {
+                dispatch(logoutStart())
+            }
         } catch (error) {
             setError(error.response ? error.response.data.message : error.message);
         } finally {
@@ -32,7 +35,7 @@ export default function ShowAllUsers() {
         if (currentUser?.user) {
             fetchUsers();
         } else {
-            navigate('/home');
+            navigate('/');
         }
     }, [currentUser, navigate]);
 
@@ -47,6 +50,9 @@ export default function ShowAllUsers() {
                 const res = await axios.delete(`/api/v1/user/delete?userId=${userId}`);
                 if (res.status === 200) {
                     setUsers((prevUsers) => prevUsers.filter((user) => user._id !== userId));
+                }
+                if(res.status === 401 ) {
+                    dispatch(logoutStart())
                 }
             } catch (error) {
                 setError(error.response ? error.response.data.message : error.message);

@@ -9,6 +9,9 @@ export default function Home() {
   useEffect(() => {
     const fetchPosts = async () => {
       const res = await fetch('/api/v1/post/getPosts');
+      if(res.status === 401 ) {
+        dispatch(logoutStart())
+      }
       const data = await res.json();
       setPosts(data.posts);
     };
@@ -19,7 +22,7 @@ export default function Home() {
     <div className='min-h-screen bg-gray-50 '>
       <div className='flex flex-col gap-4 p-6 lg:p-16 px-4 max-w-6xl mx-auto'>
         <h1 className='text-4xl lg:text-5xl font-bold text-gray-700 text-center'>
-          Welcome:) to <span className='text-indigo-700'>Thought Flow</span>
+          Welcome to <span className='text-indigo-700'>Thought Flow</span>
         </h1>
         <p className='text-gray-600 text-md sm:text-lg text-center'>
           Let your thoughts flow. Express them freely!

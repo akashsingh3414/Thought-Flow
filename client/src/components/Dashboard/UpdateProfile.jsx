@@ -70,6 +70,9 @@ function UpdateProfile() {
       const res = await axios.patch('/api/v1/user/updateProfilePhoto', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
+      if(res.status === 401 ) {
+        dispatch(logoutStart())
+      }
       setImageLoading(false);
       dispatch(loginSuccess(res.data));
       setSuccessMessage(res.data.message);
