@@ -25,7 +25,7 @@ const ProfileOptions = ({ user, toggleOptions, onLogout }) => (
 
       <Link
         to="/dashboard"
-        className="block px-4 py-2 rounded-lg text-sm text-gray-800 hover:bg-gray-100"
+        className="block px-4 py-2 rounded-lg text-sm text-gray-800 hover:bg-gray-200"
         onClick={toggleOptions}
       >
         Dashboard
@@ -33,7 +33,7 @@ const ProfileOptions = ({ user, toggleOptions, onLogout }) => (
 
       <button
         onClick={onLogout}
-        className="w-full px-4 py-2 text-sm rounded-lg text-red-600 hover:bg-red-500 hover:text-white"
+        className="w-full px-4 py-2 text-sm rounded-lg text-red-600 hover:bg-red-400 hover:text-white"
       >
         Logout
       </button>
@@ -48,7 +48,7 @@ const SearchInput = ({ searchTerm, setSearchTerm, handleSearch }) => (
       placeholder="Search..."
       value={searchTerm}
       onChange={(e) => setSearchTerm(e.target.value)}
-      className="pl-10 pr-4 py-2 w-full border border-gray-300 bg-gray-100 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 backdrop-blur-lg bg-opacity-60"
+      className="pl-10 pr-4 py-2 w-full border border-gray-300 bg-gray-100 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 backdrop-blur-lg bg-opacity-60"
       style={{ backdropFilter: 'blur(10px)' }}
     />
     <AiOutlineSearch className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-500" />
@@ -89,10 +89,11 @@ function Header() {
 
   const handleLogout = async () => {
     try {
-      await axios.post('/api/v1/user/logout');
+      const res = await axios.post('/api/v1/user/logout');
       dispatch(logoutStart());
       navigate('/home');
     } catch (error) {
+      dispatch(logoutStart());
       console.error(error.message);
     }
   };
@@ -102,7 +103,7 @@ function Header() {
     const urlParams = new URLSearchParams(location.search);
     urlParams.set('searchTerm', searchTerm);
     const searchQuery = urlParams.toString();
-    navigate(`/search?${searchQuery}`);
+    navigate(`/posts?${searchQuery}`);
   };
 
   useEffect(() => {
@@ -168,7 +169,7 @@ function Header() {
 
       {isMenuOpen && (
         <div className="absolute right-4 top-16 bg-gray-200 bg-opacity-95 backdrop-blur-lg shadow-md rounded-lg py-2 px-2 flex flex-col space-y-1 lg:hidden">
-          <Link className={`hover:bg-gray-700 hover:text-white px-4 py-2 rounded-md ${isActive('/home')} text-gray-800`} to="/home" onClick={toggleMenuOptions}>
+          <Link className={`hover:bg-gray-700 hover:text-white px-4 py-2 rounded-md ${isActive('/')} text-gray-800`} to="/" onClick={toggleMenuOptions}>
             Home
           </Link>
           <Link className={`hover:bg-gray-700 hover:text-white px-4 py-2 rounded-md ${isActive('/about')} text-gray-800`} to="/about" onClick={toggleMenuOptions}>

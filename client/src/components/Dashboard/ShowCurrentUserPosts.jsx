@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
@@ -12,6 +12,7 @@ export default function ShowCurrentUserPosts() {
     const [userPosts, setUserPosts] = useState([]);
     const [showMore, setShowMore] = useState(true);
     const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch()
 
     const fetchPosts = async (startIndex = 0) => {
         setLoading(true);

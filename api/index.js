@@ -29,9 +29,8 @@ app.use('/api/v1/post', postRouter);
 app.use('/api/v1/post/likes', likesRouter);
 app.use('/api/v1/post/comments', commentRouter);
 
-// Fallback to client-side index.html for all non-API routes (SPA support)
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+  res.sendFile(path.join(__dirname, 'client', 'index.html'));
 });
 
 connectToMongoDB()

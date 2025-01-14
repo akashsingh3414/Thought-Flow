@@ -2,24 +2,29 @@ import React, { useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { logoutStart } from '../../redux/user/userSlice';
 
 function CreatePosts() {
-  const selectionOptions = ['Uncategorized', 'Programming Languages', 'Python', 'Web', 'App'];
+  const selectionOptions = ['Uncategorized, Social Media', 'Machine Learning', 'Data Science', 'AI', 'Sports', 'Politics'];
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [category, setCategory] = useState('Uncategorized');
+  const [customCategory, setCustomCategory] = useState('');
   const [imageFiles, setImageFiles] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const dispatch = useDispatch();
 
-  const {currentUser} = useSelector((state) => state.user);
+  const { currentUser } = useSelector((state) => state.user);
 
   const handlePost = async (e) => {
     e.preventDefault();
-    if (!title || !content || !category) {
-      setErrorMessage('Title & Content are required');
+    const finalCategory = category === 'Other' ? customCategory.trim().toLowerCase() : category.toLowerCase();
+
+    if (!title || !content || !finalCategory) {
+      setErrorMessage('Title, Content, and Category are required');
       return;
     }
 
@@ -31,7 +36,7 @@ function CreatePosts() {
       const formData = new FormData();
       formData.append('title', title);
       formData.append('content', content);
-      formData.append('category', category);
+      formData.append('category', finalCategory);
       formData.append('userId', currentUser?.user._id);
 
       Array.from(imageFiles).forEach((file) => {
@@ -41,6 +46,9 @@ function CreatePosts() {
       const res = await axios.post('/api/v1/post/createPost', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
+      if(res.status === 401)  {
+        dispatch(logoutStart())
+      }
       setSuccessMessage(res.data.message);
     } catch (error) {
       setErrorMessage(error.response?.data?.message || 'An error occurred');
@@ -84,6 +92,20 @@ function CreatePosts() {
             </select>
           </div>
         </div>
+
+        {category === 'Other' && (
+          <div className="flex flex-col">
+            <label htmlFor="custom-category" className="mb-2 text-sm font-semibold text-gray-700">Specify Category</label>
+            <input
+              id="custom-category"
+              type="text"
+              placeholder="Enter custom category here..."
+              className="p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              value={customCategory}
+              onChange={(e) => setCustomCategory(e.target.value)}
+            />
+          </div>
+        )}
 
         <div className="flex flex-col">
           <label htmlFor="files" className="mb-2 text-sm font-semibold text-gray-700">Upload Files</label>

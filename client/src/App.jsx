@@ -12,7 +12,7 @@ import PostPage from './pages/PostPage';
 import Profile from './pages/Profile';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsAndConditions from './pages/TermsAndConditions';
-import Search from './pages/Search';
+import Posts from './pages/Posts';
 
 function App() {
 
@@ -36,7 +36,7 @@ function App() {
             <Route path='/profile' element={<Profile />} />
             <Route path='/privacyPolicy' element={<PrivacyPolicy />} />
             <Route path='/termsAndconditions' element={<TermsAndConditions />} />
-            <Route path='/search' element={<Search />} />
+            <Route path='/posts' element={<Posts />} />
           </Routes>
         </main>
         <Footer />

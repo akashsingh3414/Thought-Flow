@@ -5,7 +5,7 @@ import { ClipLoader } from 'react-spinners';
 import ConnectionCard from '../components/ConnectionCard';
 import PostCard from '../components/PostCard';
 import CommentSection from '../components/CommentSection';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Comment from '../components/Comment';
 
 function PostPage() {
@@ -20,6 +20,7 @@ function PostPage() {
     const [comments, setComments] = useState([]);
     const [visiblePostCount, setVisiblePostCount] = useState(3);
 
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const fetchPost = async (postSlug) => {

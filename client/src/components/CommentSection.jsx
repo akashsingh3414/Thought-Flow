@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 function CommentSection({ postId }) {
@@ -8,6 +8,7 @@ function CommentSection({ postId }) {
     const [comment, setComment] = useState('');
     const [charCount, setCharCount] = useState(200);
     const [error, setError] = useState(null);
+    const dispatch = useDispatch();
 
     const handleChange = (e) => {
         setComment(e.target.value);
@@ -43,10 +44,10 @@ function CommentSection({ postId }) {
     return (
         <div className="mx-auto p-5 bg-gray-50 rounded-lg shadow-md">
             {currentUser && currentUser?.user ? (
-                <div className="flex items-center mb-4 text-gray-700">
+                <div className="flex items-center mb-4 text-gray-700 gap-2">
                     <img
                         src={currentUser?.user?.profilePhoto}
-                        alt="Profile"
+                        alt="profile"
                         className="h-8 w-8 rounded-full object-cover mr-2"
                     />
                     <span className="font-semibold">

@@ -37,7 +37,7 @@ const Sidebar = () => {
               currentTab === 'myPosts' ? 'bg-blue-600 text-white' : 'hover:bg-gray-700 hover:text-white'
             }`}
           >
-            My Blogs
+            My Posts
           </Link>
         </li>
         {currentUser?.user?.isAdmin && (
