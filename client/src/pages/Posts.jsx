@@ -170,7 +170,7 @@ export default function Posts() {
                     <Link key={post._id} to={`/post/${post.slug}`} className="group">
                         <div className="bg-gray-50 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
                           <img
-                            src={post.image || '/placeholder.svg?height=200&width=300'}
+                            src={post.images[0] || '/placeholder.svg?height=200&width=300'}
                             alt={post.title}
                             className="w-full h-48 object-cover"
                           />
