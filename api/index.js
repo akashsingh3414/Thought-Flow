@@ -15,13 +15,11 @@ const __dirname = path.resolve();
 
 const app = express();
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(cookieParser());
 
-// Serve static files (Client build)
 app.use(express.static(path.join(__dirname, 'client', 'dist')));
 
 app.use('/api/v1/user', userRouter);
@@ -30,7 +28,7 @@ app.use('/api/v1/post/likes', likesRouter);
 app.use('/api/v1/post/comments', commentRouter);
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client', 'index.html'));
+  res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
 });
 
 connectToMongoDB()
