@@ -38,6 +38,10 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    oAuth: {
+        type: Boolean,
+        default: false
+    },
     refreshToken: {
         type: String,
     }

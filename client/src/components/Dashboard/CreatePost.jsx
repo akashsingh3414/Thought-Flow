@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logoutStart } from '../../redux/user/userSlice';
 
 function CreatePosts() {
-  const selectionOptions = ['Uncategorized, Social Media', 'Machine Learning', 'Data Science', 'AI', 'Sports', 'Politics'];
+  const selectionOptions = ['Uncategorized', 'Social Media', 'Machine Learning', 'Data Science', 'AI', 'Sports', 'Politics'];
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [category, setCategory] = useState('Uncategorized');

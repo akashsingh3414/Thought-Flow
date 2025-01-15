@@ -12,7 +12,7 @@ function Footer() {
   return (
     <footer className="flex flex-col md:flex-row items-center justify-between p-4 bg-gray-100 text-gray-800 gap-4 mt-auto">
       <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4 font-semibold">
-        <Link to="/home" className={`hover:text-blue-500 ${isActive('/home')}`}>
+        <Link to="/" className={`hover:text-blue-500 ${isActive('/')}`}>
           Home
         </Link>
         <Link to="/about" className={`hover:text-blue-500 ${isActive('/about')}`}>

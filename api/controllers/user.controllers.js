@@ -1,5 +1,6 @@
 import { User } from '../models/user.models.js';
 import { Post } from '../models/posts.models.js';
+import { Comment } from '../models/comments.models.js'
 import { Like } from '../models/likes.models.js';
 import { generateAccessANDrefreshToken } from '../controllers/generate.controllers.js';
 import bcrypt from 'bcrypt';
@@ -154,7 +155,6 @@ export const google = async (req, res) => {
         let accessToken, refreshToken;
 
         if (user) {
-            // User exists
             ({ accessToken, refreshToken } = await generateAccessANDrefreshToken(user._id));
             return res
                 .cookie('accessToken', accessToken, options)
@@ -162,15 +162,15 @@ export const google = async (req, res) => {
                 .status(200)
                 .json({ message: 'Logged in using Google', user });
         } else {
-            // Create new user
-            const generatedPassword = Math.random().toString(36).slice(-16); // Example for generating a password
+            const generatedPassword = Math.random().toString(36).slice(-16);
             const hashedPassword = bcrypt.hashSync(generatedPassword, 8);
             const newUser = await User.create({
                 userName: userName.split(" ").join("").toLowerCase(),
                 emailID,
                 password: hashedPassword,
                 profilePhoto: googlePhotoUrl,
-                fullName: userName
+                fullName: userName,
+                oAuth: true,
             });
             ({ accessToken, refreshToken } = await generateAccessANDrefreshToken(newUser._id));
             return res
@@ -261,7 +261,7 @@ export const updateUser = async (req, res) => {
             isAdmin: req.body.admin,
         };
 
-        if (!loggedInUser.isAdmin) {
+        if (!loggedInUser.isAdmin && loggedInUser.oAuth === false) {
             const password = req.body.oldPassword;
             if (!password) {
                 return res.status(400).json({ message: "Old Password is required" });
@@ -304,12 +304,16 @@ export const deleteUser = async (req, res) => {
         }
 
         await User.findByIdAndDelete(userId);
+
         await Post.deleteMany({ userId });
+
         await Comment.deleteMany({ userId });
+
         await Like.deleteMany({ userId });
 
         return res.status(200).json({ message: "User deleted successfully" });
     } catch (error) {
+        console.error("Error during deletion:", error);
         return res.status(500).json({ message: "Internal server error" });
     }
 };

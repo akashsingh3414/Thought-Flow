@@ -49,7 +49,6 @@ function PostPage() {
             if (res.status === 200) {
                 const { likeCount, hasLiked } = res.data;
                 setLikes(likeCount);
-                setHasLiked(hasLiked);
                 setError(null);
             } 
             else if (res.status === 401 ) {
@@ -101,12 +100,8 @@ function PostPage() {
                 await fetchRecentPosts();
                 if (postSlug) {
                     await fetchPost(postSlug);
-                    if (post && post._id) {
-                        await fetchLikes(post._id);
-                        await fetchComments(post._id);
-                    }
                 } else {
-                    navigate('/home');
+                    navigate('/');
                 }
             } catch (error) {
             } finally {
@@ -115,6 +110,18 @@ function PostPage() {
         };    
         loadData();
     }, [postSlug, navigate, post?._id]);  
+
+    useEffect(() => {
+        if (post && post._id) {
+            fetchLikes(post._id);
+        }
+    }, [post]);
+    
+    useEffect(() => {
+        if (post && post._id) {
+            fetchComments(post._id);
+        }
+    }, [post]);
 
     if (loading) {
         return (
@@ -144,10 +151,23 @@ function PostPage() {
         }
         navigate(`/profile?userName=${userName}`);
     };
+
+    const handleNewComment = (newComment) => {
+        setComments((prevComments) => [...prevComments, newComment]);
+    };
     
     const handleDeleteComment = (commentId) => {
         setComments(prevComments => prevComments.filter(comment => comment._id !== commentId));
     };
+
+    const handleEditComment = (commentId, updatedComment) => {
+        setComments(prevComments => 
+            prevComments.map(comment =>
+                comment._id === commentId ? updatedComment : comment
+            )
+        );
+    };
+    
 
     const handleUpvote = async (postId) => {
         try {
@@ -263,6 +283,7 @@ function PostPage() {
                                             postId={post._id}
                                             postAuthorId={post.userId} 
                                             onDelete={handleDeleteComment}
+                                            onEdit={handleEditComment}
                                         />
                                     </li>
                                 ))}
@@ -271,9 +292,10 @@ function PostPage() {
                             <p className="text-gray-600 text-lg italic">No comments yet. Be the first to comment!</p>
                         )}
                     </div>
-                    <CommentSection postId={post._id} />
+                    <CommentSection postId={post._id} onNewComment={handleNewComment} />
                 </div>
             )}
+
             <div className='border-none gap-2 p-2 m-2 w-full h-full'>
                 <h1 className='text-2xl font-bold text-left'>Recent Posts</h1>
                 <div className='flex flex-row flex-wrap w-full'>

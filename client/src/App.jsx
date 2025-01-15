@@ -23,7 +23,6 @@ function App() {
         <main className="flex-grow mt-16">
           <Routes>
             <Route path='/' element={<Home />} />
-            <Route path='/home' element={<Home />} />
             <Route path='/about' element={<About />} />
             <Route path='/signin' element={<SignIn />} />
             <Route path='/signup' element={<SignUp />} />

@@ -47,12 +47,14 @@ function UpdateProfile() {
 
   const handleLogout = async () => {
     try {
-      await axios.post('/api/v1/user/logout');
-      setLocalErrorMessage(null);
-      dispatch(logoutStart());
-      navigate('/home');
+      const res = await axios.post('/api/v1/user/logout');
+      if(res.status === 200) {
+        dispatch(logoutStart())
+        navigate('/');
+      }
     } catch (error) {
-      setLocalErrorMessage(error.message);
+      dispatch(logoutStart());
+      console.error(error.message);
     }
   };
 
@@ -82,7 +84,7 @@ function UpdateProfile() {
     }
   };
 
-  const handleSave = async () => {
+  const handleUpdate = async () => {
     setLoading(true);
     const updateData = {
       ...formData,
@@ -103,7 +105,9 @@ function UpdateProfile() {
         bio: res.data.user.bio
       });
       setSuccessMessage(res.data.message);
-      dispatch(loginSuccess(res.data));
+      if(res.status === 200) {
+        dispatch(loginSuccess(res.data));
+      }
       setIsEditing(false);
     } catch (error) {
       setLoading(false);
@@ -114,13 +118,12 @@ function UpdateProfile() {
   const handleDelete = async () => {
     setDeleting(true);
     try {
-      const res = await axios.delete(`/api/v1/user/delete?userId=${currentUser.user._id}`, {
-        data: { password: 'userPassword' }
-      });
-      dispatch(logoutStart());
+      const res = await axios.delete(`/api/v1/user/delete?userId=${currentUser.user._id}`);
+      if(res.status === 200) {
+        dispatch(logoutStart())
+      }
       setSuccessMessage(res.data.message);
       setDeleting(false);
-      navigate('/home');
     } catch (error) {
       setDeleting(false);
       setLocalErrorMessage(error.response?.data?.message || 'Error deleting account');
@@ -200,9 +203,13 @@ function UpdateProfile() {
 
         <div className="flex justify-between mt-6">
           {isEditing ? (
-            <button onClick={handleSave} className="bg-green-500 w-full text-white py-2 px-4 rounded hover:bg-green-600 transition duration-300 ease-in-out shadow">
-              {loading ? 'Saving details...' : 'Save'}
-            </button>
+            <>
+              <button onClick={handleUpdate} className="bg-green-500 w-full text-white py-2 px-4 rounded hover:bg-green-600 transition duration-300 ease-in-out shadow">
+                {loading ? 'Saving details...' : 'Save'}
+              </button>
+              {!loading && localSuccessMessage && <div>{localSuccessMessage}</div>}
+              {!loading && localErrorMessage && <div className='text-red-400 px-2'>{localErrorMessage}</div>}
+            </>
           ) : (
             <button onClick={() => setIsEditing(true)} className="bg-gray-500 w-full text-white py-2 px-4 rounded hover:bg-gray-600 transition duration-300 ease-in-out shadow">
               Edit Account Details
@@ -222,11 +229,12 @@ function UpdateProfile() {
         {confirmDelete && (
           <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
             <div className="bg-white w-full max-w-md p-6 rounded-md shadow-lg text-center">
-              <h3 className="text-xl mb-4">Are you sure you want to delete your account?</h3>
-              <button onClick={handleDelete} className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 w-full">
+              <h3 className="text-xl mb-4 font-bold">Are you sure you want to delete your account?</h3>
+              <p className='m-2'>This is a destructive step, if you continue all data related to your account i.e. posts, likes, comments will be removed from our database and can not be recovered.</p>
+              <button onClick={handleDelete} className="outline text-red-700  py-2 px-4 rounded-lg hover:bg-red-700 hover:text-white hover:outline-none w-full">
                 Confirm Delete
               </button>
-              <button onClick={() => setConfirmDelete(false)} className="bg-white text-blue-500 py-2 px-4 rounded hover:bg-blue-500 hover:text-white w-full border mt-4">
+              <button onClick={() => setConfirmDelete(false)} className="bg-gray-700 text-white py-2 px-4 outline-none rounded-lg hover:bg-green-600 hover:text-white w-full border mt-4">
                 Cancel
               </button>
             </div>

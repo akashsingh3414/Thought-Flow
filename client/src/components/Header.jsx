@@ -25,7 +25,7 @@ const ProfileOptions = ({ user, toggleOptions, onLogout }) => (
 
       <Link
         to="/dashboard"
-        className="block px-4 py-2 rounded-lg text-sm text-gray-800 hover:bg-gray-200"
+        className="block px-4 py-2 rounded-lg text-sm text-gray-800 hover:bg-gray-800 hover:text-white"
         onClick={toggleOptions}
       >
         Dashboard
@@ -33,7 +33,7 @@ const ProfileOptions = ({ user, toggleOptions, onLogout }) => (
 
       <button
         onClick={onLogout}
-        className="w-full px-4 py-2 text-sm rounded-lg text-red-600 hover:bg-red-400 hover:text-white"
+        className="w-full px-4 py-2 text-sm rounded-lg text-red-600 hover:bg-red-500 hover:text-white"
       >
         Logout
       </button>
@@ -90,8 +90,10 @@ function Header() {
   const handleLogout = async () => {
     try {
       const res = await axios.post('/api/v1/user/logout');
-      dispatch(logoutStart());
-      navigate('/home');
+      if(res.status === 200) {
+        dispatch(logoutStart())
+        navigate('/');
+      }
     } catch (error) {
       dispatch(logoutStart());
       console.error(error.message);
@@ -122,7 +124,7 @@ function Header() {
         <SearchInput searchTerm={searchTerm} setSearchTerm={setSearchTerm} handleSearch={handleSearch} />
 
         <nav className="hidden lg:flex space-x-6">
-          <Link className={`hover:bg-gray-700 hover:text-white px-4 py-2 rounded-md ${isActive('/home')} text-gray-800`} to="/home">
+          <Link className={`hover:bg-gray-700 hover:text-white px-4 py-2 rounded-md ${isActive('/')} text-gray-800`} to="/">
             Home
           </Link>
           <Link className={`hover:bg-gray-700 hover:text-white px-4 py-2 rounded-md ${isActive('/about')} text-gray-800`} to="/about">

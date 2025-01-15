@@ -2,8 +2,9 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { logoutStart } from '../redux/user/userSlice';
 
-function CommentSection({ postId }) {
+function CommentSection({ postId, onNewComment }) {
     const { currentUser } = useSelector((state) => state.user);
     const [comment, setComment] = useState('');
     const [charCount, setCharCount] = useState(200);
@@ -27,14 +28,18 @@ function CommentSection({ postId }) {
                 postId,
                 comment
             });
-            if(res.status === 401 ) {
-                dispatch(logoutStart())
+
+            if (res.status === 401) {
+                dispatch(logoutStart());
+                return;
             }
+
+            const newComment = res.data.comment;
+            onNewComment(newComment);
 
             setComment('');
             setCharCount(200);
             setError(null);
-
         } catch (error) {
             console.error(error);
             setError('Error submitting comment. Please try again.');

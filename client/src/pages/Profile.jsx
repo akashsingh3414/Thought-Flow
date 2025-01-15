@@ -95,7 +95,7 @@ function Profile({ dashUserName }) {
       {user._id === currentUser?.user?._id && (
         <div className='flex w-full justify-end'>
           <Link to={'/dashboard?tab=updateProfile'} className='bg-gray-800 p-2 rounded text-white hover:bg-gray-600 font-semibold rounded-lg'>
-            Update Profile
+            Profile Settings
           </Link>
         </div>
       )}

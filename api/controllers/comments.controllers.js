@@ -78,7 +78,7 @@ export const updateComment = async (req, res) => {
             { new: true }
         );
 
-        return res.status(200).json({ message: 'Comment updated successfully', updateComment });
+        return res.status(200).json({ message: 'Comment updated successfully', comment: updateComment });
     } catch (error) {
         return res.status(500).json({ message: 'Some error occurred while updating comments', error });
     }
