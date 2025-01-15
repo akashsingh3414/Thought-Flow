@@ -138,7 +138,7 @@ function SignUp() {
       <div className='mt-6'>
         <span>Already have an account?</span>
         <Link to='/signin' className='ml-2 text-indigo-600 font-semibold hover:underline'>
-          Log in
+          Sign in
         </Link>
       </div>
     </div>

@@ -70,7 +70,7 @@ export default function Posts() {
       sort: sidebarData.sort,
       category: sidebarData.category,
     });
-    navigate(`/search?${urlParams.toString()}`);
+    navigate(`/posts?${urlParams.toString()}`);
   };
 
   const handleShowMore = async () => {

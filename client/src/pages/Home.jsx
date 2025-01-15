@@ -73,7 +73,7 @@ export default function Home() {
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-3xl font-bold text-gray-900">Recent Posts</h2>
             <Link
-              to="/search"
+              to="/posts"
               className="text-indigo-600 hover:text-indigo-700 font-semibold"
             >
               View all posts →

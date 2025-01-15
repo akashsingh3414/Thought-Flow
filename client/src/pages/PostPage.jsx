@@ -196,7 +196,7 @@ function PostPage() {
         urlParams.set('sort', '');
         urlParams.set('category', postCategory);
         const searchQuery = urlParams.toString();
-        navigate(`/search?${searchQuery}`);
+        navigate(`/posts?${searchQuery}`);
     }
 
     return (
